@@ -87,6 +87,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
 .pv-other-item{font-size:9px;color:#3d5a6e;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);cursor:pointer}
 .pv-other-item:hover{color:#80b4cc}
 
+/* Search */
+#search-wrap{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:95;width:min(340px,80vw)}
+#search-box{width:100%;background:rgba(6,13,24,.92);border:1px solid var(--border);color:var(--text);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;padding:9px 14px 9px 36px;outline:none;transition:border-color .2s;backdrop-filter:blur(12px)}
+#search-box::placeholder{color:var(--muted);letter-spacing:.15em}
+#search-box:focus{border-color:rgba(255,205,0,.35)}
+#search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--muted);pointer-events:none}
+#search-results{position:absolute;top:calc(100% + 4px);left:0;right:0;background:rgba(6,13,24,.97);border:1px solid var(--border);backdrop-filter:blur(16px);max-height:280px;overflow-y:auto;display:none}
+#search-results.visible{display:block}
+.sr{padding:9px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+.sr:hover{background:rgba(255,205,0,.05)}
+.sr-name{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.05em;color:var(--text)}
+.sr-name mark{background:none;color:var(--yellow)}
+.sr-sub{font-size:8px;color:var(--muted);letter-spacing:.08em;margin-top:1px}
+.sr-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.sr-empty{padding:10px 14px;font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+
 /* MapLibre overrides */
 .maplibregl-ctrl-bottom-right,.maplibregl-ctrl-bottom-left,
 .maplibregl-ctrl-top-right,.maplibregl-ctrl-top-left{display:none}
@@ -126,6 +142,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
   <p>Global Footprint · All Time</p>
 </div>
 <div id="zlbl">World View</div>
+
+<div id="search-wrap">
+  <span id="search-icon">⌕</span>
+  <input id="search-box" type="text" placeholder="Search player or club…" autocomplete="off" spellcheck="false">
+  <div id="search-results"></div>
+</div>
+
 <div id="live">⟳ Fetching live data…</div>
 
 <div id="stats">
@@ -304,7 +327,13 @@ const CLUBS = {
   "New England Revolution":{lat:42.09090,lng:-71.26430,city:"Boston",   country:"USA",        stadium:"Gillette Stadium"},
   "Al Ain":             {lat:24.21390,lng:55.73970,city:"Al Ain",       country:"UAE",        stadium:"Hazza bin Zayed Stadium"},
   "Al-Ittihad":         {lat:21.49166,lng:39.18444,city:"Jeddah",       country:"Saudi Arabia",stadium:"King Abdullah Sports City"},
-  "Vissel Kobe":        {lat:34.67878,lng:135.18849,city:"Kobe",        country:"Japan",      stadium:"Noevir Stadium"},
+  "Vissel Kobe":        {lat:34.67878,lng:135.18849,city:"Kobe",        country:"Japan",       stadium:"Noevir Stadium"},
+  "Bristol City":       {lat:51.44002,lng:-2.62011, city:"Bristol",     country:"England",     stadium:"Ashton Gate"},
+  "Lecce":              {lat:40.35782,lng:18.17530, city:"Lecce",        country:"Italy",       stadium:"Via del Mare"},
+  "Greuther Fürth":     {lat:49.48085,lng:10.97860, city:"Fürth",        country:"Germany",     stadium:"Sportpark Ronhof"},
+  "Gençlerbirliği":     {lat:39.92716,lng:32.82832, city:"Ankara",       country:"Turkey",      stadium:"Eryaman Stadium"},
+  "Sint-Truiden":       {lat:50.81402,lng: 5.17270, city:"Sint-Truiden",country:"Belgium",      stadium:"Stayen"},
+  "Elfsborg":           {lat:57.72032,lng:12.93947, city:"Borås",        country:"Sweden",      stadium:"Borås Arena"},
 };
 
 // ================================================================
@@ -908,6 +937,90 @@ const PLAYERS = [
    clubs:[
      {name:"Groningen", years:"2014–18", apps:87, goals:9, trophies:"—", bio:"87 appearances for Groningen — became a consistent Eredivisie performer and one of the most technically gifted young Swedes of his generation."},
    ]},
+
+  {name:"Kristoffer Olsson", influence:44, born:1995, pos:"Midfielder", active:true,
+   bio:"Energetic, box-to-box midfielder with 30+ caps. Played in Belgium and Russia.",
+   clubs:[
+     {name:"Anderlecht",  years:"2018–21", apps:68,  goals:5,  trophies:"Belgian Cup", bio:"A key part of Anderlecht's midfield across three seasons. Won the Belgian Cup. Energetic and technically sound in one of Belgium's biggest clubs."},
+     {name:"Krasnodar",   years:"2021–23", apps:47,  goals:4,  trophies:"—",           bio:"Moved to Russia following his Anderlecht spell. Consistent performer in the Russian Premier League for Krasnodar."},
+   ]},
+
+  {name:"Branimir Hrgota", influence:40, born:1993, pos:"Forward", active:true,
+   bio:"Swedish striker of Bosnian heritage. Bundesliga career at Frankfurt and Fürth.",
+   clubs:[
+     {name:"Eintracht Frankfurt", years:"2015–17", apps:34,  goals:6,  trophies:"—", bio:"Six goals in the Bundesliga for Frankfurt — a sharp, mobile attacker who showed his quality at one of Germany's top clubs."},
+     {name:"Greuther Fürth",      years:"2017–22", apps:152, goals:58, trophies:"Bundesliga promotion", bio:"58 goals in 152 games — a Fürth legend and their all-time top scorer in 2. Bundesliga. Drove their historic promotion to the top flight."},
+   ]},
+
+  {name:"Kristoffer Nordfeldt", influence:38, born:1989, pos:"Goalkeeper", active:false,
+   bio:"30 caps. Premier League goalkeeper at Swansea City.",
+   clubs:[
+     {name:"Swansea",        years:"2014–18", apps:68, goals:0, trophies:"—",       bio:"68 Premier League and Championship appearances for Swansea — a dependable, technically excellent goalkeeper who helped keep Swansea in the top flight."},
+     {name:"Gençlerbirliği", years:"2018–20", apps:52, goals:0, trophies:"—",       bio:"Two seasons in Turkey's Süper Lig. Continued performing at a high level in European football."},
+   ]},
+
+  {name:"Pontus Almqvist", influence:30, born:1999, pos:"Winger", active:true,
+   bio:"Direct, energetic winger. Made his mark in Serie A at Lecce.",
+   clubs:[
+     {name:"Lecce", years:"2022–24", apps:58, goals:8, trophies:"—", bio:"58 appearances and 8 goals for Lecce in Serie A — an impressive return for a young Swedish winger adapting to Italian football. Became a fan favourite."},
+   ]},
+
+  {name:"Robin Söder", influence:32, born:1993, pos:"Forward", active:false,
+   bio:"Mobile, clever striker. Played in Ligue 1 with Nantes.",
+   clubs:[
+     {name:"Nantes", years:"2017–21", apps:112, goals:28, trophies:"—", bio:"112 appearances and 28 goals for Nantes across four Ligue 1 seasons — one of their most consistent attackers. Quick, intelligent and reliable in front of goal."},
+   ]},
+
+  {name:"Niclas Eliasson", influence:29, born:1995, pos:"Winger", active:false,
+   bio:"Creative, direct winger. Several years in the English Championship.",
+   clubs:[
+     {name:"Bristol City",      years:"2017–20", apps:91, goals:9, trophies:"—", bio:"91 appearances for Bristol City — one of the Championship's most exciting wingers during this period. Quick and creative on the right flank."},
+     {name:"Nottingham Forest", years:"2020–21", apps:18, goals:1, trophies:"—", bio:"Short spell at Forest in the Championship before returning to Sweden."},
+   ]},
+
+  {name:"Muamer Tankovic", influence:28, born:1995, pos:"Winger", active:true,
+   bio:"Tricky winger with Bundesliga experience at Hamburg.",
+   clubs:[
+     {name:"Hamburg", years:"2016–18", apps:38, goals:4, trophies:"—", bio:"38 appearances for Hamburg in the Bundesliga. A creative, direct winger who showed promise at one of Germany's most storied clubs."},
+   ]},
+
+  {name:"Gustav Engvall", influence:28, born:1996, pos:"Forward", active:true,
+   bio:"Technical striker who came through Juventus's academy system.",
+   clubs:[
+     {name:"Juventus",    years:"2015–17", apps:4,  goals:0, trophies:"Serie A",      bio:"Part of Juventus's squad during their dominant era — a rare achievement for a young Swede at one of world football's elite academies."},
+     {name:"Bristol City",years:"2017–19", apps:48, goals:8, trophies:"—",            bio:"48 appearances for Bristol City — showed his goalscoring ability in England's Championship."},
+   ]},
+
+  {name:"Pontus Dahlberg", influence:26, born:1999, pos:"Goalkeeper", active:true,
+   bio:"Young goalkeeper with Premier League and Championship experience at Watford.",
+   clubs:[
+     {name:"Watford", years:"2017–22", apps:22, goals:0, trophies:"—", bio:"22 appearances for Watford — broke through at Premier League level as a young goalkeeper, showing composure and shot-stopping ability beyond his years."},
+   ]},
+
+  {name:"Simon Gustafson", influence:28, born:1995, pos:"Midfielder", active:true,
+   bio:"Creative midfielder. Played at Leeds United and Feyenoord.",
+   clubs:[
+     {name:"Leeds United", years:"2017–18", apps:14, goals:2, trophies:"—",  bio:"A short but productive spell at Leeds — showed his creativity and eye for goal in the Championship."},
+     {name:"Feyenoord",    years:"2018–21", apps:62, goals:9, trophies:"—",  bio:"62 appearances and 9 goals for Feyenoord in the Eredivisie. An intelligent, technically gifted performer in Dutch football."},
+   ]},
+
+  {name:"Christoffer Nyman", influence:27, born:1992, pos:"Forward", active:false,
+   bio:"Powerful, direct striker. Played in the Bundesliga at Nuremberg.",
+   clubs:[
+     {name:"Nuremberg", years:"2016–18", apps:44, goals:14, trophies:"2. Bundesliga", bio:"14 goals including crucial strikes in Nuremberg's 2. Bundesliga title win and promotion to the top flight. A key figure in one of their best recent seasons."},
+   ]},
+
+  {name:"Carlos Strandberg", influence:25, born:1996, pos:"Forward", active:true,
+   bio:"Swedish striker with experience in Belgium and Turkey.",
+   clubs:[
+     {name:"Sint-Truiden", years:"2019–21", apps:52, goals:16, trophies:"—", bio:"16 goals in two Belgian Pro League seasons — an impressive return that put him on Sweden's radar. Physical, direct and effective."},
+   ]},
+
+  {name:"Melker Hallberg", influence:24, born:1995, pos:"Midfielder", active:true,
+   bio:"Energetic midfielder. Serie A experience at Udinese.",
+   clubs:[
+     {name:"Udinese", years:"2017–21", apps:48, goals:3, trophies:"—", bio:"48 Serie A appearances for Udinese across four seasons — proved he could compete at Italy's top level with his energy and work rate."},
+   ]},
 ];
 
 // ================================================================
@@ -1026,6 +1139,100 @@ function updateStats() {
   document.getElementById('s-cnt').textContent = new Set(Object.values(CLUBS).map(c => c.country)).size;
 }
 updateStats();
+
+// ================================================================
+//  FLY-TO helper
+// ================================================================
+function flyToClub(clubName, zoomLevel) {
+  const cm = clubMap[clubName];
+  if (!cm || !map) return;
+  const z = zoomLevel != null ? zoomLevel : (map.getZoom() < 10 ? 13 : map.getZoom());
+  map.flyTo({ center: [cm.lng, cm.lat], zoom: z, duration: 1400, essential: true });
+  rotating = false;
+}
+
+// ================================================================
+//  SEARCH
+// ================================================================
+function initSearch() {
+  const box = document.getElementById('search-box');
+  const res = document.getElementById('search-results');
+
+  box.addEventListener('input', () => {
+    const q = box.value.trim().toLowerCase();
+    if (q.length < 2) { res.classList.remove('visible'); res.innerHTML = ''; return; }
+
+    const hits = [];
+    const seen = new Set();
+
+    PLAYERS.forEach(p => {
+      if (p.name.toLowerCase().includes(q) && !seen.has(p.name)) {
+        seen.add(p.name);
+        hits.push({ type:'player', p, score: p.name.toLowerCase().startsWith(q) ? 2 : 1 });
+      }
+    });
+    Object.keys(clubMap).forEach(cName => {
+      if (cName.toLowerCase().includes(q)) {
+        hits.push({ type:'club', cName, score: cName.toLowerCase().startsWith(q) ? 2 : 1 });
+      }
+    });
+
+    hits.sort((a,b) => b.score - a.score);
+    const top = hits.slice(0, 10);
+
+    if (!top.length) {
+      res.innerHTML = '<div class="sr-empty">No results</div>';
+      res.classList.add('visible'); return;
+    }
+
+    res.innerHTML = top.map(h => {
+      if (h.type === 'player') {
+        const p = h.p;
+        const col = p.influence>=85?'#FFCD00':p.influence>=65?'#7ab6d0':p.influence>=40?'#3d7a99':'#1e3d50';
+        const clubs = p.clubs.filter(c=>clubMap[c.name]).map(c=>c.name).join(', ');
+        const hl = p.name.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+        return `<div class="sr" onclick="searchSelectPlayer('${p.name.replace(/'/g,"\\'")}')">
+          <div class="sr-name"><span class="sr-dot" style="background:${col}"></span>${hl}</div>
+          <div class="sr-sub">${p.pos} · ${p.caps} caps · ${clubs}</div></div>`;
+      } else {
+        const cm = clubMap[h.cName];
+        const top = cm.players[0].player;
+        const col = top.influence>=85?'#FFCD00':top.influence>=65?'#7ab6d0':top.influence>=40?'#3d7a99':'#1e3d50';
+        const hl = h.cName.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+        return `<div class="sr" onclick="searchSelectClub('${h.cName.replace(/'/g,"\\'")}')">
+          <div class="sr-name"><span class="sr-dot" style="background:${col}"></span>${hl}</div>
+          <div class="sr-sub">${cm.stadium} · ${cm.players.length} Swedish players</div></div>`;
+      }
+    }).join('');
+    res.classList.add('visible');
+  });
+
+  box.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { res.classList.remove('visible'); box.blur(); }
+  });
+  document.addEventListener('click', e => {
+    if (!document.getElementById('search-wrap').contains(e.target)) res.classList.remove('visible');
+  });
+}
+
+window.searchSelectPlayer = function(playerName) {
+  const p = PLAYERS.find(x => x.name === playerName);
+  if (!p) return;
+  const first = p.clubs.find(c => clubMap[c.name]);
+  if (first) {
+    flyToClub(first.name, 14);
+    setTimeout(() => openPlayerPanel(playerName, first.name), 1500);
+  }
+  document.getElementById('search-results').classList.remove('visible');
+  document.getElementById('search-box').value = '';
+};
+
+window.searchSelectClub = function(clubName) {
+  flyToClub(clubName, 13);
+  setTimeout(() => openClubPanel(clubName), 1500);
+  document.getElementById('search-results').classList.remove('visible');
+  document.getElementById('search-box').value = '';
+};
 
 // ================================================================
 //  MAP INIT
@@ -1192,6 +1399,9 @@ function onMapLoad() {
       const p = e.features[0].properties;
       const cm = clubMap[p.id];
       if (!cm) return;
+      // Zoom into stadium
+      const targetZoom = Math.max(map.getZoom(), 13);
+      map.flyTo({ center: [cm.lng, cm.lat], zoom: targetZoom, duration: 900, essential: true });
       const top = cm.players[0];
       const more = cm.players.length > 1
         ? `<div class="pop-meta" style="margin-top:3px;font-style:italic">+${cm.players.length - 1} more Swedish players</div>` : '';
@@ -1202,13 +1412,17 @@ function onMapLoad() {
         ${more}
         <span class="pop-cta" onclick="openClubPanel('${p.id.replace(/'/g,"\\'")}')">View all players →</span>`;
       activePopup = new maplibregl.Popup({ closeButton:true, offset:12 })
-        .setLngLat(e.lngLat).setHTML(html).addTo(map);
+        .setLngLat([cm.lng, cm.lat]).setHTML(html).addTo(map);
     });
 
     map.on('click', 'players-dot', e => {
       rotating = false;
       if (activePopup) { activePopup.remove(); activePopup = null; }
       const pr = e.features[0].properties;
+      const cm = clubMap[pr.clubName];
+      const coords = e.features[0].geometry.coordinates;
+      // Zoom into the player pin
+      map.flyTo({ center: coords, zoom: Math.max(map.getZoom(), 15), duration: 700, essential: true });
       const html = `
         <div class="pop-tag">${pr.country} · ${pr.stadium}</div>
         <div class="pop-name">${pr.playerName}</div>
@@ -1216,7 +1430,7 @@ function onMapLoad() {
         <div class="pop-meta">${pr.apps} apps · ${pr.ceGoals} goals · ${pr.trophies}</div>
         <span class="pop-cta" onclick="openPlayerPanel('${pr.playerName.replace(/'/g,"\\'")}','${pr.clubName.replace(/'/g,"\\'")}')">Full profile →</span>`;
       activePopup = new maplibregl.Popup({ closeButton:true, offset:12 })
-        .setLngLat(e.lngLat).setHTML(html).addTo(map);
+        .setLngLat(coords).setHTML(html).addTo(map);
     });
 
     map.on('click', e => {
@@ -1241,6 +1455,7 @@ function onMapLoad() {
 
     setP(100, '');
     setTimeout(() => document.getElementById('boot').classList.add('gone'), 400);
+    initSearch();
     fetchWikidata();
 
   } catch(err) {
@@ -1252,9 +1467,10 @@ function onMapLoad() {
 // ================================================================
 //  PANEL  – club view
 // ================================================================
-window.openClubPanel = function(clubId) {
+window.openClubPanel = function(clubId, fly) {
   const cm = clubMap[clubId];
   if (!cm) return;
+  if (fly !== false) flyToClub(clubId, 13);
   document.getElementById('pbody').innerHTML = `
     <div class="pc-tag">${cm.country}</div>
     <div class="pc-name">${clubId}</div>
@@ -1268,10 +1484,16 @@ window.openClubPanel = function(clubId) {
 function clubPlayerRow(p, ce, i, cid) {
   const cls = p.influence >= 85 ? 'legend' : p.influence >= 65 ? 'star' : '';
   const id = `bio_${cid.replace(/\W/g,'_')}_${i}`;
-  return `<div class="ply" onclick="toggleBio('${id}')">
-    <div class="ply-rank">${String(i+1).padStart(2,'0')} · ${p.pos}${p.active ? ' · <span style="color:#3aaa66">Active</span>' : ''}</div>
-    <div class="ply-name ${cls}">${p.name}</div>
-    <div class="ply-meta">${ce.years} · ${ce.apps} apps · ${ce.goals} goals</div>
+  const cm = clubMap[cid];
+  // Calculate this player's spread position
+  const total = cm ? cm.players.length : 1;
+  const [sLng, sLat] = spreadCoord(i, total, cm ? cm.lat : 0, cm ? cm.lng : 0);
+  return `<div class="ply">
+    <div class="ply-rank" onclick="toggleBio('${id}')">${String(i+1).padStart(2,'0')} · ${p.pos}${p.active ? ' · <span style="color:#3aaa66">Active</span>' : ''}</div>
+    <div class="ply-name ${cls}" onclick="map&&map.flyTo({center:[${sLng},${sLat}],zoom:15,duration:900,essential:true});openPlayerPanel('${p.name.replace(/'/g,"\\'")}','${cid.replace(/'/g,"\\'")}')">
+      ${p.name}
+    </div>
+    <div class="ply-meta" onclick="toggleBio('${id}')">${ce.years} · ${ce.apps} apps · ${ce.goals} goals</div>
     <div class="ply-bio" id="${id}">${ce.bio}
       <div class="bio-row">
         <div class="bs"><strong>${ce.apps}</strong>Apps</div>
@@ -1280,7 +1502,7 @@ function clubPlayerRow(p, ce, i, cid) {
         <div class="bs"><strong style="font-size:10px">${ce.trophies || '—'}</strong>Trophies</div>
       </div>
       <div style="margin-top:8px">
-        <span class="pop-cta" onclick="event.stopPropagation();openPlayerPanel('${p.name.replace(/'/g,"\\'")}','${cid.replace(/'/g,"\\'")}')">Full career →</span>
+        <span class="pop-cta" onclick="openPlayerPanel('${p.name.replace(/'/g,"\\'")}','${cid.replace(/'/g,"\\'")}')">Full career →</span>
       </div>
     </div>
   </div>`;
@@ -1295,14 +1517,18 @@ window.openPlayerPanel = function(playerName, fromClub) {
 
   const otherClubs = p.clubs
     .filter(ce => ce.name !== fromClub && clubMap[ce.name])
-    .map(ce => `<div class="pv-other-item" onclick="openClubPanel('${ce.name.replace(/'/g,"\\'")}')">
-      ${ce.name} · ${ce.years} · ${ce.apps} apps · ${ce.goals} goals
-    </div>`).join('');
+    .map(ce => {
+      const cm = clubMap[ce.name];
+      return `<div class="pv-other-item" onclick="flyToClub('${ce.name.replace(/'/g,"\\'")}',13);setTimeout(()=>openClubPanel('${ce.name.replace(/'/g,"\\'")}',false),1500)">
+        <span style="color:var(--yellow);margin-right:5px">→</span>${ce.name}
+        <span style="color:var(--muted);margin-left:4px">· ${ce.years} · ${ce.apps} apps · ${ce.goals} g</span>
+      </div>`;
+    }).join('');
 
   const thisEntry = p.clubs.find(ce => ce.name === fromClub) || p.clubs[0];
 
   document.getElementById('pbody').innerHTML = `
-    <span class="pv-back" onclick="openClubPanel('${fromClub.replace(/'/g,"\\'")}')">← Back to ${fromClub}</span>
+    <span class="pv-back" onclick="openClubPanel('${fromClub.replace(/'/g,"\\'")}',false)">← Back to ${fromClub}</span>
     <div class="pv-pos">${p.pos}${p.active ? ' · <span style="color:#3aaa66">Active</span>' : ''}</div>
     <div class="pv-name">${p.name}</div>
     <div class="pv-meta">Born ${p.born} · ${p.caps} international caps · ${p.goals} international goals</div>
@@ -1323,6 +1549,7 @@ window.openPlayerPanel = function(playerName, fromClub) {
 
 window.toggleBio = id => document.getElementById(id)?.classList.toggle('open');
 window.closePanel = () => document.getElementById('panel').classList.remove('open');
+window.flyToClub = flyToClub;
 
 // ================================================================
 //  WIKIDATA LIVE FETCH
