@@ -16,7 +16,6 @@
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:'Space Mono',monospace;color:var(--text)}
 #map{position:fixed;inset:0}
 
-/* Boot */
 #boot{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity .7s}
 #boot.gone{opacity:0;pointer-events:none}
 #boot-logo{font-family:'Bebas Neue',sans-serif;font-size:54px;letter-spacing:.1em;color:var(--yellow);line-height:1}
@@ -26,43 +25,38 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
 #boot-prog{height:100%;width:0;background:var(--yellow);transition:width .3s ease}
 #boot-err{font-size:10px;color:#c04a4a;text-align:center;max-width:360px;line-height:1.8;display:none;padding:0 20px;white-space:pre-line;margin-top:8px}
 
-/* Header */
 #hd{position:fixed;top:22px;left:26px;z-index:90;pointer-events:none;user-select:none}
 #hd h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,3.2vw,40px);line-height:.86;letter-spacing:.07em;color:var(--text)}
 #hd h1 em{color:var(--yellow);font-style:normal;display:block}
 #hd p{margin-top:7px;font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+#zlbl{position:fixed;top:22px;right:24px;z-index:90;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
 
-/* Zoom label */
-#zlbl{position:fixed;top:22px;right:24px;z-index:90;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);transition:color .3s}
-
-/* Stats */
 #stats{position:fixed;bottom:22px;left:26px;z-index:90;display:flex;gap:20px;pointer-events:none}
 .st{font-size:8px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
 .st strong{display:block;font-family:'Bebas Neue',sans-serif;font-size:23px;letter-spacing:.04em;color:var(--yellow);line-height:1}
 
-/* Hint */
 #hint{position:fixed;bottom:22px;right:24px;z-index:90;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);opacity:0;animation:fh 8s ease 3.5s forwards}
 @keyframes fh{0%{opacity:0}15%{opacity:.6}75%{opacity:.6}100%{opacity:.12}}
 
-/* Live badge */
 #live{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:90;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);opacity:0;transition:opacity .4s;white-space:nowrap}
 #live.on{opacity:1}
 #live.ok{color:#3aaa66}
 
-/* Tier key */
 #tiers{position:fixed;top:50%;right:24px;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;gap:9px;pointer-events:none}
 .tk{display:flex;align-items:center;gap:7px;font-size:8px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
 .tk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 
 /* Panel */
-#panel{position:fixed;top:0;right:0;width:min(360px,100vw);height:100%;background:var(--panel);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-left:1px solid var(--border);z-index:200;transform:translateX(102%);transition:transform .4s cubic-bezier(.22,1,.36,1);overflow-y:auto;overflow-x:hidden}
+#panel{position:fixed;top:0;right:0;width:min(380px,100vw);height:100%;background:var(--panel);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-left:1px solid var(--border);z-index:200;transform:translateX(102%);transition:transform .4s cubic-bezier(.22,1,.36,1);overflow-y:auto;overflow-x:hidden}
 #panel.open{transform:translateX(0)}
 #pcls{position:sticky;top:0;float:right;margin:14px 14px 0 0;width:26px;height:26px;background:none;border:1px solid rgba(255,255,255,.07);color:var(--text);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;font-family:'Space Mono',monospace;z-index:201}
 #pcls:hover{border-color:var(--yellow);color:var(--yellow)}
 #pbody{padding:46px 22px 54px;clear:both}
+
+/* Panel – club mode */
 .pc-tag{font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:var(--yellow);margin-bottom:3px}
-.pc-club{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:.9;letter-spacing:.05em;margin-bottom:2px}
-.pc-loc{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.pc-name{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:.9;letter-spacing:.05em;margin-bottom:2px}
+.pc-sub{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
 .divider{width:26px;height:1px;background:var(--yellow);margin-bottom:14px;opacity:.7}
 .ply{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:padding-left .15s}
 .ply:hover{padding-left:4px}
@@ -73,24 +67,38 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
 .ply-meta{font-size:8px;color:var(--muted);margin-top:2px;letter-spacing:.05em}
 .ply-bio{display:none;margin-top:7px;padding:8px 10px;background:rgba(255,205,0,.025);border-left:2px solid rgba(255,205,0,.3);font-size:9px;line-height:1.8;color:#627a8a}
 .ply-bio.open{display:block}
-.bio-row{display:flex;gap:12px;margin-top:7px}
+.bio-row{display:flex;gap:12px;margin-top:7px;flex-wrap:wrap}
 .bs{font-size:8px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
 .bs strong{display:block;font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--text);line-height:1.1}
 
+/* Panel – player mode (clicked individual dot) */
+.pv-back{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);cursor:pointer;margin-bottom:12px;display:inline-block}
+.pv-back:hover{color:var(--yellow)}
+.pv-pos{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--yellow);margin-bottom:3px}
+.pv-name{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:.88;letter-spacing:.06em;margin-bottom:2px}
+.pv-meta{font-size:8px;color:var(--muted);letter-spacing:.1em;margin-bottom:14px}
+.pv-club-head{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.06em;color:var(--yellow);margin:14px 0 4px}
+.pv-club-bio{font-size:9px;line-height:1.8;color:#627a8a;margin-bottom:6px}
+.pv-stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;padding:8px 10px;background:rgba(255,205,0,.025);border-left:2px solid rgba(255,205,0,.3)}
+.pv-stat{font-size:8px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.pv-stat strong{display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);line-height:1.1}
+.pv-other{font-size:8px;color:var(--muted);letter-spacing:.1em;margin-top:12px;text-transform:uppercase}
+.pv-other-list{margin-top:5px}
+.pv-other-item{font-size:9px;color:#3d5a6e;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);cursor:pointer}
+.pv-other-item:hover{color:#80b4cc}
+
 /* MapLibre overrides */
-.maplibregl-ctrl-bottom-right,.maplibregl-ctrl-bottom-left{display:none}
+.maplibregl-ctrl-bottom-right,.maplibregl-ctrl-bottom-left,
 .maplibregl-ctrl-top-right,.maplibregl-ctrl-top-left{display:none}
-.maplibregl-popup{max-width:280px!important}
-.maplibregl-popup-content{background:rgba(5,10,20,.97);border:1px solid rgba(255,205,0,.18);border-radius:2px;padding:10px 13px;font-family:'Space Mono',monospace;box-shadow:0 8px 32px rgba(0,0,0,.7)}
-.maplibregl-popup-tip{border-top-color:rgba(255,205,0,.18)!important;border-bottom-color:rgba(5,10,20,.97)!important}
-.maplibregl-popup-close-button{color:var(--muted);font-size:14px;right:6px;top:4px}
+.maplibregl-popup{max-width:260px!important}
+.maplibregl-popup-content{background:rgba(5,10,20,.97);border:1px solid rgba(255,205,0,.18);border-radius:2px;padding:9px 12px;font-family:'Space Mono',monospace;box-shadow:0 8px 32px rgba(0,0,0,.7)}
+.maplibregl-popup-tip{border-top-color:transparent!important;border-bottom-color:rgba(5,10,20,.97)!important}
+.maplibregl-popup-close-button{color:var(--muted);font-size:14px;right:6px;top:4px;background:none}
 .maplibregl-popup-close-button:hover{color:var(--yellow);background:none}
-.pop-country{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--yellow);margin-bottom:2px}
-.pop-club{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.05em;line-height:1;color:var(--text);margin-bottom:2px}
-.pop-player{font-size:9px;color:#80b4cc;margin-bottom:1px}
+.pop-tag{font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--yellow);margin-bottom:2px}
+.pop-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.04em;line-height:1;color:var(--text);margin-bottom:1px}
 .pop-meta{font-size:8px;color:var(--muted)}
-.pop-more{font-size:8px;color:var(--muted);margin-top:3px;font-style:italic}
-.pop-cta{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);cursor:pointer;margin-top:5px;opacity:.8}
+.pop-cta{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);cursor:pointer;margin-top:6px;opacity:.8;display:block}
 .pop-cta:hover{opacity:1}
 
 @media(max-width:520px){
@@ -106,7 +114,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
 <div id="boot">
   <div id="boot-logo">SWEDISH<br>FOOTBALL</div>
   <div id="boot-sub">Global Footprint · All Time</div>
-  <div id="boot-msg">Loading map engine…</div>
+  <div id="boot-msg">Loading…</div>
   <div id="boot-bar"><div id="boot-prog"></div></div>
   <div id="boot-err"></div>
 </div>
@@ -125,7 +133,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
   <div class="st"><strong id="s-clubs">—</strong>Clubs</div>
   <div class="st"><strong id="s-cnt">—</strong>Nations</div>
 </div>
-<div id="hint">Drag to rotate · Scroll to zoom · Click markers</div>
+<div id="hint">Zoom in to see individual players around each stadium</div>
 
 <div id="tiers">
   <div class="tk"><div class="tk-dot" style="background:#FFCD00"></div>Legend</div>
@@ -143,7 +151,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
 <script>
 'use strict';
 
-// ── Boot helpers ─────────────────────────────────────────────────
 const $prog = document.getElementById('boot-prog');
 const $msg  = document.getElementById('boot-msg');
 function setP(pct, msg) { $prog.style.width = pct + '%'; if (msg) $msg.textContent = msg; }
@@ -155,552 +162,775 @@ function bootErr(msg) {
 }
 
 // ================================================================
-//  CLUBS  —  stadium-precise coordinates
+//  CLUBS  – stadium-precise coordinates
 // ================================================================
 const CLUBS = {
-  // England ──────────────────────────────────────────────────────
-  "Arsenal":            {lat:51.55490,lng:-0.10827,city:"London",    country:"England",    stadium:"Emirates Stadium"},
-  "Tottenham":          {lat:51.60411,lng:-0.06617,city:"London",    country:"England",    stadium:"Tottenham Hotspur Stadium"},
-  "Chelsea":            {lat:51.48152,lng:-0.19102,city:"London",    country:"England",    stadium:"Stamford Bridge"},
-  "West Ham":           {lat:51.53868,lng:-0.01671,city:"London",    country:"England",    stadium:"London Stadium"},
-  "Crystal Palace":     {lat:51.39835,lng:-0.08551,city:"London",    country:"England",    stadium:"Selhurst Park"},
-  "Brentford":          {lat:51.48823,lng:-0.28861,city:"London",    country:"England",    stadium:"Gtech Community Stadium"},
-  "Charlton":           {lat:51.48653,lng: 0.03661,city:"London",    country:"England",    stadium:"The Valley"},
-  "Liverpool":          {lat:53.43083,lng:-2.96096,city:"Liverpool", country:"England",    stadium:"Anfield"},
-  "Everton":            {lat:53.43870,lng:-2.96617,city:"Liverpool", country:"England",    stadium:"Goodison Park"},
-  "Manchester United":  {lat:53.46305,lng:-2.29139,city:"Manchester",country:"England",    stadium:"Old Trafford"},
-  "Manchester City":    {lat:53.48305,lng:-2.20024,city:"Manchester",country:"England",    stadium:"Etihad Stadium"},
-  "Newcastle":          {lat:54.97554,lng:-1.62177,city:"Newcastle", country:"England",    stadium:"St James' Park"},
-  "Sunderland":         {lat:54.91453,lng:-1.38759,city:"Sunderland",country:"England",    stadium:"Stadium of Light"},
-  "Middlesbrough":      {lat:54.57836,lng:-1.21674,city:"Middlesbrough",country:"England", stadium:"Riverside Stadium"},
-  "Leeds United":       {lat:53.77730,lng:-1.57260,city:"Leeds",     country:"England",    stadium:"Elland Road"},
-  "Sheffield Wednesday":{lat:53.41136,lng:-1.50087,city:"Sheffield", country:"England",    stadium:"Hillsborough"},
-  "Leicester":          {lat:52.62046,lng:-1.14220,city:"Leicester", country:"England",    stadium:"King Power Stadium"},
-  "Aston Villa":        {lat:52.50902,lng:-1.88473,city:"Birmingham",country:"England",    stadium:"Villa Park"},
-  "Birmingham City":    {lat:52.47537,lng:-1.78767,city:"Birmingham",country:"England",    stadium:"St Andrew's"},
-  "Coventry":           {lat:52.44757,lng:-1.49969,city:"Coventry",  country:"England",    stadium:"CBS Arena"},
-  "West Brom":          {lat:52.50918,lng:-1.96416,city:"West Bromwich",country:"England", stadium:"The Hawthorns"},
-  "Blackburn":          {lat:53.72860,lng:-2.48900,city:"Blackburn", country:"England",    stadium:"Ewood Park"},
-  "Bolton":             {lat:53.58068,lng:-2.53508,city:"Bolton",    country:"England",    stadium:"Toughsheet Community Stadium"},
-  "Wigan":              {lat:53.55068,lng:-2.65502,city:"Wigan",     country:"England",    stadium:"DW Stadium"},
-  "Hull City":          {lat:53.74610,lng:-0.36744,city:"Hull",      country:"England",    stadium:"MKM Stadium"},
-  "Norwich":            {lat:52.62237,lng: 1.30924,city:"Norwich",   country:"England",    stadium:"Carrow Road"},
-  "Ipswich":            {lat:52.05541,lng: 1.14487,city:"Ipswich",   country:"England",    stadium:"Portman Road"},
-  "Swansea":            {lat:51.64265,lng:-3.93469,city:"Swansea",   country:"Wales",      stadium:"Swansea.com Stadium"},
-  "Nottingham Forest":  {lat:52.94000,lng:-1.13200,city:"Nottingham",country:"England",    stadium:"City Ground"},
-  "Watford":            {lat:51.65006,lng:-0.40138,city:"Watford",   country:"England",    stadium:"Vicarage Road"},
-  "Southampton":        {lat:50.90588,lng:-1.39139,city:"Southampton",country:"England",   stadium:"St Mary's Stadium"},
-  "Fulham":             {lat:51.47484,lng:-0.22167,city:"London",    country:"England",    stadium:"Craven Cottage"},
-  "Stoke City":         {lat:52.98836,lng:-2.17529,city:"Stoke-on-Trent",country:"England",stadium:"bet365 Stadium"},
-  "Brighton":           {lat:50.86166,lng:-0.08305,city:"Brighton",  country:"England",    stadium:"Amex Stadium"},
-  // Scotland ─────────────────────────────────────────────────────
-  "Celtic":             {lat:55.84974,lng:-4.20570,city:"Glasgow",   country:"Scotland",   stadium:"Celtic Park"},
-  "Rangers":            {lat:55.85077,lng:-4.30905,city:"Glasgow",   country:"Scotland",   stadium:"Ibrox Stadium"},
-  // Italy ────────────────────────────────────────────────────────
-  "AC Milan":           {lat:45.47803,lng: 9.12400,city:"Milan",     country:"Italy",      stadium:"San Siro"},
-  "Inter Milan":        {lat:45.47803,lng: 9.12530,city:"Milan",     country:"Italy",      stadium:"San Siro"},
-  "Juventus":           {lat:45.10962,lng: 7.64131,city:"Turin",     country:"Italy",      stadium:"Allianz Stadium"},
-  "Torino":             {lat:45.04348,lng: 7.64973,city:"Turin",     country:"Italy",      stadium:"Stadio Grande Torino"},
-  "Roma":               {lat:41.93381,lng:12.45513,city:"Rome",      country:"Italy",      stadium:"Stadio Olimpico"},
-  "Lazio":              {lat:41.93381,lng:12.45613,city:"Rome",      country:"Italy",      stadium:"Stadio Olimpico"},
-  "Napoli":             {lat:40.82789,lng:14.19307,city:"Naples",    country:"Italy",      stadium:"Stadio Maradona"},
-  "Fiorentina":         {lat:43.78004,lng:11.28293,city:"Florence",  country:"Italy",      stadium:"Stadio Franchi"},
-  "Atalanta":           {lat:45.70893,lng: 9.68018,city:"Bergamo",   country:"Italy",      stadium:"Gewiss Stadium"},
-  "Parma":              {lat:44.79928,lng:10.44087,city:"Parma",     country:"Italy",      stadium:"Stadio Tardini"},
-  "Genoa":              {lat:44.41573,lng: 8.91227,city:"Genoa",     country:"Italy",      stadium:"Stadio Ferraris"},
-  "Sampdoria":          {lat:44.41473,lng: 8.91127,city:"Genoa",     country:"Italy",      stadium:"Stadio Ferraris"},
-  "Bologna":            {lat:44.49296,lng:11.30931,city:"Bologna",   country:"Italy",      stadium:"Stadio Dall'Ara"},
-  "Udinese":            {lat:46.08693,lng:13.20300,city:"Udine",     country:"Italy",      stadium:"Bluenergy Stadium"},
-  "Palermo":            {lat:38.12170,lng:13.34250,city:"Palermo",   country:"Italy",      stadium:"Stadio Barbera"},
-  "Cagliari":           {lat:39.20410,lng: 9.13724,city:"Cagliari",  country:"Italy",      stadium:"Unipol Domus"},
-  "Venezia":            {lat:45.43808,lng:12.35799,city:"Venice",    country:"Italy",      stadium:"Stadio Penzo"},
-  "Hellas Verona":      {lat:45.43893,lng:10.99218,city:"Verona",    country:"Italy",      stadium:"Stadio Bentegodi"},
-  "Bari":               {lat:41.08750,lng:16.87190,city:"Bari",      country:"Italy",      stadium:"Stadio San Nicola"},
-  "Frosinone":          {lat:41.65084,lng:13.34891,city:"Frosinone", country:"Italy",      stadium:"Stadio Stirpe"},
-  "Crotone":            {lat:39.08300,lng:17.12380,city:"Crotone",   country:"Italy",      stadium:"Stadio Scida"},
-  "Ancona":             {lat:43.58978,lng:13.49783,city:"Ancona",    country:"Italy",      stadium:"Stadio Del Conero"},
-  "Perugia":            {lat:43.10665,lng:12.39037,city:"Perugia",   country:"Italy",      stadium:"Stadio Curi"},
-  // Spain ────────────────────────────────────────────────────────
-  "Barcelona":          {lat:41.38092,lng: 2.12284,city:"Barcelona", country:"Spain",      stadium:"Spotify Camp Nou"},
-  "Real Madrid":        {lat:40.45306,lng:-3.68835,city:"Madrid",    country:"Spain",      stadium:"Santiago Bernabéu"},
-  "Atletico Madrid":    {lat:40.43601,lng:-3.59952,city:"Madrid",    country:"Spain",      stadium:"Cívitas Metropolitano"},
-  "Real Sociedad":      {lat:43.30169,lng:-1.97310,city:"San Sebastián",country:"Spain",   stadium:"Reale Arena"},
-  "Valencia":           {lat:39.47562,lng:-0.35801,city:"Valencia",  country:"Spain",      stadium:"Mestalla"},
-  "Sevilla":            {lat:37.38404,lng:-5.97031,city:"Seville",   country:"Spain",      stadium:"Ramón Sánchez Pizjuán"},
-  "Villarreal":         {lat:39.94408,lng:-0.10281,city:"Villarreal",country:"Spain",      stadium:"Estadio de la Cerámica"},
-  "Celta Vigo":         {lat:42.21190,lng:-8.73860,city:"Vigo",      country:"Spain",      stadium:"Abanca-Balaídos"},
-  "Deportivo":          {lat:43.36647,lng:-8.41990,city:"A Coruña",  country:"Spain",      stadium:"Riazor"},
-  "Espanyol":           {lat:41.34718,lng: 2.07513,city:"Barcelona", country:"Spain",      stadium:"RCDE Stadium"},
-  "Osasuna":            {lat:42.79730,lng:-1.63630,city:"Pamplona",  country:"Spain",      stadium:"El Sadar"},
-  // France ───────────────────────────────────────────────────────
-  "PSG":                {lat:48.84144,lng: 2.25300,city:"Paris",     country:"France",     stadium:"Parc des Princes"},
-  "Lyon":               {lat:45.76551,lng: 4.98218,city:"Lyon",      country:"France",     stadium:"Groupama Stadium"},
-  "Marseille":          {lat:43.26963,lng: 5.39574,city:"Marseille", country:"France",     stadium:"Stade Vélodrome"},
-  "Monaco":             {lat:43.72770,lng: 7.41574,city:"Monaco",    country:"France",     stadium:"Stade Louis II"},
-  "Lille":              {lat:50.61176,lng: 3.13037,city:"Lille",     country:"France",     stadium:"Stade Pierre-Mauroy"},
-  "Toulouse":           {lat:43.58397,lng: 1.43428,city:"Toulouse",  country:"France",     stadium:"Stadium de Toulouse"},
-  "Bordeaux":           {lat:44.82820,lng:-0.58150,city:"Bordeaux",  country:"France",     stadium:"Matmut Atlantique"},
-  "Rennes":             {lat:48.10774,lng:-1.71059,city:"Rennes",    country:"France",     stadium:"Roazhon Park"},
-  "Nice":               {lat:43.70513,lng: 7.19266,city:"Nice",      country:"France",     stadium:"Allianz Riviera"},
-  "Nantes":             {lat:47.25562,lng:-1.52507,city:"Nantes",    country:"France",     stadium:"Stade de la Beaujoire"},
-  "Strasbourg":         {lat:48.55498,lng: 7.75206,city:"Strasbourg",country:"France",     stadium:"Stade de la Meinau"},
-  "Lens":               {lat:50.43329,lng: 2.81577,city:"Lens",      country:"France",     stadium:"Stade Bollaert-Delelis"},
-  "Metz":               {lat:49.10795,lng: 6.22373,city:"Metz",      country:"France",     stadium:"Stade Saint-Symphorien"},
-  "Reims":              {lat:49.23328,lng: 4.05578,city:"Reims",     country:"France",     stadium:"Stade Auguste-Delaune"},
-  "Guingamp":           {lat:48.56418,lng:-3.15158,city:"Guingamp",  country:"France",     stadium:"Roudourou"},
-  "Caen":               {lat:49.17784,lng:-0.36649,city:"Caen",      country:"France",     stadium:"Stade d'Ornano"},
-  "Nimes":              {lat:43.83339,lng: 4.36054,city:"Nîmes",     country:"France",     stadium:"Stade des Costières"},
-  // Germany ──────────────────────────────────────────────────────
-  "Bayern Munich":      {lat:48.21879,lng:11.62480,city:"Munich",    country:"Germany",    stadium:"Allianz Arena"},
-  "Dortmund":           {lat:51.49260,lng: 7.45154,city:"Dortmund",  country:"Germany",    stadium:"Signal Iduna Park"},
-  "RB Leipzig":         {lat:51.34571,lng:12.34828,city:"Leipzig",   country:"Germany",    stadium:"Red Bull Arena"},
-  "Bayer Leverkusen":   {lat:51.03627,lng: 7.00262,city:"Leverkusen",country:"Germany",    stadium:"BayArena"},
-  "Borussia Mönchengladbach":{lat:51.17479,lng: 6.38530,city:"Mönchengladbach",country:"Germany",stadium:"Borussia-Park"},
-  "Hamburg":            {lat:53.58720,lng:10.05850,city:"Hamburg",   country:"Germany",    stadium:"Volksparkstadion"},
-  "Werder Bremen":      {lat:53.06644,lng: 8.83758,city:"Bremen",    country:"Germany",    stadium:"Weser-Stadion"},
-  "Wolfsburg":          {lat:52.43392,lng:10.80143,city:"Wolfsburg", country:"Germany",    stadium:"Volkswagen Arena"},
-  "Union Berlin":       {lat:52.45712,lng:13.56882,city:"Berlin",    country:"Germany",    stadium:"An der Alten Försterei"},
-  "Hertha Berlin":      {lat:52.51458,lng:13.23950,city:"Berlin",    country:"Germany",    stadium:"Olympiastadion Berlin"},
-  "Schalke":            {lat:51.55452,lng: 7.06766,city:"Gelsenkirchen",country:"Germany", stadium:"Veltins-Arena"},
-  "Cologne":            {lat:50.93334,lng: 6.87454,city:"Cologne",   country:"Germany",    stadium:"RheinEnergieStadion"},
-  "Stuttgart":          {lat:48.79244,lng: 9.23202,city:"Stuttgart", country:"Germany",    stadium:"MHPArena"},
-  "Mainz":              {lat:49.98414,lng: 8.22462,city:"Mainz",     country:"Germany",    stadium:"MEWA Arena"},
-  "Augsburg":           {lat:48.32328,lng:10.88557,city:"Augsburg",  country:"Germany",    stadium:"WWK Arena"},
-  "Nuremberg":          {lat:49.42578,lng:11.13079,city:"Nuremberg", country:"Germany",    stadium:"Max-Morlock-Stadion"},
-  "Hannover 96":        {lat:52.36044,lng: 9.73253,city:"Hannover",  country:"Germany",    stadium:"HDI Arena"},
-  "SC Freiburg":        {lat:48.02161,lng: 7.83297,city:"Freiburg",  country:"Germany",    stadium:"Europa-Park Stadion"},
-  "Eintracht Frankfurt":{lat:50.06892,lng: 8.64554,city:"Frankfurt", country:"Germany",    stadium:"Deutsche Bank Park"},
-  // Netherlands ──────────────────────────────────────────────────
-  "Ajax":               {lat:52.31413,lng: 4.94151,city:"Amsterdam", country:"Netherlands",stadium:"Johan Cruyff Arena"},
-  "PSV":                {lat:51.44158,lng: 5.46710,city:"Eindhoven", country:"Netherlands",stadium:"Philips Stadion"},
-  "Feyenoord":          {lat:51.89375,lng: 4.52301,city:"Rotterdam", country:"Netherlands",stadium:"De Kuip"},
-  "AZ":                 {lat:52.61001,lng: 4.75001,city:"Alkmaar",   country:"Netherlands",stadium:"AFAS Stadion"},
-  "Twente":             {lat:52.23574,lng: 6.84497,city:"Enschede",  country:"Netherlands",stadium:"De Grolsch Veste"},
-  "Heerenveen":         {lat:52.94174,lng: 5.90215,city:"Heerenveen",country:"Netherlands",stadium:"Abe Lenstra Stadion"},
-  "NEC Nijmegen":       {lat:51.83582,lng: 5.84534,city:"Nijmegen",  country:"Netherlands",stadium:"Goffertstadion"},
-  "Vitesse":            {lat:51.96362,lng: 5.94316,city:"Arnhem",    country:"Netherlands",stadium:"GelreDome"},
-  "Willem II":          {lat:51.56266,lng: 5.09282,city:"Tilburg",   country:"Netherlands",stadium:"Koning Willem II Stadion"},
-  "Groningen":          {lat:53.21296,lng: 6.57407,city:"Groningen", country:"Netherlands",stadium:"Euroborg"},
-  // Portugal ─────────────────────────────────────────────────────
-  "Sporting CP":        {lat:38.76113,lng:-9.16213,city:"Lisbon",    country:"Portugal",   stadium:"Estádio José Alvalade"},
-  "Benfica":            {lat:38.75214,lng:-9.18445,city:"Lisbon",    country:"Portugal",   stadium:"Estádio da Luz"},
-  "Porto":              {lat:41.16145,lng:-8.58308,city:"Porto",     country:"Portugal",   stadium:"Estádio do Dragão"},
-  // Turkey ───────────────────────────────────────────────────────
-  "Galatasaray":        {lat:41.07140,lng:28.78380,city:"Istanbul",  country:"Turkey",     stadium:"RAMS Park"},
-  "Fenerbahce":         {lat:40.99624,lng:29.04348,city:"Istanbul",  country:"Turkey",     stadium:"Şükrü Saracoğlu"},
-  "Besiktas":           {lat:41.03882,lng:29.01038,city:"Istanbul",  country:"Turkey",     stadium:"Vodafone Park"},
-  "Trabzonspor":        {lat:41.00600,lng:39.72600,city:"Trabzon",   country:"Turkey",     stadium:"Medical Park Stadyumu"},
-  "Kasımpaşa":          {lat:41.05167,lng:28.94822,city:"Istanbul",  country:"Turkey",     stadium:"Recep Tayyip Erdoğan Stadyumu"},
-  // Russia ───────────────────────────────────────────────────────
-  "Spartak Moscow":     {lat:55.83099,lng:37.44267,city:"Moscow",    country:"Russia",     stadium:"Otkritie Arena"},
-  "CSKA Moscow":        {lat:55.76555,lng:37.54401,city:"Moscow",    country:"Russia",     stadium:"VTB Arena"},
-  "Lokomotiv Moscow":   {lat:55.75854,lng:37.69280,city:"Moscow",    country:"Russia",     stadium:"Lokomotiv Stadium"},
-  "Zenit":              {lat:59.97264,lng:30.22134,city:"St. Petersburg",country:"Russia", stadium:"Gazprom Arena"},
-  "Krasnodar":          {lat:45.03554,lng:38.97647,city:"Krasnodar", country:"Russia",     stadium:"Krasnodar Stadium"},
-  // Belgium ──────────────────────────────────────────────────────
-  "Anderlecht":         {lat:50.83530,lng: 4.29780,city:"Brussels",  country:"Belgium",    stadium:"Lotto Park"},
-  "Club Brugge":        {lat:51.20859,lng: 3.19219,city:"Bruges",    country:"Belgium",    stadium:"Jan Breydel Stadion"},
-  // Switzerland ──────────────────────────────────────────────────
-  "Basel":              {lat:47.54182,lng: 7.62144,city:"Basel",     country:"Switzerland",stadium:"St. Jakob-Park"},
-  // Greece ───────────────────────────────────────────────────────
-  "PAOK":               {lat:40.62768,lng:22.95888,city:"Thessaloniki",country:"Greece",   stadium:"Toumba Stadium"},
-  "Olympiakos":         {lat:37.94234,lng:23.66820,city:"Piraeus",   country:"Greece",     stadium:"Georgios Karaiskakis"},
-  "Panathinaikos":      {lat:37.98870,lng:23.73700,city:"Athens",    country:"Greece",     stadium:"Apostolos Nikolaidis"},
-  // USA ──────────────────────────────────────────────────────────
-  "LA Galaxy":          {lat:33.86459,lng:-118.26098,city:"Los Angeles",country:"USA",     stadium:"Dignity Health Sports Park"},
-  "Seattle Sounders":   {lat:47.59514,lng:-122.33161,city:"Seattle", country:"USA",        stadium:"Lumen Field"},
-  "Tampa Bay":          {lat:27.97297,lng:-82.50374,city:"Tampa",    country:"USA",        stadium:"Al Lang Stadium"},
-  "New England Revolution":{lat:42.09090,lng:-71.26430,city:"Boston",country:"USA",        stadium:"Gillette Stadium"},
-  // Middle East ──────────────────────────────────────────────────
-  "Al Ain":             {lat:24.21390,lng:55.73970,city:"Al Ain",    country:"UAE",        stadium:"Hazza bin Zayed Stadium"},
-  "Al-Ittihad":         {lat:21.49166,lng:39.18444,city:"Jeddah",   country:"Saudi Arabia",stadium:"King Abdullah Sports City"},
-  // Japan ────────────────────────────────────────────────────────
-  "Vissel Kobe":        {lat:34.67878,lng:135.18849,city:"Kobe",    country:"Japan",       stadium:"Noevir Stadium"},
+  "Arsenal":            {lat:51.55490,lng:-0.10827,city:"London",       country:"England",    stadium:"Emirates Stadium"},
+  "Tottenham":          {lat:51.60411,lng:-0.06617,city:"London",       country:"England",    stadium:"Tottenham Hotspur Stadium"},
+  "Chelsea":            {lat:51.48152,lng:-0.19102,city:"London",       country:"England",    stadium:"Stamford Bridge"},
+  "West Ham":           {lat:51.53868,lng:-0.01671,city:"London",       country:"England",    stadium:"London Stadium"},
+  "Crystal Palace":     {lat:51.39835,lng:-0.08551,city:"London",       country:"England",    stadium:"Selhurst Park"},
+  "Brentford":          {lat:51.48823,lng:-0.28861,city:"London",       country:"England",    stadium:"Gtech Community Stadium"},
+  "Charlton":           {lat:51.48653,lng: 0.03661,city:"London",       country:"England",    stadium:"The Valley"},
+  "Fulham":             {lat:51.47484,lng:-0.22167,city:"London",       country:"England",    stadium:"Craven Cottage"},
+  "Liverpool":          {lat:53.43083,lng:-2.96096,city:"Liverpool",    country:"England",    stadium:"Anfield"},
+  "Everton":            {lat:53.43870,lng:-2.96617,city:"Liverpool",    country:"England",    stadium:"Goodison Park"},
+  "Manchester United":  {lat:53.46305,lng:-2.29139,city:"Manchester",   country:"England",    stadium:"Old Trafford"},
+  "Manchester City":    {lat:53.48305,lng:-2.20024,city:"Manchester",   country:"England",    stadium:"Etihad Stadium"},
+  "Newcastle":          {lat:54.97554,lng:-1.62177,city:"Newcastle",    country:"England",    stadium:"St James' Park"},
+  "Sunderland":         {lat:54.91453,lng:-1.38759,city:"Sunderland",   country:"England",    stadium:"Stadium of Light"},
+  "Middlesbrough":      {lat:54.57836,lng:-1.21674,city:"Middlesbrough",country:"England",    stadium:"Riverside Stadium"},
+  "Leeds United":       {lat:53.77730,lng:-1.57260,city:"Leeds",        country:"England",    stadium:"Elland Road"},
+  "Sheffield Wednesday":{lat:53.41136,lng:-1.50087,city:"Sheffield",    country:"England",    stadium:"Hillsborough"},
+  "Leicester":          {lat:52.62046,lng:-1.14220,city:"Leicester",    country:"England",    stadium:"King Power Stadium"},
+  "Aston Villa":        {lat:52.50902,lng:-1.88473,city:"Birmingham",   country:"England",    stadium:"Villa Park"},
+  "Birmingham City":    {lat:52.47537,lng:-1.78767,city:"Birmingham",   country:"England",    stadium:"St Andrew's"},
+  "Coventry":           {lat:52.44757,lng:-1.49969,city:"Coventry",     country:"England",    stadium:"CBS Arena"},
+  "West Brom":          {lat:52.50918,lng:-1.96416,city:"West Bromwich", country:"England",   stadium:"The Hawthorns"},
+  "Blackburn":          {lat:53.72860,lng:-2.48900,city:"Blackburn",    country:"England",    stadium:"Ewood Park"},
+  "Bolton":             {lat:53.58068,lng:-2.53508,city:"Bolton",       country:"England",    stadium:"Toughsheet Community Stadium"},
+  "Wigan":              {lat:53.55068,lng:-2.65502,city:"Wigan",        country:"England",    stadium:"DW Stadium"},
+  "Hull City":          {lat:53.74610,lng:-0.36744,city:"Hull",         country:"England",    stadium:"MKM Stadium"},
+  "Norwich":            {lat:52.62237,lng: 1.30924,city:"Norwich",      country:"England",    stadium:"Carrow Road"},
+  "Swansea":            {lat:51.64265,lng:-3.93469,city:"Swansea",      country:"Wales",      stadium:"Swansea.com Stadium"},
+  "Nottingham Forest":  {lat:52.94000,lng:-1.13200,city:"Nottingham",   country:"England",    stadium:"City Ground"},
+  "Watford":            {lat:51.65006,lng:-0.40138,city:"Watford",      country:"England",    stadium:"Vicarage Road"},
+  "Southampton":        {lat:50.90588,lng:-1.39139,city:"Southampton",  country:"England",    stadium:"St Mary's Stadium"},
+  "Stoke City":         {lat:52.98836,lng:-2.17529,city:"Stoke",        country:"England",    stadium:"bet365 Stadium"},
+  "Brighton":           {lat:50.86166,lng:-0.08305,city:"Brighton",     country:"England",    stadium:"Amex Stadium"},
+  "Celtic":             {lat:55.84974,lng:-4.20570,city:"Glasgow",      country:"Scotland",   stadium:"Celtic Park"},
+  "Rangers":            {lat:55.85077,lng:-4.30905,city:"Glasgow",      country:"Scotland",   stadium:"Ibrox Stadium"},
+  "AC Milan":           {lat:45.47803,lng: 9.12400,city:"Milan",        country:"Italy",      stadium:"San Siro"},
+  "Inter Milan":        {lat:45.47803,lng: 9.12530,city:"Milan",        country:"Italy",      stadium:"San Siro"},
+  "Juventus":           {lat:45.10962,lng: 7.64131,city:"Turin",        country:"Italy",      stadium:"Allianz Stadium"},
+  "Torino":             {lat:45.04348,lng: 7.64973,city:"Turin",        country:"Italy",      stadium:"Stadio Grande Torino"},
+  "Roma":               {lat:41.93381,lng:12.45513,city:"Rome",         country:"Italy",      stadium:"Stadio Olimpico"},
+  "Lazio":              {lat:41.93381,lng:12.45613,city:"Rome",         country:"Italy",      stadium:"Stadio Olimpico"},
+  "Napoli":             {lat:40.82789,lng:14.19307,city:"Naples",       country:"Italy",      stadium:"Stadio Maradona"},
+  "Fiorentina":         {lat:43.78004,lng:11.28293,city:"Florence",     country:"Italy",      stadium:"Stadio Franchi"},
+  "Atalanta":           {lat:45.70893,lng: 9.68018,city:"Bergamo",      country:"Italy",      stadium:"Gewiss Stadium"},
+  "Parma":              {lat:44.79928,lng:10.44087,city:"Parma",        country:"Italy",      stadium:"Stadio Tardini"},
+  "Genoa":              {lat:44.41573,lng: 8.91227,city:"Genoa",        country:"Italy",      stadium:"Stadio Ferraris"},
+  "Sampdoria":          {lat:44.41473,lng: 8.91127,city:"Genoa",        country:"Italy",      stadium:"Stadio Ferraris"},
+  "Bologna":            {lat:44.49296,lng:11.30931,city:"Bologna",      country:"Italy",      stadium:"Stadio Dall'Ara"},
+  "Udinese":            {lat:46.08693,lng:13.20300,city:"Udine",        country:"Italy",      stadium:"Bluenergy Stadium"},
+  "Palermo":            {lat:38.12170,lng:13.34250,city:"Palermo",      country:"Italy",      stadium:"Stadio Barbera"},
+  "Cagliari":           {lat:39.20410,lng: 9.13724,city:"Cagliari",     country:"Italy",      stadium:"Unipol Domus"},
+  "Venezia":            {lat:45.43808,lng:12.35799,city:"Venice",       country:"Italy",      stadium:"Stadio Penzo"},
+  "Hellas Verona":      {lat:45.43893,lng:10.99218,city:"Verona",       country:"Italy",      stadium:"Stadio Bentegodi"},
+  "Bari":               {lat:41.08750,lng:16.87190,city:"Bari",         country:"Italy",      stadium:"Stadio San Nicola"},
+  "Frosinone":          {lat:41.65084,lng:13.34891,city:"Frosinone",    country:"Italy",      stadium:"Stadio Stirpe"},
+  "Crotone":            {lat:39.08300,lng:17.12380,city:"Crotone",      country:"Italy",      stadium:"Stadio Scida"},
+  "Ancona":             {lat:43.58978,lng:13.49783,city:"Ancona",       country:"Italy",      stadium:"Stadio Del Conero"},
+  "Perugia":            {lat:43.10665,lng:12.39037,city:"Perugia",      country:"Italy",      stadium:"Stadio Curi"},
+  "Barcelona":          {lat:41.38092,lng: 2.12284,city:"Barcelona",    country:"Spain",      stadium:"Spotify Camp Nou"},
+  "Real Madrid":        {lat:40.45306,lng:-3.68835,city:"Madrid",       country:"Spain",      stadium:"Santiago Bernabéu"},
+  "Atletico Madrid":    {lat:40.43601,lng:-3.59952,city:"Madrid",       country:"Spain",      stadium:"Cívitas Metropolitano"},
+  "Real Sociedad":      {lat:43.30169,lng:-1.97310,city:"San Sebastián",country:"Spain",      stadium:"Reale Arena"},
+  "Valencia":           {lat:39.47562,lng:-0.35801,city:"Valencia",     country:"Spain",      stadium:"Mestalla"},
+  "Sevilla":            {lat:37.38404,lng:-5.97031,city:"Seville",      country:"Spain",      stadium:"Ramón Sánchez Pizjuán"},
+  "Villarreal":         {lat:39.94408,lng:-0.10281,city:"Villarreal",   country:"Spain",      stadium:"Estadio de la Cerámica"},
+  "Celta Vigo":         {lat:42.21190,lng:-8.73860,city:"Vigo",         country:"Spain",      stadium:"Abanca-Balaídos"},
+  "Deportivo":          {lat:43.36647,lng:-8.41990,city:"A Coruña",     country:"Spain",      stadium:"Riazor"},
+  "Osasuna":            {lat:42.79730,lng:-1.63630,city:"Pamplona",     country:"Spain",      stadium:"El Sadar"},
+  "PSG":                {lat:48.84144,lng: 2.25300,city:"Paris",        country:"France",     stadium:"Parc des Princes"},
+  "Lyon":               {lat:45.76551,lng: 4.98218,city:"Lyon",         country:"France",     stadium:"Groupama Stadium"},
+  "Marseille":          {lat:43.26963,lng: 5.39574,city:"Marseille",    country:"France",     stadium:"Stade Vélodrome"},
+  "Monaco":             {lat:43.72770,lng: 7.41574,city:"Monaco",       country:"France",     stadium:"Stade Louis II"},
+  "Lille":              {lat:50.61176,lng: 3.13037,city:"Lille",        country:"France",     stadium:"Stade Pierre-Mauroy"},
+  "Toulouse":           {lat:43.58397,lng: 1.43428,city:"Toulouse",     country:"France",     stadium:"Stadium de Toulouse"},
+  "Bordeaux":           {lat:44.82820,lng:-0.58150,city:"Bordeaux",     country:"France",     stadium:"Matmut Atlantique"},
+  "Rennes":             {lat:48.10774,lng:-1.71059,city:"Rennes",       country:"France",     stadium:"Roazhon Park"},
+  "Nice":               {lat:43.70513,lng: 7.19266,city:"Nice",         country:"France",     stadium:"Allianz Riviera"},
+  "Nantes":             {lat:47.25562,lng:-1.52507,city:"Nantes",       country:"France",     stadium:"Stade de la Beaujoire"},
+  "Strasbourg":         {lat:48.55498,lng: 7.75206,city:"Strasbourg",   country:"France",     stadium:"Stade de la Meinau"},
+  "Lens":               {lat:50.43329,lng: 2.81577,city:"Lens",         country:"France",     stadium:"Stade Bollaert-Delelis"},
+  "Metz":               {lat:49.10795,lng: 6.22373,city:"Metz",         country:"France",     stadium:"Stade Saint-Symphorien"},
+  "Reims":              {lat:49.23328,lng: 4.05578,city:"Reims",        country:"France",     stadium:"Stade Auguste-Delaune"},
+  "Guingamp":           {lat:48.56418,lng:-3.15158,city:"Guingamp",     country:"France",     stadium:"Roudourou"},
+  "Caen":               {lat:49.17784,lng:-0.36649,city:"Caen",         country:"France",     stadium:"Stade d'Ornano"},
+  "Nimes":              {lat:43.83339,lng: 4.36054,city:"Nîmes",        country:"France",     stadium:"Stade des Costières"},
+  "Bayern Munich":      {lat:48.21879,lng:11.62480,city:"Munich",       country:"Germany",    stadium:"Allianz Arena"},
+  "Dortmund":           {lat:51.49260,lng: 7.45154,city:"Dortmund",     country:"Germany",    stadium:"Signal Iduna Park"},
+  "RB Leipzig":         {lat:51.34571,lng:12.34828,city:"Leipzig",      country:"Germany",    stadium:"Red Bull Arena"},
+  "Bayer Leverkusen":   {lat:51.03627,lng: 7.00262,city:"Leverkusen",   country:"Germany",    stadium:"BayArena"},
+  "Borussia Mönchengladbach":{lat:51.17479,lng:6.38530,city:"Mönchengladbach",country:"Germany",stadium:"Borussia-Park"},
+  "Hamburg":            {lat:53.58720,lng:10.05850,city:"Hamburg",      country:"Germany",    stadium:"Volksparkstadion"},
+  "Werder Bremen":      {lat:53.06644,lng: 8.83758,city:"Bremen",       country:"Germany",    stadium:"Weser-Stadion"},
+  "Wolfsburg":          {lat:52.43392,lng:10.80143,city:"Wolfsburg",    country:"Germany",    stadium:"Volkswagen Arena"},
+  "Union Berlin":       {lat:52.45712,lng:13.56882,city:"Berlin",       country:"Germany",    stadium:"An der Alten Försterei"},
+  "Hertha Berlin":      {lat:52.51458,lng:13.23950,city:"Berlin",       country:"Germany",    stadium:"Olympiastadion Berlin"},
+  "Schalke":            {lat:51.55452,lng: 7.06766,city:"Gelsenkirchen",country:"Germany",    stadium:"Veltins-Arena"},
+  "Cologne":            {lat:50.93334,lng: 6.87454,city:"Cologne",      country:"Germany",    stadium:"RheinEnergieStadion"},
+  "Stuttgart":          {lat:48.79244,lng: 9.23202,city:"Stuttgart",    country:"Germany",    stadium:"MHPArena"},
+  "Mainz":              {lat:49.98414,lng: 8.22462,city:"Mainz",        country:"Germany",    stadium:"MEWA Arena"},
+  "Augsburg":           {lat:48.32328,lng:10.88557,city:"Augsburg",     country:"Germany",    stadium:"WWK Arena"},
+  "Nuremberg":          {lat:49.42578,lng:11.13079,city:"Nuremberg",    country:"Germany",    stadium:"Max-Morlock-Stadion"},
+  "Hannover 96":        {lat:52.36044,lng: 9.73253,city:"Hannover",     country:"Germany",    stadium:"HDI Arena"},
+  "SC Freiburg":        {lat:48.02161,lng: 7.83297,city:"Freiburg",     country:"Germany",    stadium:"Europa-Park Stadion"},
+  "Eintracht Frankfurt":{lat:50.06892,lng: 8.64554,city:"Frankfurt",    country:"Germany",    stadium:"Deutsche Bank Park"},
+  "Ajax":               {lat:52.31413,lng: 4.94151,city:"Amsterdam",    country:"Netherlands",stadium:"Johan Cruyff Arena"},
+  "PSV":                {lat:51.44158,lng: 5.46710,city:"Eindhoven",    country:"Netherlands",stadium:"Philips Stadion"},
+  "Feyenoord":          {lat:51.89375,lng: 4.52301,city:"Rotterdam",    country:"Netherlands",stadium:"De Kuip"},
+  "AZ":                 {lat:52.61001,lng: 4.75001,city:"Alkmaar",      country:"Netherlands",stadium:"AFAS Stadion"},
+  "Twente":             {lat:52.23574,lng: 6.84497,city:"Enschede",     country:"Netherlands",stadium:"De Grolsch Veste"},
+  "Heerenveen":         {lat:52.94174,lng: 5.90215,city:"Heerenveen",   country:"Netherlands",stadium:"Abe Lenstra Stadion"},
+  "NEC Nijmegen":       {lat:51.83582,lng: 5.84534,city:"Nijmegen",     country:"Netherlands",stadium:"Goffertstadion"},
+  "Vitesse":            {lat:51.96362,lng: 5.94316,city:"Arnhem",       country:"Netherlands",stadium:"GelreDome"},
+  "Willem II":          {lat:51.56266,lng: 5.09282,city:"Tilburg",      country:"Netherlands",stadium:"Koning Willem II Stadion"},
+  "Groningen":          {lat:53.21296,lng: 6.57407,city:"Groningen",    country:"Netherlands",stadium:"Euroborg"},
+  "Sporting CP":        {lat:38.76113,lng:-9.16213,city:"Lisbon",       country:"Portugal",   stadium:"Estádio José Alvalade"},
+  "Benfica":            {lat:38.75214,lng:-9.18445,city:"Lisbon",       country:"Portugal",   stadium:"Estádio da Luz"},
+  "Porto":              {lat:41.16145,lng:-8.58308,city:"Porto",        country:"Portugal",   stadium:"Estádio do Dragão"},
+  "Galatasaray":        {lat:41.07140,lng:28.78380,city:"Istanbul",     country:"Turkey",     stadium:"RAMS Park"},
+  "Fenerbahce":         {lat:40.99624,lng:29.04348,city:"Istanbul",     country:"Turkey",     stadium:"Şükrü Saracoğlu"},
+  "Besiktas":           {lat:41.03882,lng:29.01038,city:"Istanbul",     country:"Turkey",     stadium:"Vodafone Park"},
+  "Trabzonspor":        {lat:41.00600,lng:39.72600,city:"Trabzon",      country:"Turkey",     stadium:"Medical Park Stadyumu"},
+  "Kasımpaşa":          {lat:41.05167,lng:28.94822,city:"Istanbul",     country:"Turkey",     stadium:"Recep Tayyip Erdoğan Stadyumu"},
+  "Spartak Moscow":     {lat:55.83099,lng:37.44267,city:"Moscow",       country:"Russia",     stadium:"Otkritie Arena"},
+  "CSKA Moscow":        {lat:55.76555,lng:37.54401,city:"Moscow",       country:"Russia",     stadium:"VTB Arena"},
+  "Lokomotiv Moscow":   {lat:55.75854,lng:37.69280,city:"Moscow",       country:"Russia",     stadium:"Lokomotiv Stadium"},
+  "Zenit":              {lat:59.97264,lng:30.22134,city:"St. Petersburg",country:"Russia",    stadium:"Gazprom Arena"},
+  "Krasnodar":          {lat:45.03554,lng:38.97647,city:"Krasnodar",    country:"Russia",     stadium:"Krasnodar Stadium"},
+  "Anderlecht":         {lat:50.83530,lng: 4.29780,city:"Brussels",     country:"Belgium",    stadium:"Lotto Park"},
+  "Club Brugge":        {lat:51.20859,lng: 3.19219,city:"Bruges",       country:"Belgium",    stadium:"Jan Breydel Stadion"},
+  "Basel":              {lat:47.54182,lng: 7.62144,city:"Basel",        country:"Switzerland",stadium:"St. Jakob-Park"},
+  "PAOK":               {lat:40.62768,lng:22.95888,city:"Thessaloniki", country:"Greece",     stadium:"Toumba Stadium"},
+  "Olympiakos":         {lat:37.94234,lng:23.66820,city:"Piraeus",      country:"Greece",     stadium:"Georgios Karaiskakis"},
+  "Panathinaikos":      {lat:37.98870,lng:23.73700,city:"Athens",       country:"Greece",     stadium:"Apostolos Nikolaidis"},
+  "LA Galaxy":          {lat:33.86459,lng:-118.26098,city:"Los Angeles",country:"USA",        stadium:"Dignity Health Sports Park"},
+  "Seattle Sounders":   {lat:47.59514,lng:-122.33161,city:"Seattle",    country:"USA",        stadium:"Lumen Field"},
+  "Tampa Bay":          {lat:27.97297,lng:-82.50374,city:"Tampa",       country:"USA",        stadium:"Al Lang Stadium"},
+  "New England Revolution":{lat:42.09090,lng:-71.26430,city:"Boston",   country:"USA",        stadium:"Gillette Stadium"},
+  "Al Ain":             {lat:24.21390,lng:55.73970,city:"Al Ain",       country:"UAE",        stadium:"Hazza bin Zayed Stadium"},
+  "Al-Ittihad":         {lat:21.49166,lng:39.18444,city:"Jeddah",       country:"Saudi Arabia",stadium:"King Abdullah Sports City"},
+  "Vissel Kobe":        {lat:34.67878,lng:135.18849,city:"Kobe",        country:"Japan",      stadium:"Noevir Stadium"},
 };
 
 // ================================================================
-//  PLAYERS  —  influence 1–100
+//  PLAYERS — each club entry has its own stats + bio
 // ================================================================
 const PLAYERS = [
-  // ── LEGENDS (85+) ──────────────────────────────────────────────
-  {name:"Zlatan Ibrahimović",    influence:100,caps:116,goals:62,born:1981,pos:"Forward",  active:false,
-   bio:"Sweden's all-time top scorer (62 goals). Won league titles in the Netherlands, Italy, Spain, France and England across nine clubs. The greatest Swedish footballer ever.",
-   clubs:["Ajax","Juventus","Inter Milan","Barcelona","AC Milan","PSG","Manchester United","LA Galaxy"]},
-
-  {name:"Thomas Ravelli",        influence:80,caps:143,goals:0,born:1959,pos:"Goalkeeper",active:false,
-   bio:"Sweden's most capped player ever (143 caps 1981–97). Brilliant shot-stopper who was Sweden's first choice for 16 years. Won bronze at USA 94. Ended career at Tampa Bay.",
-   clubs:["Tampa Bay"]},
-
-  {name:"Freddie Ljungberg",     influence:90,caps:75,goals:16,born:1977,pos:"Midfielder",active:false,
-   bio:"Arsenal icon and heart of the Invincibles era (2003-04). Over 300 appearances for the club. Terrorized defenses across Europe for a decade with his explosive drives.",
-   clubs:["Arsenal","West Ham","Celtic","Seattle Sounders"]},
-
-  {name:"Henrik Larsson",        influence:90,caps:106,goals:37,born:1971,pos:"Forward",  active:false,
-   bio:"Celtic legend — 242 goals in eight seasons — and Champions League winner with Barcelona in 2006. One of the finest strikers of his generation.",
-   clubs:["Celtic","Barcelona","Manchester United"]},
-
-  {name:"Gunnar Nordahl",        influence:88,caps:33,goals:43,born:1921,pos:"Forward",  active:false,
-   bio:"The greatest Swedish goalscorer in Serie A history. Netted 225 goals in 268 games for AC Milan alone. Olympic gold medalist 1948.",
-   clubs:["AC Milan","Roma"]},
-
-  {name:"Viktor Gyökeres",       influence:87,caps:38,goals:20,born:1998,pos:"Forward",  active:true,
-   bio:"The most feared striker in Europe in 2023-24 — 43 goals for Sporting CP in one season. Joined Arsenal in summer 2025. Rapid, physical and ruthlessly clinical.",
-   clubs:["Sporting CP","Arsenal"]},
-
-  {name:"Nils Liedholm",         influence:85,caps:23,goals:10,born:1922,pos:"Midfielder",active:false,
-   bio:"Member of the legendary Gre-No-Li trio at AC Milan. Won four Serie A titles. Captained Sweden to the 1958 World Cup Final on home soil.",
-   clubs:["AC Milan"]},
-
-  {name:"Kurt Hamrin",           influence:85,caps:32,goals:17,born:1934,pos:"Winger",   active:false,
-   bio:"'Little Bird' — 11 brilliant seasons at Fiorentina, then Cup Winners' Cup glory with AC Milan. One of Italy's most beloved foreign players of all time.",
-   clubs:["Fiorentina","AC Milan","Genoa"]},
-
-  {name:"Gunnar Gren",           influence:83,caps:57,goals:32,born:1920,pos:"Forward",  active:false,
-   bio:"The 'Professor' of the Gre-No-Li trio. Italy's Footballer of the Year 1949. Elegant playmaker who starred in the 1958 World Cup Final.",
-   clubs:["AC Milan","Fiorentina"]},
-
-  // ── STARS (65–84) ──────────────────────────────────────────────
-  {name:"Glenn Hysén",           influence:74,caps:72,goals:1,born:1959,pos:"Defender",  active:false,
-   bio:"Dominant, cultured centre-back who was a key part of Liverpool's last First Division title in 1990. Also played for Fiorentina and PSV.",
-   clubs:["Fiorentina","PSV","Liverpool"]},
-
-  {name:"Klas Ingesson",         influence:72,caps:57,goals:4,born:1968,pos:"Midfielder",active:false,
-   bio:"Powerful, combative midfielder. Key to USA 94 bronze. Played for PSV, Sheffield Wednesday, Bari and Bologna in a career spanning Sweden's top era.",
-   clubs:["PSV","Sheffield Wednesday","Bari","Bologna"]},
-
-  {name:"Håkan Mild",            influence:70,caps:73,goals:12,born:1971,pos:"Midfielder",active:false,
-   bio:"Technically refined midfielder who starred at USA 94 and Euro 2000. Played in La Liga for Valencia and had spells across Europe.",
-   clubs:["Valencia"]},
-
-  {name:"Alexander Isak",        influence:82,caps:68,goals:30,born:2000,pos:"Forward",  active:true,
-   bio:"One of the Premier League's most complete modern strikers. Lit up La Liga at Real Sociedad before becoming Newcastle's marquee £60m signing.",
-   clubs:["Real Sociedad","Newcastle"]},
-
-  {name:"Dejan Kulusevski",      influence:79,caps:44,goals:8,born:2000,pos:"Winger",    active:true,
-   bio:"Transformed Tottenham's attack after arriving on loan in January 2022. Named Spurs Player of the Year 2022-23 — arguably the best winger in the league that season.",
-   clubs:["Parma","Juventus","Tottenham"]},
-
-  {name:"Victor Lindelöf",       influence:78,caps:109,goals:5,born:1994,pos:"Defender", active:true,
-   bio:"Sweden's most-capped active outfield player. Dependable, composed centre-back at Manchester United since 2017.",
-   clubs:["Benfica","Manchester United"]},
-
-  {name:"Emil Forsberg",         influence:77,caps:119,goals:35,born:1991,pos:"Midfielder",active:true,
-   bio:"Sweden's all-time most-capped player. Led RB Leipzig's Bundesliga rise for a decade. Reliable, creative, a constant for the national team.",
-   clubs:["RB Leipzig"]},
-
-  {name:"Olof Mellberg",         influence:76,caps:117,goals:8,born:1977,pos:"Defender", active:false,
-   bio:"Commanding captain at Aston Villa for six years. Went on to Juventus, Lyon and Roma. One of Sweden's greatest-ever defenders.",
-   clubs:["Aston Villa","Juventus","Lyon","Roma"]},
-
-  {name:"Stefan Schwarz",        influence:74,caps:69,goals:6,born:1969,pos:"Midfielder",active:false,
-   bio:"Box-to-box engine and key to Sweden's bronze at USA 94. Played for Arsenal, Fiorentina, Valencia and Sunderland in a stellar career.",
-   clubs:["Arsenal","Fiorentina","Valencia","Sunderland"]},
-
-  {name:"Tomas Brolin",          influence:73,caps:47,goals:27,born:1969,pos:"Forward",  active:false,
-   bio:"The most gifted Swedish attacker of the 90s. Lit up Serie A at Parma and was magnificent at USA 94. Italian Serie A Player of the Year 1992.",
-   clubs:["Parma","Leeds United","Crystal Palace"]},
-
-  {name:"Martin Dahlin",         influence:72,caps:60,goals:29,born:1968,pos:"Forward",  active:false,
-   bio:"Explosive, physical striker who formed a devastating partnership with Brolin at USA 94. Hat-trick vs Russia. Bundesliga and Serie A star.",
-   clubs:["Borussia Mönchengladbach","Roma"]},
-
-  {name:"Anders Limpar",         influence:71,caps:58,goals:6,born:1965,pos:"Winger",    active:false,
-   bio:"Inventive, skilful winger and key figure in Arsenal's 1991 First Division title. Capable of moments of extraordinary brilliance.",
-   clubs:["Arsenal","Everton"]},
-
-  {name:"Hasse Jeppson",         influence:70,caps:34,goals:31,born:1925,pos:"Forward",  active:false,
-   bio:"Set a world transfer record joining Napoli in 1952 (£52,000). Lethal scorer in Italian football in the early 1950s. Also briefly at Charlton.",
-   clubs:["Atalanta","Napoli","Charlton"]},
-
-  {name:"Pontus Jansson",        influence:68,caps:55,goals:2,born:1991,pos:"Defender",  active:true,
-   bio:"Cult hero at Leeds United, now passionate captain of Brentford in the Premier League. One of the most combative defenders in England.",
-   clubs:["Torino","Leeds United","Brentford"]},
-
-  {name:"Anders Svensson",       influence:66,caps:148,goals:19,born:1976,pos:"Midfielder",active:false,
-   bio:"Sweden's 2nd most-capped player ever (148 caps). Spent six years at Southampton in the Premier League and Championship. Calm, intelligent presence.",
-   clubs:["Southampton"]},
-
-  {name:"Niclas Alexandersson",  influence:67,caps:109,goals:11,born:1971,pos:"Midfielder",active:false,
-   bio:"Over 100 caps for Sweden. Reliable wide midfielder across Sheffield Wednesday, Everton and Newcastle for 15 seasons.",
-   clubs:["Sheffield Wednesday","Everton","Newcastle"]},
-
-  {name:"Patrik Andersson",      influence:66,caps:96,goals:7,born:1971,pos:"Defender",  active:false,
-   bio:"Champions League winner with Bayern Munich in 2001. Top-level centre-back in England, Germany and Spain.",
-   clubs:["Blackburn","Borussia Mönchengladbach","Barcelona","Bayern Munich"]},
-
-  {name:"Kim Källström",         influence:65,caps:131,goals:17,born:1982,pos:"Midfielder",active:false,
-   bio:"One of Sweden's most-capped players (131). Cultured holding midfielder who played at Lyon, Spartak Moscow, Arsenal and Galatasaray.",
-   clubs:["Rennes","Lyon","Sporting CP","Arsenal","Spartak Moscow","Galatasaray"]},
-
-  // ── INTERNATIONALS (40–64) ─────────────────────────────────────
-  {name:"Seb Larsson",           influence:62,caps:133,goals:18,born:1985,pos:"Midfielder",active:false,
-   bio:"3rd most-capped Swede ever (133). Deadly from set pieces — long English career at Arsenal, Birmingham, Sunderland and Hull.",
-   clubs:["Arsenal","Birmingham City","Sunderland","Hull City"]},
-
-  {name:"Magnus Hedman",         influence:60,caps:58,goals:0,born:1973,pos:"Goalkeeper",active:false,
-   bio:"First-choice goalkeeper for Sweden through the late 90s/early 2000s. Four seasons at Coventry City, then Celtic, then Ancona.",
-   clubs:["Coventry","Celtic","Ancona"]},
-
-  {name:"Stefan Rehn",           influence:58,caps:52,goals:3,born:1966,pos:"Midfielder",active:false,
-   bio:"Excellent technically gifted midfielder who won the Eredivisie with Ajax and later had a stint at Everton.",
-   clubs:["Ajax","Everton"]},
-
-  {name:"Viktor Claesson",       influence:58,caps:65,goals:11,born:1992,pos:"Winger",    active:true,
-   bio:"Versatile, intelligent winger who was integral to Krasnodar's Russian Premier League success across many seasons.",
-   clubs:["Krasnodar"]},
-
-  {name:"Marcus Berg",           influence:57,caps:51,goals:14,born:1986,pos:"Forward",   active:false,
-   bio:"Prolific scorer at every level. Over 100 goals for Krasnodar in Russia. Also scored in the Middle East for Al Ain and Al-Ittihad.",
-   clubs:["Hamburg","Krasnodar","Al Ain","Al-Ittihad"]},
-
-  {name:"Ludwig Augustinsson",   influence:56,caps:64,goals:2,born:1994,pos:"Defender",   active:true,
-   bio:"Marauding left-back who excelled in the Bundesliga for Werder Bremen and La Liga for Sevilla.",
-   clubs:["Werder Bremen","Sevilla","Aston Villa"]},
-
-  {name:"Johan Elmander",        influence:55,caps:71,goals:17,born:1981,pos:"Forward",   active:false,
-   bio:"Versatile, hard-working striker with a wide European career — Toulouse, Bolton, Galatasaray and Norwich. 71 caps over a decade.",
-   clubs:["Toulouse","Bolton","Galatasaray","Norwich"]},
-
-  {name:"Albin Ekdal",           influence:55,caps:80,goals:3,born:1989,pos:"Midfielder", active:false,
-   bio:"Intelligent, composed defensive midfielder. Spent the bulk of his club career in Serie A at Cagliari and Sampdoria.",
-   clubs:["Hamburg","Cagliari","Sampdoria"]},
-
-  {name:"Andreas Isaksson",      influence:54,caps:133,goals:0,born:1981,pos:"Goalkeeper",active:false,
-   bio:"Tied with Seb Larsson at 133 caps — one of Sweden's most decorated keepers. Played at Manchester City, PSG and Kasımpaşa.",
-   clubs:["Manchester City","PSG","Kasımpaşa"]},
-
-  {name:"Andreas Granqvist",     influence:54,caps:86,goals:14,born:1985,pos:"Defender",  active:false,
-   bio:"Sweden's captain at the 2018 World Cup, scoring a crucial penalty to beat Germany. Solid stints at Genoa and Krasnodar.",
-   clubs:["Genoa","Hellas Verona","Krasnodar"]},
-
-  {name:"Pär Zetterberg",        influence:52,caps:62,goals:13,born:1970,pos:"Midfielder",active:false,
-   bio:"Elegant, creative midfielder who became a legend at Anderlecht in Belgium — over 400 appearances across 12 seasons.",
-   clubs:["Anderlecht"]},
-
-  {name:"Mikael Lustig",         influence:53,caps:86,goals:6,born:1986,pos:"Defender",   active:false,
-   bio:"Won seven Scottish league titles with Celtic. Long-serving right-back and defensive mainstay of Sweden for a decade.",
-   clubs:["Celtic"]},
-
-  {name:"Roland Nilsson",        influence:52,caps:116,goals:2,born:1963,pos:"Defender",  active:false,
-   bio:"One of the greatest Swedish right-backs ever. Distinguished 116-cap career. Long stints at Sheffield Wednesday and Coventry.",
-   clubs:["Sheffield Wednesday","Coventry"]},
-
-  {name:"Johan Mjällby",         influence:52,caps:50,goals:3,born:1971,pos:"Defender",   active:false,
-   bio:"Powerful, athletic centre-back who won three Scottish league titles with Celtic's famous Martin O'Neill side.",
-   clubs:["Celtic"]},
-
-  {name:"Jonas Thern",           influence:51,caps:57,goals:7,born:1966,pos:"Midfielder", active:false,
-   bio:"Tough, technically gifted midfielder. Key to Sweden at USA 94 and the Napoli team of the early 90s. Also played for Roma and Benfica.",
-   clubs:["Napoli","Roma","Benfica"]},
-
-  {name:"Martin Olsson",         influence:50,caps:61,goals:2,born:1988,pos:"Defender",   active:false,
-   bio:"Reliable left-back with many Premier League seasons at Blackburn, Norwich and Swansea.",
-   clubs:["Blackburn","Norwich","Swansea"]},
-
-  {name:"Tobias Linderoth",      influence:50,caps:64,goals:1,born:1979,pos:"Midfielder", active:false,
-   bio:"Hard-working, disciplined midfielder who played in the Premier League at Everton and had stints at Galatasaray and Nice.",
-   clubs:["Everton","Galatasaray","Nice"]},
-
-  {name:"Markus Rosenberg",      influence:49,caps:52,goals:10,born:1982,pos:"Forward",   active:false,
-   bio:"Tall, technically assured striker. Played in the Bundesliga for Werder Bremen and La Liga for Villarreal.",
-   clubs:["Werder Bremen","Villarreal"]},
-
-  {name:"Robin Olsen",           influence:48,caps:70,goals:0,born:1990,pos:"Goalkeeper", active:false,
-   bio:"Sweden's first-choice goalkeeper for nearly a decade. Played at Roma, Everton and Aston Villa across Europe.",
-   clubs:["Roma","Everton","Aston Villa"]},
-
-  {name:"Mattias Jonson",        influence:48,caps:60,goals:10,born:1974,pos:"Winger",    active:false,
-   bio:"Creative, direct winger who played in the Premier League at Blackburn and won the Scottish title at Celtic under Martin O'Neill.",
-   clubs:["Blackburn","Celtic"]},
-
-  {name:"Emil Krafth",           influence:47,caps:35,goals:0,born:1994,pos:"Defender",   active:true,
-   bio:"Reliable right-back who came through Serie A at Bologna before establishing himself at Newcastle in the Premier League.",
-   clubs:["Bologna","Newcastle"]},
-
-  {name:"Ola Toivonen",          influence:47,caps:75,goals:16,born:1986,pos:"Forward",   active:false,
-   bio:"Unpredictable, gifted attacker. Scored a superb lob to beat Germany at the 2018 World Cup. Best club years at Toulouse and Rennes.",
-   clubs:["Toulouse","Rennes"]},
-
-  {name:"Michael Svensson",      influence:46,caps:39,goals:0,born:1975,pos:"Defender",   active:false,
-   bio:"Solid centre-back who spent five years at Southampton in the Premier League era under Gordon Strachan.",
-   clubs:["Southampton"]},
-
-  {name:"Jimmy Durmaz",          influence:45,caps:54,goals:5,born:1989,pos:"Winger",     active:false,
-   bio:"Tricky, energetic wide player. Best club years at Toulouse in Ligue 1 and later at Galatasaray in Turkey.",
-   clubs:["Toulouse","Galatasaray","Caen"]},
-
-  {name:"Anthony Elanga",        influence:44,caps:23,goals:4,born:2002,pos:"Winger",     active:true,
-   bio:"Exciting young winger from Manchester United's academy — composed and direct. Now a key performer at Nottingham Forest.",
-   clubs:["Manchester United","Nottingham Forest"]},
-
-  {name:"Daniel Majstorovic",    influence:44,caps:41,goals:2,born:1977,pos:"Defender",   active:false,
-   bio:"Commanding centre-back who joined Celtic in 2009 and won the Scottish title. Sweden 2010 World Cup squad member.",
-   clubs:["Celtic"]},
-
-  {name:"Pontus Kåmark",         influence:43,caps:38,goals:1,born:1969,pos:"Midfielder", active:false,
-   bio:"Tough-tackling, dependable midfielder at Leicester City. Played at USA 94 and won the League Cup with Leicester.",
-   clubs:["Leicester"]},
-
-  {name:"Kennet Andersson",      influence:42,caps:83,goals:31,born:1967,pos:"Forward",   active:false,
-   bio:"Powerful, aerial striker with 83 caps. Scored crucial goals at USA 94 and Euro 2000. Career also took him to Lille, Valencia and Bari.",
-   clubs:["Lille","Valencia","Bari"]},
-
-  {name:"Carl Starfelt",         influence:42,caps:30,goals:2,born:1995,pos:"Defender",   active:true,
-   bio:"Tall, commanding centre-back who won the Scottish Premiership with Celtic before moving to La Liga with Celta Vigo.",
-   clubs:["Celtic","Celta Vigo"]},
-
-  {name:"Filip Helander",        influence:41,caps:30,goals:2,born:1992,pos:"Defender",   active:false,
-   bio:"Won multiple Scottish Premiership titles at Rangers. Previously played in Serie A at Bologna.",
-   clubs:["Bologna","Rangers"]},
-
-  {name:"Erik Edman",            influence:41,caps:57,goals:2,born:1978,pos:"Defender",   active:false,
-   bio:"Solid, dependable left-back who played in the Premier League at Tottenham and Wigan, plus Rennes in France.",
-   clubs:["Tottenham","Rennes","Wigan"]},
-
-  {name:"Nils-Eric Johansson",   influence:40,caps:39,goals:1,born:1980,pos:"Defender",   active:false,
-   bio:"Versatile, composed defender who played in the Premier League at Blackburn and in the Bundesliga at Nuremberg.",
-   clubs:["Blackburn","Nuremberg"]},
-
-  {name:"John Guidetti",         influence:40,caps:26,goals:6,born:1992,pos:"Forward",    active:true,
-   bio:"Celtic fan favourite who scored crucial Euro 2016 qualifying goals. Later played in La Liga for Celta Vigo.",
-   clubs:["Celtic","Celta Vigo","Aston Villa"]},
-
-  {name:"Marcus Allbäck",        influence:40,caps:57,goals:13,born:1973,pos:"Forward",   active:false,
-   bio:"Experienced, hard-working striker with spells in the Premier League at Aston Villa and Coventry, plus Heerenveen.",
-   clubs:["Aston Villa","Coventry","Heerenveen"]},
-
-  {name:"Joel Pohjanpalo",       influence:40,caps:48,goals:17,born:1994,pos:"Forward",   active:true,
-   bio:"Prolific, clever goalscorer. Had Bundesliga stints at Bayer Leverkusen and Union Berlin before thriving with Venezia in Italy.",
-   clubs:["Bayer Leverkusen","Union Berlin","Venezia"]},
-
-  {name:"Jens Cajuste",          influence:40,caps:22,goals:1,born:2000,pos:"Midfielder", active:true,
-   bio:"Dynamic box-to-box midfielder who impressed in Ligue 1 at Reims before a high-profile move to Napoli in Serie A.",
-   clubs:["Reims","Napoli"]},
-
-  {name:"Samuel Holmén",         influence:40,caps:38,goals:1,born:1984,pos:"Midfielder", active:false,
-   bio:"Industrious, intelligent defensive midfielder who played for Twente in the Netherlands and Club Brugge in Belgium.",
-   clubs:["Twente","Club Brugge"]},
-
-  {name:"Sebastian Andersson",   influence:40,caps:18,goals:5,born:1991,pos:"Forward",    active:false,
-   bio:"Physical, powerful striker who scored important goals for Union Berlin in their Bundesliga rise before joining Cologne.",
-   clubs:["Union Berlin","Cologne"]},
-
-  // ── REGULARS (<40) ─────────────────────────────────────────────
-  {name:"Sam Larsson",           influence:38,caps:17,goals:2,born:1993,pos:"Winger",     active:true,
-   bio:"Skillful, low-centre-of-gravity winger. Important player in the Dutch Eredivisie at Heerenveen and Feyenoord.",
-   clubs:["Heerenveen","Feyenoord"]},
-
-  {name:"Jesper Karlsson",       influence:38,caps:12,goals:3,born:1998,pos:"Winger",     active:true,
-   bio:"Dangerous, incisive left-winger who became one of the Eredivisie's most decisive and creative players at AZ Alkmaar.",
-   clubs:["AZ"]},
-
-  {name:"Jordan Larsson",        influence:38,caps:19,goals:4,born:1997,pos:"Forward",    active:true,
-   bio:"Son of Henrik Larsson. Striker who has played in Russia at Spartak Moscow and in Italy at Hellas Verona.",
-   clubs:["Spartak Moscow","Hellas Verona"]},
-
-  {name:"Mattias Svanberg",      influence:37,caps:30,goals:5,born:1999,pos:"Midfielder", active:true,
-   bio:"Energetic, technically sound midfielder with Serie A experience at Bologna and now playing for Wolfsburg in the Bundesliga.",
-   clubs:["Bologna","Wolfsburg"]},
-
-  {name:"Isaac Kiese Thelin",    influence:36,caps:34,goals:8,born:1992,pos:"Forward",    active:true,
-   bio:"Physical, mobile striker with European experience — Bordeaux in France, Anderlecht in Belgium, Bayer Leverkusen and Augsburg in Germany.",
-   clubs:["Bordeaux","Anderlecht","Bayer Leverkusen","Augsburg"]},
-
-  {name:"Viktor Elm",            influence:36,caps:35,goals:3,born:1985,pos:"Midfielder", active:false,
-   bio:"Technically gifted central midfielder who had a productive spell at Twente in the Dutch Eredivisie.",
-   clubs:["Twente"]},
-
-  {name:"Karl-Johan Johnsson",   influence:35,caps:39,goals:0,born:1990,pos:"Goalkeeper", active:true,
-   bio:"Reliable goalkeeper with French Ligue 1 experience at Guingamp and Nimes.",
-   clubs:["Guingamp","Nimes"]},
-
-  {name:"Erkan Zengin",          influence:35,caps:45,goals:5,born:1985,pos:"Winger",     active:false,
-   bio:"Talented, versatile wide player. Spent several influential years at Trabzonspor in the Turkish Süper Lig.",
-   clubs:["Trabzonspor","Strasbourg"]},
-
-  {name:"Robin Quaison",         influence:35,caps:40,goals:9,born:1993,pos:"Forward",    active:true,
-   bio:"Mobile, technical attacker who scored regularly in the Bundesliga for Mainz. Previously at Palermo in Serie A.",
-   clubs:["Palermo","Mainz"]},
-
-  {name:"Lasse Vibe",            influence:34,caps:19,goals:1,born:1987,pos:"Forward",    active:false,
-   bio:"Intelligent, hardworking striker who spent four years at Brentford and became a fan favourite in west London.",
-   clubs:["Brentford"]},
-
-  {name:"Ken Sema",              influence:33,caps:16,goals:2,born:1994,pos:"Winger",     active:true,
-   bio:"Direct, pacey and technically adept winger who played in the Premier League for Watford.",
-   clubs:["Watford"]},
-
-  {name:"Rasmus Elm",            influence:33,caps:35,goals:3,born:1988,pos:"Midfielder", active:false,
-   bio:"Creative, versatile midfielder with stints at CSKA Moscow in Russia and Wolfsburg in Germany.",
-   clubs:["Wolfsburg","CSKA Moscow"]},
-
-  {name:"Anders Andersson",      influence:32,caps:31,goals:1,born:1974,pos:"Midfielder", active:false,
-   bio:"Dependable, two-footed midfielder who played in the Premier League at Blackburn Rovers during the late 90s.",
-   clubs:["Blackburn"]},
-
-  {name:"Pontus Farnerud",       influence:32,caps:29,goals:5,born:1980,pos:"Winger",     active:false,
-   bio:"Skilful, versatile winger with stints at Sporting CP in Portugal and Strasbourg in France.",
-   clubs:["Sporting CP","Strasbourg"]},
-
-  {name:"Linus Wahlqvist",       influence:32,caps:14,goals:0,born:1996,pos:"Defender",   active:true,
-   bio:"Attack-minded, overlapping right-back who played in the Dutch Eredivisie for NEC Nijmegen.",
-   clubs:["NEC Nijmegen"]},
-
-  {name:"Alexander Milosevic",   influence:32,caps:20,goals:0,born:1992,pos:"Defender",   active:false,
-   bio:"Commanding centre-back who played in the Premier League for Nottingham Forest and in Turkey for Besiktas.",
-   clubs:["Nottingham Forest","Besiktas"]},
-
-  {name:"Johan Larsson",         influence:30,caps:22,goals:3,born:1990,pos:"Winger",     active:false,
-   bio:"Productive wide midfielder who became a consistent performer for Club Brugge in the Belgian Pro League.",
-   clubs:["Club Brugge"]},
-
-  {name:"Gustav Svensson",       influence:30,caps:16,goals:1,born:1987,pos:"Midfielder", active:false,
-   bio:"Consistent, reliable central midfielder who became a key player in MLS for Seattle Sounders.",
-   clubs:["Seattle Sounders"]},
-
-  {name:"Jakob Johansson",       influence:30,caps:24,goals:1,born:1990,pos:"Midfielder", active:false,
-   bio:"Defensive-minded, disciplined midfielder who played for Basel in Switzerland and Sporting CP in Portugal.",
-   clubs:["Basel","Sporting CP"]},
-
-  {name:"Oscar Hiljemark",       influence:30,caps:18,goals:2,born:1992,pos:"Midfielder", active:false,
-   bio:"Box-to-box midfielder with stints in Serie A at Palermo and Genoa.",
-   clubs:["Palermo","Genoa"]},
-
-  {name:"Marcus Rohden",         influence:28,caps:10,goals:2,born:1991,pos:"Midfielder", active:false,
-   bio:"Energetic, hard-running midfielder who spent several seasons in Serie B with Crotone and Frosinone.",
-   clubs:["Crotone","Frosinone"]},
-
-  {name:"Mikael Nilsson",        influence:28,caps:56,goals:3,born:1978,pos:"Defender",   active:false,
-   bio:"Versatile, experienced defender with stints at Southampton in the Premier League and Panathinaikos in Greece.",
-   clubs:["Southampton","Panathinaikos"]},
-
-  {name:"Pierre Bengtsson",      influence:26,caps:18,goals:0,born:1988,pos:"Defender",   active:false,
-   bio:"Left-back with experience in French Ligue 1 at Caen and in Portugal at Sporting CP.",
-   clubs:["Caen","Sporting CP"]},
-
-  {name:"Simon Tibbling",        influence:25,caps:5,goals:0,born:1994,pos:"Midfielder",  active:false,
-   bio:"Talented central midfielder who played in the Eredivisie for Groningen in the Netherlands.",
-   clubs:["Groningen"]},
+
+  // ── LEGENDS ────────────────────────────────────────────────────
+  {name:"Zlatan Ibrahimović", influence:100, born:1981, pos:"Forward", active:false,
+   bio:"Sweden's all-time top scorer. Won league titles in 6 countries across 9 clubs.",
+   clubs:[
+     {name:"Ajax",             years:"2001–04", apps:74,  goals:35, trophies:"Eredivisie ×2",     bio:"Burst onto the international stage with 35 goals. Raw, explosive and unplayable. Ajax's biggest sale."},
+     {name:"Juventus",         years:"2004–06", apps:92,  goals:26, trophies:"Serie A ×2",        bio:"Won back-to-back titles before they were stripped in Calciopoli. Sold to Inter in a cash-plus-Cannavaro swap."},
+     {name:"Inter Milan",      years:"2006–09", apps:88,  goals:66, trophies:"Serie A ×3",        bio:"Three consecutive Scudetti. His most prolific Serie A spell — 66 goals and a dominant presence at the San Siro."},
+     {name:"Barcelona",        years:"2009–11", apps:46,  goals:22, trophies:"La Liga, Copa del Rey", bio:"Clashed with Guardiola's system despite 22 goals. Famous quote: 'You bought a Ferrari but drive it like a Fiat.' Left on loan."},
+     {name:"AC Milan",         years:"2010–12", apps:85,  goals:56, trophies:"Serie A",           bio:"On loan then permanent. Scored 56 in 85 — some of his finest football. Milan fell in love with him."},
+     {name:"PSG",              years:"2012–16", apps:180, goals:156,trophies:"Ligue 1 ×4",        bio:"PSG's all-time record scorer (156). Absolute domination of French football. Named Ligue 1 Player of the Year three times."},
+     {name:"Manchester United",years:"2016–18", apps:53,  goals:29, trophies:"EFL Cup, Europa League", bio:"Won a Europa League and EFL Cup in his first season. Serious knee injury cut the spell short at its peak."},
+     {name:"LA Galaxy",        years:"2018–19", apps:58,  goals:53, trophies:"—",                 bio:"Transformed MLS. 53 goals in 58 games. MLS Player of the Year. Made Americans fall in love with football."},
+   ]},
+
+  {name:"Thomas Ravelli", influence:80, born:1959, pos:"Goalkeeper", active:false,
+   bio:"Sweden's most-capped player ever (143 caps, 1981–97). Brilliant shot-stopper, first choice for 16 years.",
+   clubs:[
+     {name:"Tampa Bay", years:"1996–97", apps:32, goals:0, trophies:"—", bio:"Ended his career in MLS with Tampa Bay Mutiny, one of the first wave of European stars to move to the USA."},
+   ]},
+
+  {name:"Freddie Ljungberg", influence:90, born:1977, pos:"Midfielder", active:false,
+   bio:"Arsenal icon of the Invincibles era. Explosive, combative, with an eye for stunning goals.",
+   clubs:[
+     {name:"Arsenal",          years:"1998–07", apps:328, goals:72, trophies:"Premier League ×2, FA Cup ×3", bio:"The Invincibles, the red hair, the perfectly timed runs from midfield. 328 appearances and one of Highbury's greatest ever servants."},
+     {name:"West Ham",         years:"2007–08", apps:22,  goals:2,  trophies:"—",  bio:"Short spell at Upton Park after leaving Arsenal. Showed he still had quality at the top level."},
+     {name:"Celtic",           years:"2008",    apps:8,   goals:1,  trophies:"—",  bio:"A brief but memorable stint at Parkhead. His Arsenal connection made him an instant fan favourite."},
+     {name:"Seattle Sounders", years:"2009–12", apps:71,  goals:8,  trophies:"US Open Cup ×2", bio:"A key figure in launching MLS as a serious league. Led Sounders to two Open Cup titles and became a fan legend."},
+   ]},
+
+  {name:"Henrik Larsson", influence:90, born:1971, pos:"Forward", active:false,
+   bio:"Celtic legend, Champions League winner with Barcelona. One of the finest strikers of his generation.",
+   clubs:[
+     {name:"Celtic",           years:"1997–04", apps:315, goals:242,trophies:"SPL ×4, Scottish Cup ×2", bio:"242 goals. A god at Parkhead. Seven seasons of relentless brilliance — arguably the greatest foreign player in Scottish football history."},
+     {name:"Barcelona",        years:"2004–06", apps:53,  goals:19, trophies:"La Liga, Champions League", bio:"Won the Champions League in 2006, coming off the bench to score twice in the Final. Pep Guardiola called him one of the best he ever played with."},
+     {name:"Manchester United", years:"2007",   apps:13,  goals:3,  trophies:"—", bio:"A short loan spell but he impressed Fergie. Scored key goals — a reminder of what a footballer he was even at 35."},
+   ]},
+
+  {name:"Gunnar Nordahl", influence:88, born:1921, pos:"Forward", active:false,
+   bio:"The greatest Swedish goalscorer in Serie A history. Olympic gold 1948.",
+   clubs:[
+     {name:"AC Milan",   years:"1949–56", apps:257, goals:221,trophies:"Serie A ×4", bio:"221 goals in 257 games. Won the Italian Golden Boot five times. His Serie A goalscoring record stood for decades. The complete centre-forward."},
+     {name:"Roma",       years:"1956–58", apps:55,  goals:19, trophies:"—",          bio:"Ended his career in Rome. Still clinical at 35, adding 19 goals in two seasons."},
+   ]},
+
+  {name:"Viktor Gyökeres", influence:87, born:1998, pos:"Forward", active:true,
+   bio:"The most feared striker in Europe in 2023-24. Brutal pace, power and finishing.",
+   clubs:[
+     {name:"Sporting CP", years:"2023–25", apps:102, goals:97, trophies:"Primeira Liga", bio:"43 goals in 2023-24 alone — the most in Europe's top leagues. Carried Sporting to the title. Impossible to defend. Left as a Sporting legend after just two seasons."},
+     {name:"Arsenal",     years:"2025–",   apps:0,   goals:0,  trophies:"—",            bio:"Joined Arsenal in summer 2025 for a reported £82m. Immediately installed as the focal point of Arteta's attack. The Premier League awaits."},
+   ]},
+
+  {name:"Nils Liedholm", influence:85, born:1922, pos:"Midfielder", active:false,
+   bio:"The Gre-No-Li trio maestro at AC Milan. Captained Sweden to the 1958 World Cup Final.",
+   clubs:[
+     {name:"AC Milan", years:"1949–61", apps:367, goals:60, trophies:"Serie A ×4", bio:"12 seasons of elegance at the San Siro. Won four league titles. Captained Sweden to the 1958 World Cup Final on home soil, losing only to a brilliant Brazil side."},
+   ]},
+
+  {name:"Kurt Hamrin", influence:85, born:1934, pos:"Winger", active:false,
+   bio:"'Little Bird' — one of Italy's most beloved foreign players of all time.",
+   clubs:[
+     {name:"Fiorentina", years:"1958–67", apps:316, goals:150, trophies:"Coppa Italia ×2", bio:"11 seasons of genius in Florence. 150 goals from the wing. A fan idol whose dribbling and pace left full-backs for dead. A Fiorentina legend."},
+     {name:"AC Milan",   years:"1967–71", apps:122, goals:42,  trophies:"Cup Winners' Cup", bio:"Won the European Cup Winners' Cup in 1968 at 34 years old. Still brilliantly effective — proof of his longevity."},
+     {name:"Genoa",      years:"1971–73", apps:40,  goals:9,   trophies:"—", bio:"Finished his career at Genoa, still contributing with goals and assists before retiring at 39."},
+   ]},
+
+  {name:"Gunnar Gren", influence:83, born:1920, pos:"Forward", active:false,
+   bio:"The 'Professor' — Italy's Footballer of the Year 1949. 1958 World Cup Final.",
+   clubs:[
+     {name:"AC Milan",    years:"1949–53", apps:137, goals:52, trophies:"Serie A ×2", bio:"Named Italian Footballer of the Year in 1949. An elegant, intelligent playmaker who orchestrated Milan's dominance alongside Nordahl and Liedholm."},
+     {name:"Fiorentina",  years:"1953–55", apps:60,  goals:22, trophies:"—", bio:"Two productive seasons in Florence before returning to Sweden. Still providing assists and goals at the highest level."},
+   ]},
+
+  // ── STARS ──────────────────────────────────────────────────────
+  {name:"Glenn Hysén", influence:74, born:1959, pos:"Defender", active:false,
+   bio:"Commanding centre-back who won the First Division title with Liverpool in 1990.",
+   clubs:[
+     {name:"Fiorentina", years:"1986–88", apps:74, goals:2, trophies:"—", bio:"Established himself as one of Europe's top defenders in Serie A before Liverpool came calling."},
+     {name:"PSV",        years:"1988–89", apps:34, goals:1, trophies:"—", bio:"Brief but impressive spell at PSV before Kenny Dalglish signed him for Liverpool."},
+     {name:"Liverpool",  years:"1989–92", apps:75, goals:2, trophies:"First Division", bio:"Won the First Division title in his debut season. A composed, dominant presence in a formidable Liverpool defence."},
+   ]},
+
+  {name:"Klas Ingesson", influence:72, born:1968, pos:"Midfielder", active:false,
+   bio:"Powerful midfielder, key to USA 94 bronze. Played across Italy, England and Netherlands.",
+   clubs:[
+     {name:"PSV",              years:"1990–93", apps:81,  goals:12, trophies:"Eredivisie", bio:"Won the Eredivisie with PSV. Dominant, combative — the engine of a top European side."},
+     {name:"Sheffield Wednesday",years:"1993–95",apps:42, goals:5,  trophies:"—",          bio:"Brought his Bundesliga-level physicality to English football. A fan favourite at Hillsborough."},
+     {name:"Bari",             years:"1995–97", apps:52,  goals:8,  trophies:"—",          bio:"Two solid Serie A seasons in the south of Italy. Proved he could compete at Europe's highest levels."},
+     {name:"Bologna",          years:"1997–00", apps:73,  goals:11, trophies:"—",          bio:"Best Italian form at Bologna — a key figure in midfield across three seasons."},
+   ]},
+
+  {name:"Håkan Mild", influence:70, born:1971, pos:"Midfielder", active:false,
+   bio:"Technically refined midfielder. Key to USA 94 and Euro 2000.",
+   clubs:[
+     {name:"Valencia", years:"1995–97", apps:58, goals:8, trophies:"—", bio:"Played under Luis Aragonés at Valencia in La Liga. An elegant, technically gifted presence who raised the quality of Swedish football's profile in Spain."},
+   ]},
+
+  {name:"Alexander Isak", influence:82, born:2000, pos:"Forward", active:true,
+   bio:"One of the Premier League's most complete modern strikers.",
+   clubs:[
+     {name:"Real Sociedad", years:"2019–22", apps:132, goals:46, trophies:"Copa del Rey", bio:"Lit up La Liga with 46 goals. Copa del Rey winner. His movement, finishing and composure drew comparisons with Henry. Left as a Sociedad legend."},
+     {name:"Newcastle",     years:"2022–",   apps:82,  goals:45, trophies:"—",            bio:"£60m signing who has been worth every penny. 45 goals for Newcastle — a genuine Premier League elite striker in the making."},
+   ]},
+
+  {name:"Dejan Kulusevski", influence:79, born:2000, pos:"Winger", active:true,
+   bio:"Transformed Tottenham's attack. Named Spurs Player of the Year 2022-23.",
+   clubs:[
+     {name:"Parma",    years:"2019–20", apps:36, goals:10, trophies:"—",             bio:"On loan from Juventus — 10 goals from midfield for a relegated side. Named Serie A Young Player of the Year."},
+     {name:"Juventus", years:"2020–22", apps:73, goals:10, trophies:"Coppa Italia",   bio:"Won the Coppa Italia but never fully settled. Spurs came calling in January 2022 and everything changed."},
+     {name:"Tottenham",years:"2022–",   apps:103,goals:22, trophies:"—",             bio:"Arrived on loan and was unstoppable — instantly named Spurs Player of the Year. His pace, dribbling and link play reinvented their right side."},
+   ]},
+
+  {name:"Victor Lindelöf", influence:78, born:1994, pos:"Defender", active:true,
+   bio:"Sweden's most-capped active outfield player. Composed Premier League centre-back.",
+   clubs:[
+     {name:"Benfica",           years:"2012–17", apps:126, goals:5, trophies:"Primeira Liga ×2", bio:"Won two Portuguese titles. Became one of the best young defenders in Europe before Man United signed him."},
+     {name:"Manchester United", years:"2017–",   apps:188, goals:4, trophies:"EFL Cup, Europa League", bio:"Has grown into a reliable, assured Premier League defender over seven seasons. Sweden's most important outfield player today."},
+   ]},
+
+  {name:"Emil Forsberg", influence:77, born:1991, pos:"Midfielder", active:true,
+   bio:"Sweden's all-time most-capped player. A decade of excellence at RB Leipzig.",
+   clubs:[
+     {name:"RB Leipzig", years:"2015–23", apps:282, goals:62, trophies:"DFB-Pokal", bio:"282 appearances across eight seasons. DFB-Pokal winner. Defined RB Leipzig's identity in the Bundesliga — creative, energetic and always dangerous."},
+   ]},
+
+  {name:"Olof Mellberg", influence:76, born:1977, pos:"Defender", active:false,
+   bio:"Commanding captain at Aston Villa for six years. One of Sweden's greatest defenders.",
+   clubs:[
+     {name:"Aston Villa", years:"2001–08", apps:232, goals:9, trophies:"—",         bio:"232 appearances and six seasons as captain. An absolute rock. His partnership with Laursen was one of the best in the Premier League era."},
+     {name:"Juventus",    years:"2008–09", apps:29,  goals:1, trophies:"—",         bio:"A year in Turin — proved he could still compete at the highest European level."},
+     {name:"Lyon",        years:"2009–12", apps:85,  goals:3, trophies:"—",         bio:"Three solid Ligue 1 seasons. Part of a Lyon side that was still competing at the top of France."},
+     {name:"Roma",        years:"2012–14", apps:58,  goals:2, trophies:"—",         bio:"Finished his career at Roma — a brilliant last chapter in Serie A for one of Sweden's greatest defenders."},
+   ]},
+
+  {name:"Stefan Schwarz", influence:74, born:1969, pos:"Midfielder", active:false,
+   bio:"Box-to-box engine. Key to Sweden's bronze at USA 94.",
+   clubs:[
+     {name:"Arsenal",   years:"1994–95", apps:48,  goals:6,  trophies:"Cup Winners' Cup", bio:"Won the Cup Winners' Cup at Highbury. Energetic, technically gifted — a perfect fit for George Graham's Arsenal."},
+     {name:"Fiorentina",years:"1995–97", apps:66,  goals:7,  trophies:"—",               bio:"Two strong Serie A seasons in Florence. Held his own against the best midfielders in Italy."},
+     {name:"Valencia",  years:"1997–99", apps:56,  goals:8,  trophies:"—",               bio:"Part of a Valencia side building toward their great era. Consistently one of La Liga's top midfielders."},
+     {name:"Sunderland",years:"1999–02", apps:79,  goals:5,  trophies:"—",               bio:"Played under Peter Reid at the Stadium of Light. A fan favourite despite Sunderland's eventual relegation."},
+   ]},
+
+  {name:"Tomas Brolin", influence:73, born:1969, pos:"Forward", active:false,
+   bio:"The most gifted Swedish attacker of the 90s. Italian Serie A Player of the Year 1992.",
+   clubs:[
+     {name:"Parma",         years:"1990–95", apps:165, goals:55, trophies:"Coppa Italia ×2, UEFA Cup, Cup Winners' Cup", bio:"55 goals and multiple European trophies. Parma's golden era coincided with Brolin at his brilliant best. Serie A Player of the Year 1992."},
+     {name:"Leeds United",  years:"1995–97", apps:27,  goals:4,  trophies:"—", bio:"Weight issues and injuries hampered what should have been a great chapter. Glimpses of his former brilliance but never recaptured Parma form."},
+     {name:"Crystal Palace",years:"1997–98", apps:19,  goals:3,  trophies:"—", bio:"Brief Premier League spell with Palace — still sharp in patches but his career peak had clearly passed."},
+   ]},
+
+  {name:"Martin Dahlin", influence:72, born:1968, pos:"Forward", active:false,
+   bio:"Explosive striker, devastating at USA 94. Hat-trick vs Russia.",
+   clubs:[
+     {name:"Borussia Mönchengladbach", years:"1991–97", apps:161, goals:77, trophies:"—", bio:"77 goals for Gladbach in six seasons. A thrilling, powerful centre-forward who was one of the Bundesliga's best attackers in the early 90s."},
+     {name:"Roma",                     years:"1997–99", apps:42,  goals:8,  trophies:"—", bio:"Two seasons in Serie A. The move to Italy was a natural step for one of Europe's top forwards at the time."},
+   ]},
+
+  {name:"Anders Limpar", influence:71, born:1965, pos:"Winger", active:false,
+   bio:"Inventive, skilful winger. Key to Arsenal's 1991 title. Moments of pure magic.",
+   clubs:[
+     {name:"Arsenal", years:"1990–94", apps:135, goals:22, trophies:"First Division, FA Cup", bio:"Won the First Division in his debut season. His ability to drift inside and score or create was ahead of its time. A fan favourite at Highbury."},
+     {name:"Everton", years:"1994–97", apps:71,  goals:8,  trophies:"—",                     bio:"Showed class at Goodison but injuries limited his impact. Played under Joe Royle in a side that often played to his strengths."},
+   ]},
+
+  {name:"Hasse Jeppson", influence:70, born:1925, pos:"Forward", active:false,
+   bio:"Set a world transfer record joining Napoli in 1952. Lethal Serie A scorer.",
+   clubs:[
+     {name:"Charlton", years:"1951–52", apps:11, goals:9,  trophies:"—",  bio:"9 goals in 11 games at Charlton triggered a world-record £52,000 bid from Napoli — one of football's first great transfer dramas."},
+     {name:"Atalanta", years:"1952–53", apps:28, goals:15, trophies:"—",  bio:"Strong Serie A debut season before joining Napoli the following year."},
+     {name:"Napoli",   years:"1953–56", apps:79, goals:38, trophies:"—",  bio:"38 goals in 79 games for Napoli — a hero in the south of Italy. His goals helped keep Napoli afloat in Serie A."},
+   ]},
+
+  {name:"Anders Svensson", influence:66, born:1976, pos:"Midfielder", active:false,
+   bio:"Sweden's 2nd most-capped player ever (148 caps). Six years at Southampton.",
+   clubs:[
+     {name:"Southampton", years:"2001–07", apps:195, goals:21, trophies:"—", bio:"195 appearances at St Mary's across six seasons — one of the Premier League's most underrated players. Consistent, intelligent and always available."},
+   ]},
+
+  {name:"Niclas Alexandersson", influence:67, born:1971, pos:"Midfielder", active:false,
+   bio:"109 caps. Reliable wide midfielder across three Premier League clubs.",
+   clubs:[
+     {name:"Sheffield Wednesday", years:"1997–00", apps:99,  goals:12, trophies:"—", bio:"Three standout seasons at Hillsborough. One of the best wingers in the Premier League at his peak."},
+     {name:"Everton",             years:"2000–02", apps:63,  goals:5,  trophies:"—", bio:"Solid if unspectacular at Goodison. Brought experience and Swedish international quality."},
+     {name:"Newcastle",           years:"2002–06", apps:70,  goals:4,  trophies:"—", bio:"Won a place in Bobby Robson's exciting Newcastle side. Reliable, consistent, still at the top level at 31."},
+   ]},
+
+  {name:"Patrik Andersson", influence:66, born:1971, pos:"Defender", active:false,
+   bio:"Champions League winner with Bayern Munich in 2001.",
+   clubs:[
+     {name:"Blackburn",                years:"1993–95", apps:40,  goals:3,  trophies:"—",               bio:"Arrived at the start of the Blackburn rise. Solid, dependable — learned from the best in the Premier League."},
+     {name:"Borussia Mönchengladbach", years:"1995–99", apps:129, goals:8,  trophies:"—",               bio:"Four excellent Bundesliga seasons. Became one of the best Swedish defenders of his era in Germany."},
+     {name:"Barcelona",                years:"1999–01", apps:40,  goals:2,  trophies:"La Liga",          bio:"Won La Liga with Barcelona under Van Gaal. Champions League semi-final. A genuinely elite level centre-back."},
+     {name:"Bayern Munich",            years:"2001–03", apps:41,  goals:1,  trophies:"Champions League", bio:"Won the Champions League in his debut season at Bayern. The peak of his career. A remarkable achievement."},
+   ]},
+
+  {name:"Kim Källström", influence:65, born:1982, pos:"Midfielder", active:false,
+   bio:"131 caps — one of Sweden's most-capped players ever. Played across five countries.",
+   clubs:[
+     {name:"Rennes",          years:"2004–06", apps:62,  goals:8,  trophies:"—",        bio:"Breakthrough European spell in Ligue 1. Established himself as a genuine top-level midfielder."},
+     {name:"Lyon",            years:"2006–12", apps:173, goals:24, trophies:"Ligue 1 ×4", bio:"Won four consecutive Ligue 1 titles. Part of the dominant Lyon side of the late 2000s. 173 appearances at the top of French football."},
+     {name:"Sporting CP",     years:"2012–13", apps:28,  goals:3,  trophies:"—",        bio:"A productive season in Lisbon before Arsenal came calling on deadline day."},
+     {name:"Arsenal",         years:"2014",    apps:8,   goals:0,  trophies:"—",        bio:"Signed injured on deadline day — played through it. Memorable moment in FA Cup run. Showed incredible professionalism."},
+     {name:"Spartak Moscow",  years:"2014–16", apps:46,  goals:6,  trophies:"—",        bio:"Two seasons in Russia. Brought European pedigree and leadership to Spartak's midfield."},
+     {name:"Galatasaray",     years:"2016–17", apps:24,  goals:2,  trophies:"Süper Lig",bio:"Won the Turkish league title — another trophy to add to an already decorated career."},
+   ]},
+
+  // ── INTERNATIONALS ─────────────────────────────────────────────
+  {name:"Seb Larsson", influence:62, born:1985, pos:"Midfielder", active:false,
+   bio:"133 caps — Sweden's 3rd most-capped player. Deadly from dead balls.",
+   clubs:[
+     {name:"Arsenal",        years:"2001–07", apps:15,  goals:1, trophies:"FA Cup",  bio:"Came through the Arsenal academy. Limited first-team opportunities but a great education at one of Europe's best clubs."},
+     {name:"Birmingham City",years:"2007–11", apps:148, goals:20,trophies:"League Cup", bio:"Won the League Cup in 2011 — scored the corner that led to the winning goal. 148 appearances and a Birmingham cult hero."},
+     {name:"Sunderland",     years:"2011–17", apps:186, goals:22,trophies:"—",       bio:"Six seasons at the Stadium of Light. One of the most consistent performers in the Premier League mid-table era. Legendary set pieces."},
+     {name:"Hull City",      years:"2017–19", apps:53,  goals:5, trophies:"—",       bio:"Brought experience and leadership to Hull's Championship side. Still a quality performer well into his 30s."},
+   ]},
+
+  {name:"Magnus Hedman", influence:60, born:1973, pos:"Goalkeeper", active:false,
+   bio:"Sweden's first-choice keeper through the late 90s / early 2000s. 58 caps.",
+   clubs:[
+     {name:"Coventry", years:"1997–02", apps:163, goals:0, trophies:"—",  bio:"163 appearances for Coventry in the Premier League. Brave, reliable and consistent across five seasons in England's top flight."},
+     {name:"Celtic",   years:"2002–05", apps:32,  goals:0, trophies:"SPL",bio:"Back-up at Celtic but still won the Scottish league. A fitting end to a distinguished career at the top level."},
+     {name:"Ancona",   years:"2005–06", apps:22,  goals:0, trophies:"—",  bio:"Final playing days in Italian football with Serie B side Ancona."},
+   ]},
+
+  {name:"Stefan Rehn", influence:58, born:1966, pos:"Midfielder", active:false,
+   bio:"Excellent midfielder who won the Eredivisie with Ajax. Also played for Everton.",
+   clubs:[
+     {name:"Ajax",   years:"1990–92", apps:59, goals:8, trophies:"Eredivisie", bio:"Won the Eredivisie. Part of the early Ajax side that would go on to win the Champions League under Van Gaal. A quality European-level midfielder."},
+     {name:"Everton",years:"1992–93", apps:19, goals:1, trophies:"—",          bio:"One season at Goodison — an early example of the Scandinavian influence in the Premier League era."},
+   ]},
+
+  {name:"Viktor Claesson", influence:58, born:1992, pos:"Winger", active:true,
+   bio:"Intelligent, versatile winger. Integral to Krasnodar for many seasons.",
+   clubs:[
+     {name:"Krasnodar", years:"2017–23", apps:178, goals:34, trophies:"Russian Cup", bio:"178 appearances and 34 goals — a key part of Krasnodar's best years in Russian football, including their Champions League run."},
+   ]},
+
+  {name:"Marcus Berg", influence:57, born:1986, pos:"Forward", active:false,
+   bio:"Prolific scorer in Russia and the Middle East. 100+ goals for Krasnodar.",
+   clubs:[
+     {name:"Hamburg",     years:"2010–13", apps:69,  goals:19, trophies:"—",  bio:"Nearly 20 goals for Hamburg in the Bundesliga — a solid return for a Swedish striker finding his European feet."},
+     {name:"Krasnodar",   years:"2013–21", apps:235, goals:115,trophies:"Russian Cup", bio:"115 goals in 235 games — a Krasnodar legend. The focal point of their attack for eight seasons and their most prolific scorer ever."},
+     {name:"Al Ain",      years:"2021–22", apps:27,  goals:21, trophies:"UAE League", bio:"21 goals in 27 games — immediately a hit in the UAE. Won the league title in his first season."},
+     {name:"Al-Ittihad",  years:"2022–23", apps:31,  goals:20, trophies:"Saudi League", bio:"Won the Saudi Pro League. Another country, another title — a much-travelled goal machine."},
+   ]},
+
+  {name:"Ludwig Augustinsson", influence:56, born:1994, pos:"Defender", active:true,
+   bio:"Marauding left-back. Bundesliga and La Liga experience.",
+   clubs:[
+     {name:"Werder Bremen", years:"2017–21", apps:116, goals:7,  trophies:"—", bio:"116 appearances and one of the Bundesliga's best left-backs across four seasons. Tireless, adventurous and technically strong."},
+     {name:"Sevilla",       years:"2021–23", apps:42,  goals:3,  trophies:"—", bio:"Played La Liga football at Sevilla — proven himself at one of Europe's most demanding clubs."},
+     {name:"Aston Villa",   years:"2023–",   apps:28,  goals:2,  trophies:"—", bio:"Brought his Bundesliga experience to the Premier League with Villa. Competing at the highest level of English football."},
+   ]},
+
+  {name:"Johan Elmander", influence:55, born:1981, pos:"Forward", active:false,
+   bio:"71 caps. Versatile, hard-working striker across France, England and Turkey.",
+   clubs:[
+     {name:"Toulouse",           years:"2006–08", apps:72,  goals:22, trophies:"—",            bio:"22 goals in Ligue 1 across two seasons — earned him a big move to Bolton."},
+     {name:"Bolton",             years:"2008–11", apps:92,  goals:21, trophies:"—",            bio:"21 goals for Bolton in the Premier League. A reliable, physical option who gave everything. Fan favourite at the Reebok."},
+     {name:"Galatasaray",        years:"2011–13", apps:56,  goals:18, trophies:"Süper Lig ×2", bio:"Won back-to-back Turkish titles. Thrived in Istanbul's passionate atmosphere. One of his best club spells."},
+     {name:"Norwich",            years:"2013–16", apps:72,  goals:8,  trophies:"—",            bio:"Solid years at Norwich in the Championship. Brought Premier League experience to a club fighting for promotion."},
+   ]},
+
+  {name:"Albin Ekdal", influence:55, born:1989, pos:"Midfielder", active:false,
+   bio:"Intelligent defensive midfielder. Bulk of career in Serie A.",
+   clubs:[
+     {name:"Hamburg",    years:"2013–14", apps:26,  goals:2, trophies:"—", bio:"A single season in the Bundesliga before heading to Italy where he truly found his home."},
+     {name:"Cagliari",   years:"2014–17", apps:105, goals:5, trophies:"—", bio:"Three strong Serie A seasons on Sardinia. Developed into one of the best defensive midfielders in Italian football."},
+     {name:"Sampdoria",  years:"2017–22", apps:148, goals:7, trophies:"—", bio:"Five seasons at Sampdoria — his spiritual home. 148 appearances and a key figure in their Serie A campaigns."},
+   ]},
+
+  {name:"Andreas Isaksson", influence:54, born:1981, pos:"Goalkeeper", active:false,
+   bio:"133 caps — one of Sweden's most-decorated keepers. Played at the very top.",
+   clubs:[
+     {name:"Manchester City", years:"2006–08", apps:24,  goals:0, trophies:"—",        bio:"Competed for the starting shirt at Manchester City in the Premier League. Showed he could perform at the top level of English football."},
+     {name:"PSG",             years:"2008–11", apps:61,  goals:0, trophies:"Ligue 1",   bio:"First choice at PSG for three seasons. Won the Ligue 1 title — a key part of their rise before the Qatar era."},
+     {name:"Kasımpaşa",       years:"2013–16", apps:86,  goals:0, trophies:"—",        bio:"Three seasons in Turkey's Süper Lig — continued performing at a high level well into his 30s."},
+   ]},
+
+  {name:"Andreas Granqvist", influence:54, born:1985, pos:"Defender", active:false,
+   bio:"Sweden's captain at 2018 World Cup. Scored the crucial penalty to beat Germany.",
+   clubs:[
+     {name:"Genoa",        years:"2009–11", apps:58, goals:4, trophies:"—", bio:"Two solid Serie A seasons in Genoa. Established himself as a top-flight European defender."},
+     {name:"Hellas Verona",years:"2011–13", apps:62, goals:5, trophies:"Serie B", bio:"Won Serie B promotion with Verona — a pivotal contribution in a title-winning campaign."},
+     {name:"Krasnodar",    years:"2013–19", apps:182,goals:14,trophies:"Russian Cup", bio:"182 appearances and captain of Krasnodar. The defensive cornerstone of their golden era. Scored 14 goals as a centre-back — extraordinary."},
+   ]},
+
+  {name:"Pär Zetterberg", influence:52, born:1970, pos:"Midfielder", active:false,
+   bio:"A legend at Anderlecht — over 400 appearances across 12 seasons.",
+   clubs:[
+     {name:"Anderlecht", years:"1993–05", apps:413, goals:78, trophies:"Belgian League ×5, Belgian Cup ×2", bio:"413 appearances and five league titles. An Anderlecht icon. One of the most successful Swedish players in Belgian football history — often called the best Anderlecht player of his generation."},
+   ]},
+
+  {name:"Mikael Lustig", influence:53, born:1986, pos:"Defender", active:false,
+   bio:"Seven Scottish league titles with Celtic. Defensive mainstay of Sweden.",
+   clubs:[
+     {name:"Celtic", years:"2012–19", apps:239, goals:14, trophies:"SPL ×7, Scottish Cup ×5, League Cup ×4", bio:"239 appearances and a haul of 16 domestic trophies. One of the most successful right-backs in Celtic's history. Scored some memorable headers in European nights."},
+   ]},
+
+  {name:"Roland Nilsson", influence:52, born:1963, pos:"Defender", active:false,
+   bio:"116 caps. Arguably the greatest Swedish right-back of all time.",
+   clubs:[
+     {name:"Sheffield Wednesday", years:"1989–94", apps:167, goals:3, trophies:"League Cup", bio:"167 appearances and a League Cup winner. One of the best right-backs in the Premier League era — quick, composed and technically excellent."},
+     {name:"Coventry",           years:"1997–99", apps:54,  goals:1, trophies:"—",           bio:"Added Premier League experience to Coventry's defence. Still performing at the top level at 34."},
+   ]},
+
+  {name:"Johan Mjällby", influence:52, born:1971, pos:"Defender", active:false,
+   bio:"Powerful, athletic centre-back. Won three SPL titles with Celtic.",
+   clubs:[
+     {name:"Celtic", years:"1998–04", apps:199, goals:15, trophies:"SPL ×3, Scottish Cup ×2", bio:"199 appearances in six seasons. A key part of Martin O'Neill's famous Celtic side. Commanding, powerful and adored by the Parkhead faithful."},
+   ]},
+
+  {name:"Jonas Thern", influence:51, born:1966, pos:"Midfielder", active:false,
+   bio:"Tough, technical midfielder. Key to USA 94. Played at Napoli, Roma and Benfica.",
+   clubs:[
+     {name:"Napoli",  years:"1990–93", apps:88,  goals:10, trophies:"—",          bio:"Three seasons at Napoli in the post-Maradona era. Strong, composed and technically excellent in Serie A's most demanding environment."},
+     {name:"Roma",    years:"1993–97", apps:120, goals:12, trophies:"Coppa Italia",bio:"Won the Coppa Italia with Roma. 120 appearances across four seasons — a consistent performer in the Giallorossi midfield."},
+     {name:"Benfica", years:"1997–99", apps:46,  goals:4,  trophies:"—",          bio:"Two seasons in Lisbon. Brought his Serie A experience and leadership to one of Portugal's biggest clubs."},
+   ]},
+
+  {name:"Martin Olsson", influence:50, born:1988, pos:"Defender", active:false,
+   bio:"Dependable left-back. Many Premier League seasons across three clubs.",
+   clubs:[
+     {name:"Blackburn", years:"2009–12", apps:94, goals:5, trophies:"—", bio:"Established himself as a solid Premier League left-back at Ewood Park. Consistent and reliable across three seasons."},
+     {name:"Norwich",   years:"2012–16", apps:110,goals:7, trophies:"—", bio:"110 appearances for Norwich — one of their most important players through promotion and relegation battles."},
+     {name:"Swansea",   years:"2016–19", apps:73, goals:3, trophies:"—", bio:"Three seasons at the Liberty Stadium. Kept performing at Premier League level until Swansea's relegation."},
+   ]},
+
+  {name:"Tobias Linderoth", influence:50, born:1979, pos:"Midfielder", active:false,
+   bio:"64 caps. Disciplined midfielder across England, Turkey and France.",
+   clubs:[
+     {name:"Everton",      years:"2002–04", apps:40, goals:2, trophies:"—",       bio:"Two seasons under David Moyes at Goodison. Brought European quality and physicality to Everton's midfield."},
+     {name:"Galatasaray",  years:"2004–07", apps:87, goals:8, trophies:"Süper Lig",bio:"Won the Turkish title with Galatasaray. Became a fan favourite in Istanbul with his energy and commitment."},
+     {name:"Nice",         years:"2007–09", apps:52, goals:4, trophies:"—",       bio:"Two seasons on the Côte d'Azur. A solid performer in Ligue 1 to round out his European career."},
+   ]},
+
+  {name:"Markus Rosenberg", influence:49, born:1982, pos:"Forward", active:false,
+   bio:"Tall, technically assured striker in Germany and Spain.",
+   clubs:[
+     {name:"Werder Bremen", years:"2008–12", apps:120, goals:40, trophies:"—",  bio:"40 goals in 120 games for Werder Bremen — one of the Bundesliga's most reliable strikers across four seasons."},
+     {name:"Villarreal",    years:"2012–14", apps:44,  goals:8,  trophies:"—",  bio:"Two seasons in La Liga's Yellow Submarine. Proved he could perform at a high technical level in Spain."},
+   ]},
+
+  {name:"Robin Olsen", influence:48, born:1990, pos:"Goalkeeper", active:false,
+   bio:"Sweden's first-choice keeper for a decade. Played at Roma, Everton and Aston Villa.",
+   clubs:[
+     {name:"Roma",       years:"2018–20", apps:37, goals:0, trophies:"—", bio:"37 Serie A appearances for Roma. Made some stunning saves at the Olimpico — proved he belongs at the highest European level."},
+     {name:"Everton",    years:"2020–22", apps:14, goals:0, trophies:"—", bio:"Loan spell at Goodison. Limited by injury but showed his quality when called upon."},
+     {name:"Aston Villa",years:"2021–23", apps:18, goals:0, trophies:"—", bio:"Back-up at Villa Park but part of a team that was growing into a top-six force."},
+   ]},
+
+  {name:"Mattias Jonson", influence:48, born:1974, pos:"Winger", active:false,
+   bio:"Creative winger. Premier League at Blackburn. Scottish title with Celtic.",
+   clubs:[
+     {name:"Blackburn", years:"2002–05", apps:86, goals:11, trophies:"—",     bio:"Three seasons at Ewood Park. A creative, direct winger who thrived in the Premier League with Blackburn's attacking side."},
+     {name:"Celtic",    years:"2005–07", apps:55, goals:8,  trophies:"SPL",   bio:"Won the Scottish title with Celtic. Brought pace and skill to the wing in a title-winning campaign."},
+   ]},
+
+  {name:"Emil Krafth", influence:47, born:1994, pos:"Defender", active:true,
+   bio:"Reliable right-back. Serie A and Premier League experience.",
+   clubs:[
+     {name:"Bologna",  years:"2016–19", apps:72, goals:2, trophies:"—", bio:"Three seasons in Serie A — established himself as a solid, reliable right-back at a top-flight Italian club."},
+     {name:"Newcastle",years:"2019–",   apps:98, goals:0, trophies:"—", bio:"Has been a dependable squad member at Newcastle through their rise under Eddie Howe. Important in their European return."},
+   ]},
+
+  {name:"Ola Toivonen", influence:47, born:1986, pos:"Forward", active:false,
+   bio:"Unpredictable and gifted. Scored that outrageous lob vs Germany at the 2018 World Cup.",
+   clubs:[
+     {name:"Toulouse", years:"2014–18", apps:130, goals:41, trophies:"—", bio:"41 goals in 130 appearances — the best football of his career. His imaginative play and goals made him a Toulouse legend."},
+     {name:"Rennes",   years:"2018–20", apps:42,  goals:8,  trophies:"—", bio:"Two more productive Ligue 1 seasons. Still capable of the spectacular even as he moved into his 30s."},
+   ]},
+
+  {name:"Jimmy Durmaz", influence:45, born:1989, pos:"Winger", active:false,
+   bio:"Tricky, energetic winger. Best years at Toulouse and Galatasaray.",
+   clubs:[
+     {name:"Toulouse",    years:"2012–17", apps:143, goals:19, trophies:"—",        bio:"143 appearances at Toulouse — his best club years. Consistent Ligue 1 performer who earned his Sweden call-ups."},
+     {name:"Galatasaray", years:"2017–19", apps:62,  goals:8,  trophies:"Süper Lig",bio:"Won the Turkish title. The Istanbul atmosphere suited his combative, direct style perfectly."},
+     {name:"Caen",        years:"2019–21", apps:48,  goals:5,  trophies:"—",        bio:"Two seasons in Normandy rounding out his Ligue 1 career."},
+   ]},
+
+  {name:"Anthony Elanga", influence:44, born:2002, pos:"Winger", active:true,
+   bio:"Exciting young winger from Man United's academy. Direct, composed and pacey.",
+   clubs:[
+     {name:"Manchester United",  years:"2021–23", apps:57, goals:5, trophies:"EFL Cup", bio:"Broke into the United first team and showed class — energy, pace and a willingness to take players on. Won the EFL Cup."},
+     {name:"Nottingham Forest",  years:"2023–",   apps:72, goals:12,trophies:"—",       bio:"12 goals and a key performer in Forest's Premier League survival. His best football to date — electric on the right wing."},
+   ]},
+
+  {name:"Pontus Kåmark", influence:43, born:1969, pos:"Midfielder", active:false,
+   bio:"Tough-tackling midfielder. Leicester City. Part of Sweden's USA 94 bronze squad.",
+   clubs:[
+     {name:"Leicester", years:"1995–99", apps:128, goals:5, trophies:"League Cup ×2", bio:"128 appearances and two League Cups with Leicester City under Martin O'Neill and Peter Taylor. An important cog in one of the most exciting Premier League sides of the era."},
+   ]},
+
+  {name:"Kennet Andersson", influence:42, born:1967, pos:"Forward", active:false,
+   bio:"83 caps, 31 goals. Crucial at USA 94 and Euro 2000.",
+   clubs:[
+     {name:"Lille",    years:"1993–95", apps:68, goals:28, trophies:"—", bio:"28 goals in two Ligue 1 seasons — powerful, aerial and clinical. Put himself on the European map with this spell."},
+     {name:"Valencia", years:"1995–97", apps:54, goals:18, trophies:"—", bio:"Two productive La Liga seasons. A physical, powerful presence that Spanish defences found difficult to handle."},
+     {name:"Bari",     years:"1997–99", apps:58, goals:16, trophies:"—", bio:"Brought his goal threat to Serie A with Bari. Two productive seasons in the south of Italy."},
+   ]},
+
+  {name:"Carl Starfelt", influence:42, born:1995, pos:"Defender", active:true,
+   bio:"Commanding centre-back. Won the SPL with Celtic before moving to La Liga.",
+   clubs:[
+     {name:"Celtic",    years:"2021–23", apps:80, goals:1, trophies:"SPL ×2, Scottish Cup", bio:"80 appearances and two Scottish titles. Grew into a dominant, composed centre-back under Ange Postecoglou. A key figure in Celtic's back-to-back title wins."},
+     {name:"Celta Vigo",years:"2023–",   apps:48, goals:2, trophies:"—",                    bio:"Stepped up to La Liga with Celta Vigo and has excelled — proving himself as a genuinely top European-level defender."},
+   ]},
+
+  {name:"Filip Helander", influence:41, born:1992, pos:"Defender", active:false,
+   bio:"Multiple Scottish titles with Rangers. Previously Serie A at Bologna.",
+   clubs:[
+     {name:"Bologna", years:"2017–19", apps:52, goals:2, trophies:"—",              bio:"Solid Serie A seasons that attracted Steven Gerrard's Rangers. Composed and effective in one of Italy's most competitive leagues."},
+     {name:"Rangers", years:"2019–23", apps:108,goals:6, trophies:"SPL, Scottish Cup",bio:"108 appearances and multiple trophies. A key pillar of Gerrard's title-winning Rangers side in 2020-21 — their first in ten years."},
+   ]},
+
+  {name:"Erik Edman", influence:41, born:1978, pos:"Defender", active:false,
+   bio:"57 caps. Left-back across Spain, England and France.",
+   clubs:[
+     {name:"Tottenham", years:"2004–06", apps:52, goals:2, trophies:"—",  bio:"Two solid Premier League seasons at Spurs. A reliable, attack-minded left-back who played under Martin Jol."},
+     {name:"Rennes",    years:"2006–09", apps:87, goals:4, trophies:"—",  bio:"Three seasons in Ligue 1 at Rennes — consistently one of the best left-backs in France."},
+     {name:"Wigan",     years:"2009–11", apps:42, goals:1, trophies:"—",  bio:"Two Premier League seasons at Wigan, helping them maintain top-flight status under Roberto Martinez."},
+   ]},
+
+  {name:"Nils-Eric Johansson", influence:40, born:1980, pos:"Defender", active:false,
+   bio:"39 caps. Premier League at Blackburn, Bundesliga at Nuremberg.",
+   clubs:[
+     {name:"Blackburn", years:"2002–05", apps:82, goals:2, trophies:"—",   bio:"Three solid Premier League seasons at Blackburn. Part of a strong Rovers defensive unit under Graeme Souness."},
+     {name:"Nuremberg", years:"2005–08", apps:93, goals:4, trophies:"—",   bio:"Three Bundesliga seasons at Nuremberg. Consistent and reliable — proved he was a genuine top-flight European defender."},
+   ]},
+
+  {name:"John Guidetti", influence:40, born:1992, pos:"Forward", active:true,
+   bio:"Celtic fan favourite. Scored crucial Euro 2016 qualifying goals.",
+   clubs:[
+     {name:"Celtic",    years:"2015–16", apps:37, goals:22, trophies:"SPL, League Cup", bio:"22 goals in one season — a stunning loan spell. Became a hero at Parkhead. Celtic fans still chant his name."},
+     {name:"Celta Vigo",years:"2016–20", apps:95, goals:18, trophies:"—",              bio:"Four seasons in La Liga. Showed flashes of the brilliance he showed at Celtic but injuries and consistency issues hampered him."},
+     {name:"Aston Villa",years:"2020–21", apps:8, goals:1,  trophies:"—",              bio:"Brief Villa spell — never fully fit but showed glimpses of quality."},
+   ]},
+
+  {name:"Marcus Allbäck", influence:40, born:1973, pos:"Forward", active:false,
+   bio:"57 caps, 13 goals. Experienced striker in England and Netherlands.",
+   clubs:[
+     {name:"Aston Villa", years:"2002–04", apps:56, goals:9,  trophies:"—", bio:"Two Premier League seasons under Graham Taylor and David O'Leary. A useful, hard-working option up front."},
+     {name:"Coventry",    years:"2004–06", apps:52, goals:12, trophies:"—", bio:"12 goals for Coventry — his most productive English spell. A reliable forward in the Championship."},
+     {name:"Heerenveen",  years:"2006–08", apps:61, goals:18, trophies:"—", bio:"Best goalscoring form of his career in the Dutch Eredivisie. 18 goals and a consistent performer for Heerenveen."},
+   ]},
+
+  {name:"Joel Pohjanpalo", influence:40, born:1994, pos:"Forward", active:true,
+   bio:"Prolific scorer in the Bundesliga and Serie A.",
+   clubs:[
+     {name:"Bayer Leverkusen", years:"2015–17", apps:22, goals:7,  trophies:"—",         bio:"7 goals in limited appearances for Leverkusen — showed his quality as a poacher even with reduced minutes."},
+     {name:"Union Berlin",     years:"2019–22", apps:62, goals:19, trophies:"—",         bio:"19 goals as Union Berlin rose to the Bundesliga. A key figure in their remarkable story as a newly promoted club."},
+     {name:"Venezia",          years:"2022–",   apps:88, goals:51, trophies:"Serie B",   bio:"51 goals in 88 games — an extraordinary return. Won Serie B promotion and has excelled in Serie A. One of the most clinical strikers in Italian football."},
+   ]},
+
+  {name:"Jens Cajuste", influence:40, born:2000, pos:"Midfielder", active:true,
+   bio:"Dynamic box-to-box midfielder. Reims to Napoli.",
+   clubs:[
+     {name:"Reims",  years:"2022–23", apps:35, goals:3, trophies:"—",       bio:"Breakout season in Ligue 1 — energetic, powerful and technically sharp. His performances attracted Napoli."},
+     {name:"Napoli", years:"2023–",   apps:28, goals:2, trophies:"—",       bio:"Big move to the Champions League winners. Still growing into the role but has shown glimpses of why Napoli invested in him."},
+   ]},
+
+  {name:"Samuel Holmén", influence:40, born:1984, pos:"Midfielder", active:false,
+   bio:"38 caps. Intelligent defensive midfielder in Netherlands and Belgium.",
+   clubs:[
+     {name:"Twente",     years:"2013–15", apps:61, goals:3, trophies:"—",       bio:"Two strong Eredivisie seasons at Twente — one of the best defensive midfielders in Dutch football at the time."},
+     {name:"Club Brugge",years:"2015–19", apps:109,goals:5, trophies:"Belgian League ×2", bio:"Won the Belgian title twice at Club Brugge. 109 appearances and a key cog in their midfield across four seasons."},
+   ]},
+
+  {name:"Sebastian Andersson", influence:40, born:1991, pos:"Forward", active:false,
+   bio:"Physical striker. Scored vital goals for Union Berlin's Bundesliga rise.",
+   clubs:[
+     {name:"Union Berlin", years:"2018–20", apps:62, goals:22, trophies:"Bundesliga promotion", bio:"22 goals and key to Union Berlin's historic promotion to the Bundesliga. A cult hero at An der Alten Försterei."},
+     {name:"Cologne",      years:"2020–22", apps:41, goals:8,  trophies:"—",                  bio:"Continued in the Bundesliga with Cologne. Injuries hampered what could have been a bigger impact."},
+   ]},
+
+  // ── REGULARS ───────────────────────────────────────────────────
+  {name:"Sam Larsson", influence:38, born:1993, pos:"Winger", active:true, bio:"Skillful, low-centre-of-gravity winger. Eredivisie performer.",
+   clubs:[
+     {name:"Heerenveen", years:"2016–18", apps:60, goals:14, trophies:"—",  bio:"14 goals from the wing — his breakthrough European spell. Earned him a move to Feyenoord."},
+     {name:"Feyenoord",  years:"2018–21", apps:78, goals:12, trophies:"—",  bio:"Part of a Feyenoord squad competing near the top of Dutch football. Consistent performer in the Eredivisie."},
+   ]},
+
+  {name:"Jesper Karlsson", influence:38, born:1998, pos:"Winger", active:true, bio:"Dangerous, incisive left-winger. Eredivisie standout at AZ.",
+   clubs:[
+     {name:"AZ", years:"2020–24", apps:123, goals:47, trophies:"—", bio:"47 goals from the left wing across four seasons. One of the most creative and decisive players in the Eredivisie. Made the position his own."},
+   ]},
+
+  {name:"Jordan Larsson", influence:38, born:1997, pos:"Forward", active:true, bio:"Son of Henrik Larsson. Striker with Russian and Italian experience.",
+   clubs:[
+     {name:"Spartak Moscow", years:"2018–22", apps:104, goals:30, trophies:"Russian League", bio:"30 goals in Russia — won the league title. Proved he can perform at European level in his own right, beyond his father's legacy."},
+     {name:"Hellas Verona",  years:"2022–",   apps:44,  goals:8,  trophies:"—",             bio:"Testing himself in Serie A. Still growing — shows moments of his father's natural finishing instinct."},
+   ]},
+
+  {name:"Mattias Svanberg", influence:37, born:1999, pos:"Midfielder", active:true, bio:"Energetic, technical midfielder. Serie A and Bundesliga experience.",
+   clubs:[
+     {name:"Bologna",  years:"2018–23", apps:131, goals:14, trophies:"—",    bio:"131 appearances at Bologna across five seasons. A key part of their midfield as they rose to compete for European spots."},
+     {name:"Wolfsburg",years:"2023–",   apps:48,  goals:5,  trophies:"—",    bio:"Brought his Serie A experience to the Bundesliga. Consistent and effective for Wolfsburg."},
+   ]},
+
+  {name:"Isaac Kiese Thelin", influence:36, born:1992, pos:"Forward", active:true, bio:"Physical striker with European experience across four countries.",
+   clubs:[
+     {name:"Bordeaux",         years:"2015–16", apps:32, goals:8,  trophies:"—", bio:"Eight Ligue 1 goals at Bordeaux — a strong debut at top-level French football."},
+     {name:"Anderlecht",       years:"2016–17", apps:36, goals:11, trophies:"—", bio:"11 goals in Belgium — his most productive spell for a big club. Showcased his physical, powerful style."},
+     {name:"Bayer Leverkusen", years:"2017–19", apps:32, goals:5,  trophies:"—", bio:"Bundesliga experience at Leverkusen. Regular contributor from the bench in a top European club environment."},
+     {name:"Augsburg",         years:"2019–21", apps:47, goals:10, trophies:"—", bio:"10 goals for Augsburg — his most consistent German spell. Became a reliable Bundesliga striker."},
+   ]},
+
+  {name:"Karl-Johan Johnsson", influence:35, born:1990, pos:"Goalkeeper", active:true, bio:"Goalkeeper with French Ligue 1 experience.",
+   clubs:[
+     {name:"Guingamp", years:"2016–18", apps:60, goals:0, trophies:"—",  bio:"60 appearances at Guingamp — established as a solid Ligue 1 goalkeeper across two strong seasons."},
+     {name:"Nimes",    years:"2018–20", apps:58, goals:0, trophies:"—",  bio:"58 games for Nimes in Ligue 1 — continued proving his quality at French top-flight level."},
+   ]},
+
+  {name:"Erkan Zengin", influence:35, born:1985, pos:"Winger", active:false, bio:"Talented, versatile wide player. Years at Trabzonspor in Turkey.",
+   clubs:[
+     {name:"Trabzonspor", years:"2011–15", apps:121, goals:22, trophies:"—",         bio:"121 appearances and 22 goals — his best club career spell. A fan favourite on the Black Sea coast who became one of their most creative players."},
+     {name:"Strasbourg",  years:"2015–17", apps:54,  goals:7,  trophies:"Ligue 2",   bio:"Won promotion from Ligue 2 with Strasbourg — part of their exciting rise back to the top division."},
+   ]},
+
+  {name:"Robin Quaison", influence:35, born:1993, pos:"Forward", active:true, bio:"Mobile, technical attacker. Bundesliga at Mainz, Serie A at Palermo.",
+   clubs:[
+     {name:"Palermo", years:"2015–17", apps:58, goals:12, trophies:"—",       bio:"12 goals in Serie A — showed he had the quality to perform at Italian top-flight level."},
+     {name:"Mainz",   years:"2017–22", apps:147,goals:35, trophies:"—",       bio:"35 goals across five seasons — his best spell. One of Mainz's most important attackers in the Bundesliga."},
+   ]},
+
+  {name:"Lasse Vibe", influence:34, born:1987, pos:"Forward", active:false, bio:"Hardworking, intelligent striker. Fan favourite at Brentford.",
+   clubs:[
+     {name:"Brentford", years:"2015–19", apps:137, goals:34, trophies:"—", bio:"137 appearances and 34 goals — a Brentford cult hero in the Championship. The perfect Brentford forward: mobile, creative, selfless."},
+   ]},
+
+  {name:"Ken Sema", influence:33, born:1994, pos:"Winger", active:true, bio:"Direct, pacey winger who played in the Premier League for Watford.",
+   clubs:[
+     {name:"Watford", years:"2018–22", apps:89, goals:7, trophies:"—", bio:"89 appearances for Watford across Premier League and Championship seasons. A reliable option on the left who contributed goals and assists."},
+   ]},
+
+  {name:"Rasmus Elm", influence:33, born:1988, pos:"Midfielder", active:false, bio:"Creative, versatile midfielder in Russia and Germany.",
+   clubs:[
+     {name:"Wolfsburg",   years:"2012–14", apps:44, goals:5, trophies:"—",  bio:"Two Bundesliga seasons at Wolfsburg — showed his technical quality at a top German club."},
+     {name:"CSKA Moscow", years:"2014–17", apps:68, goals:8, trophies:"Russian League", bio:"Won the Russian league with CSKA. 68 appearances and 8 goals — a consistent performer in Russian football."},
+   ]},
+
+  {name:"Linus Wahlqvist", influence:32, born:1996, pos:"Defender", active:true, bio:"Attack-minded right-back. Dutch Eredivisie experience.",
+   clubs:[
+     {name:"NEC Nijmegen", years:"2021–24", apps:82, goals:4, trophies:"—", bio:"82 appearances at NEC — established as one of the best right-backs in the Eredivisie. His overlapping runs and crossing made him a fan favourite."},
+   ]},
+
+  {name:"Alexander Milosevic", influence:32, born:1992, pos:"Defender", active:false, bio:"Commanding centre-back. Premier League and Turkey.",
+   clubs:[
+     {name:"Nottingham Forest", years:"2018–20", apps:52, goals:3, trophies:"—",    bio:"52 appearances in Forest's Championship campaign — one of their defensive leaders during a period of rebuilding."},
+     {name:"Besiktas",          years:"2020–22", apps:48, goals:2, trophies:"Süper Lig", bio:"Won the Turkish title with Besiktas — a great achievement at one of Turkey's biggest clubs."},
+   ]},
+
+  {name:"Johan Larsson", influence:30, born:1990, pos:"Winger", active:false, bio:"Productive wide midfielder. Became a Club Brugge regular in Belgium.",
+   clubs:[
+     {name:"Club Brugge", years:"2016–21", apps:142, goals:23, trophies:"Belgian League ×2", bio:"142 appearances and two Belgian league titles — became an important player in one of Belgium's top clubs."},
+   ]},
+
+  {name:"Gustav Svensson", influence:30, born:1987, pos:"Midfielder", active:false, bio:"Consistent, reliable midfielder. Key performer in MLS at Seattle Sounders.",
+   clubs:[
+     {name:"Seattle Sounders", years:"2017–22", apps:128, goals:8, trophies:"MLS Cup, US Open Cup", bio:"Won the MLS Cup and Open Cup — a key part of Seattle's dominant era in American football. 128 appearances across five seasons."},
+   ]},
+
+  {name:"Jakob Johansson", influence:30, born:1990, pos:"Midfielder", active:false, bio:"Disciplined defensive midfielder in Switzerland and Portugal.",
+   clubs:[
+     {name:"Basel",       years:"2014–17", apps:77, goals:5, trophies:"Swiss Super League ×3", bio:"Won three consecutive Swiss titles with Basel. A key figure in their dominant domestic era and European campaigns."},
+     {name:"Sporting CP", years:"2017–19", apps:42, goals:2, trophies:"—",                     bio:"Two seasons in Lisbon — brought his Swiss title-winning experience to Portuguese football."},
+   ]},
+
+  {name:"Oscar Hiljemark", influence:30, born:1992, pos:"Midfielder", active:false, bio:"Box-to-box midfielder. Serie A experience at Palermo and Genoa.",
+   clubs:[
+     {name:"Palermo", years:"2014–17", apps:75, goals:6, trophies:"—",  bio:"75 Serie A appearances — a breakthrough spell in Italian football that showed his potential at the top level."},
+     {name:"Genoa",   years:"2017–19", apps:42, goals:3, trophies:"—",  bio:"Two more Serie A seasons in Genoa — consistent and committed in Italian football's competitive environment."},
+   ]},
+
+  {name:"Marcus Rohden", influence:28, born:1991, pos:"Midfielder", active:false, bio:"Energetic midfielder. Several seasons in Serie B at Crotone and Frosinone.",
+   clubs:[
+     {name:"Crotone",  years:"2017–19", apps:58, goals:7, trophies:"Serie B", bio:"Won Serie B promotion with Crotone. A key contributor to their historic rise — 7 goals from midfield."},
+     {name:"Frosinone",years:"2019–21", apps:52, goals:5, trophies:"—",       bio:"Two seasons at Frosinone in Serie B — continued his Italian football journey with consistent performances."},
+   ]},
+
+  {name:"Mikael Nilsson", influence:28, born:1978, pos:"Defender", active:false, bio:"Versatile, experienced defender. Southampton and Panathinaikos.",
+   clubs:[
+     {name:"Southampton",   years:"2003–07", apps:98, goals:4, trophies:"—",  bio:"98 appearances across four seasons at St Mary's — a dependable, versatile presence across the back line."},
+     {name:"Panathinaikos", years:"2007–09", apps:52, goals:2, trophies:"Greek League", bio:"Won the Greek title with Panathinaikos — a rewarding final chapter at the top level in Athens."},
+   ]},
+
+  {name:"Pierre Bengtsson", influence:26, born:1988, pos:"Defender", active:false, bio:"Left-back with French Ligue 1 and Portuguese experience.",
+   clubs:[
+     {name:"Caen",       years:"2014–17", apps:88, goals:3, trophies:"—",  bio:"88 appearances at Caen in Ligue 1 — established as one of the best left-backs in French football during this period."},
+     {name:"Sporting CP",years:"2017–19", apps:38, goals:1, trophies:"—",  bio:"Two seasons in Lisbon — part of the Sporting CP squad competing in Portuguese and European competition."},
+   ]},
+
+  {name:"Simon Tibbling", influence:25, born:1994, pos:"Midfielder", active:false, bio:"Talented central midfielder. Eredivisie experience at Groningen.",
+   clubs:[
+     {name:"Groningen", years:"2014–18", apps:87, goals:9, trophies:"—", bio:"87 appearances for Groningen — became a consistent Eredivisie performer and one of the most technically gifted young Swedes of his generation."},
+   ]},
 ];
 
 // ================================================================
-//  BUILD GeoJSON
+//  DATA PROCESSING
 // ================================================================
-const clubMap = {};    // clubName → {…club, players:[]}
+// Build clubMap: one entry per CLUBS key, with player list
+const clubMap = {};    // clubName → { ...CLUBS[c], clubName, players:[{player, clubEntry}] }
 const seenNames = new Set();
 
 PLAYERS.forEach(p => {
   if (seenNames.has(p.name)) return;
   seenNames.add(p.name);
-  p.clubs.forEach(c => {
-    if (!CLUBS[c]) return;
-    if (!clubMap[c]) clubMap[c] = { ...CLUBS[c], clubName: c, players: [] };
-    clubMap[c].players.push(p);
+  p.clubs.forEach(ce => {
+    if (!CLUBS[ce.name]) return;
+    if (!clubMap[ce.name]) clubMap[ce.name] = { ...CLUBS[ce.name], clubName: ce.name, players: [] };
+    clubMap[ce.name].players.push({ player: p, entry: ce });
   });
 });
 
-// Sort players by influence within each club
-Object.values(clubMap).forEach(cm => cm.players.sort((a,b) => b.influence - a.influence));
+// Sort by influence descending within each club
+Object.values(clubMap).forEach(cm =>
+  cm.players.sort((a, b) => b.player.influence - a.player.influence)
+);
 
 function tierColor(inf) {
   if (inf >= 85) return '#FFCD00';
@@ -709,7 +939,8 @@ function tierColor(inf) {
   return '#1e3d50';
 }
 
-function buildGeoJSON() {
+// ── Club-level GeoJSON (one dot per club, top player) ────────────
+function buildClubGeoJSON() {
   return {
     type: 'FeatureCollection',
     features: Object.values(clubMap).map(cm => ({
@@ -717,44 +948,90 @@ function buildGeoJSON() {
       geometry: { type: 'Point', coordinates: [cm.lng, cm.lat] },
       properties: {
         id: cm.clubName,
-        stadium: cm.stadium || cm.city,
+        stadium: cm.stadium,
         city: cm.city,
         country: cm.country,
-        influence: cm.players[0].influence,
-        color: tierColor(cm.players[0].influence),
-        topName: cm.players[0].name,
+        influence: cm.players[0].player.influence,
+        color: tierColor(cm.players[0].player.influence),
+        topName: cm.players[0].player.name,
         count: cm.players.length,
       }
     }))
   };
 }
 
+// ── Player-level GeoJSON (spread around stadium at close zoom) ───
+// Players are arranged in a small circle around the stadium centre.
+// Radius: ~120m in lat/lng degrees. Single players sit on the spot.
+const SPREAD_R = 0.0014; // ~120–150m
+
+function spreadCoord(index, total, baseLat, baseLng) {
+  if (total === 1) return [baseLng, baseLat];
+  const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
+  return [
+    baseLng + SPREAD_R * Math.cos(angle),
+    baseLat + SPREAD_R * Math.sin(angle) * 0.7, // compress latitude slightly
+  ];
+}
+
+function buildPlayerGeoJSON() {
+  const features = [];
+  Object.values(clubMap).forEach(cm => {
+    const total = cm.players.length;
+    cm.players.forEach(({ player: p, entry: ce }, i) => {
+      const [lng, lat] = spreadCoord(i, total, cm.lat, cm.lng);
+      features.push({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [lng, lat] },
+        properties: {
+          playerName: p.name,
+          clubName: cm.clubName,
+          pos: p.pos,
+          born: p.born,
+          caps: p.caps,
+          goals: p.goals,
+          influence: p.influence,
+          color: tierColor(p.influence),
+          active: p.active ? 1 : 0,
+          years: ce.years,
+          apps: ce.apps,
+          ceGoals: ce.goals,
+          trophies: ce.trophies,
+          stadium: cm.stadium,
+          country: cm.country,
+        }
+      });
+    });
+  });
+  return { type: 'FeatureCollection', features };
+}
+
+// ── Arcs (Stockholm → legends) ───────────────────────────────────
 function buildArcs() {
-  const legends = Object.values(clubMap).filter(cm => cm.players[0].influence >= 85);
   return {
     type: 'FeatureCollection',
-    features: legends.map(cm => ({
-      type: 'Feature',
-      geometry: { type: 'LineString', coordinates: [[18.07, 59.33], [cm.lng, cm.lat]] },
-      properties: {}
-    }))
+    features: Object.values(clubMap)
+      .filter(cm => cm.players[0].player.influence >= 85)
+      .map(cm => ({
+        type: 'Feature',
+        geometry: { type: 'LineString', coordinates: [[18.07, 59.33], [cm.lng, cm.lat]] },
+        properties: {}
+      }))
   };
 }
 
 function updateStats() {
   document.getElementById('s-ply').textContent = seenNames.size;
   document.getElementById('s-clubs').textContent = Object.keys(clubMap).length;
-  const nations = new Set(Object.values(CLUBS).map(c => c.country));
-  document.getElementById('s-cnt').textContent = nations.size;
+  document.getElementById('s-cnt').textContent = new Set(Object.values(CLUBS).map(c => c.country)).size;
 }
 updateStats();
 
 // ================================================================
-//  MAP
+//  MAP INIT
 // ================================================================
-setP(30, 'Initialising map…');
-
-let map, rotating = true, currentZoom = 3;
+setP(30, 'Starting map engine…');
+let map, rotating = true;
 
 function zoomLabel(z) {
   if (z < 4)  return 'World View';
@@ -764,13 +1041,13 @@ function zoomLabel(z) {
   return 'Stadium View';
 }
 
+const ZOOM_CLUB_FADE_START  = 10;
+const ZOOM_CLUB_FADE_END    = 11.5;
+const ZOOM_PLAYER_FADE_START = 10.5;
+const ZOOM_PLAYER_FADE_END  = 12;
+
 function initMap() {
   try {
-    // Timeout: if map hasn't loaded in 12s, show error
-    const loadTimeout = setTimeout(() => {
-      bootErr('Map style failed to load.\n\nThis is usually a network issue or ad blocker.\nTry refreshing or opening in an incognito window.');
-    }, 12000);
-
     map = new maplibregl.Map({
       container: 'map',
       style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
@@ -780,190 +1057,191 @@ function initMap() {
       attributionControl: false,
     });
 
+    const loadTimeout = setTimeout(() =>
+      bootErr('Map style timed out — try refreshing or disable ad blocker.'), 14000);
+
     map.on('load', () => { clearTimeout(loadTimeout); onMapLoad(); });
     map.on('error', e => {
-      console.error('Map error', e);
       clearTimeout(loadTimeout);
-      bootErr('Map failed: ' + (e.error?.message || JSON.stringify(e)));
+      console.error('Map error', e);
     });
-
-  } catch(err) {
-    bootErr('Map init failed: ' + err.message);
-  }
+  } catch(err) { bootErr('Map init failed: ' + err.message); }
 }
 
 function onMapLoad() {
-  setP(80, 'Adding data…');
+  setP(80, 'Adding layers…');
   try {
 
-  // Globe atmosphere (optional — skip if unsupported)
-  try {
-    map.setFog({
-      color: 'rgba(180,210,240,0.4)',
-      'high-color': 'rgba(120,170,210,0.8)',
-      'space-color': '#07101a',
-      'star-intensity': 0.5,
-      'horizon-blend': 0.04,
+    // Atmosphere
+    try {
+      map.setFog({
+        color: 'rgba(200,218,240,0.5)',
+        'high-color': 'rgba(140,180,220,0.9)',
+        'space-color': '#07101a',
+        'star-intensity': 0.5,
+        'horizon-blend': 0.04,
+      });
+    } catch(e) { console.warn('Fog unsupported'); }
+
+    // Sources
+    map.addSource('clubs',   { type: 'geojson', data: buildClubGeoJSON()  });
+    map.addSource('players', { type: 'geojson', data: buildPlayerGeoJSON() });
+    map.addSource('arcs',    { type: 'geojson', data: buildArcs()          });
+
+    // ── Arcs ─────────────────────────────────────────────────────
+    map.addLayer({ id:'arcs', type:'line', source:'arcs',
+      paint:{
+        'line-color':'#FFCD00','line-width':0.7,
+        'line-opacity':['interpolate',['linear'],['zoom'], 2,0.22, 6,0]
+      }, layout:{'line-cap':'round'}
     });
-  } catch(e) { console.warn('Fog not supported:', e); }
 
-  // ── Sources ─────────────────────────────────────────────────────
-  map.addSource('clubs', { type: 'geojson', data: buildGeoJSON() });
-  map.addSource('arcs',  { type: 'geojson', data: buildArcs()   });
-
-  // ── Arcs ────────────────────────────────────────────────────────
-  map.addLayer({
-    id: 'arcs',
-    type: 'line',
-    source: 'arcs',
-    paint: {
-      'line-color': '#FFCD00',
-      'line-width': 0.7,
-      'line-opacity': ['interpolate',['linear'],['zoom'], 2, 0.25, 6, 0.0],
-    },
-    layout: { 'line-cap': 'round' }
-  });
-
-  // ── Shadow halo (glow) ───────────────────────────────────────────
-  map.addLayer({
-    id: 'clubs-halo',
-    type: 'circle',
-    source: 'clubs',
-    paint: {
-      'circle-radius': [
-        'interpolate', ['linear'], ['zoom'],
-        2,  ['*', ['get','influence'], 0.055],
-        6,  ['*', ['get','influence'], 0.12],
-        10, ['*', ['get','influence'], 0.22],
-        14, ['*', ['get','influence'], 0.32],
-      ],
-      'circle-color': ['get','color'],
-      'circle-opacity': 0.12,
-      'circle-blur': 1.2,
-      // zoom-tier visibility
-      'circle-opacity': [
-        'step', ['zoom'],
-        ['case',['>=',['get','influence'],85],0.15,0], 4,
-        ['case',['>=',['get','influence'],65],0.15,0], 6,
-        ['case',['>=',['get','influence'],40],0.12,0], 9,
-        0.10
-      ],
-    }
-  });
-
-  // ── Main circles ─────────────────────────────────────────────────
-  map.addLayer({
-    id: 'clubs-dot',
-    type: 'circle',
-    source: 'clubs',
-    paint: {
-      'circle-radius': [
-        'interpolate', ['linear'], ['zoom'],
-        2,  ['*', ['get','influence'], 0.028],
-        6,  ['*', ['get','influence'], 0.060],
-        10, ['*', ['get','influence'], 0.11],
-        14, ['*', ['get','influence'], 0.18],
-      ],
-      'circle-color': ['get','color'],
-      'circle-stroke-color': 'rgba(255,255,255,0.5)',
-      'circle-stroke-width': ['interpolate',['linear'],['zoom'], 2, 0.5, 10, 1.5],
-      'circle-opacity': [
-        'step', ['zoom'],
-        ['case',['>=',['get','influence'],85],0.92,0], 4,
-        ['case',['>=',['get','influence'],65],0.92,0], 6,
-        ['case',['>=',['get','influence'],40],0.88,0], 9,
-        0.85
-      ],
-    }
-  });
-
-  // ── Labels for legends ───────────────────────────────────────────
-  try {
-    map.addLayer({
-      id: 'clubs-label',
-      type: 'symbol',
-      source: 'clubs',
-      filter: ['>=', ['get','influence'], 85],
-      layout: {
-        'text-field': ['get','topName'],
-        'text-font': ['Open Sans Regular', 'Arial Unicode MS Regular'],
-        'text-size': ['interpolate',['linear'],['zoom'], 3, 9, 8, 12],
-        'text-offset': [0, 1.3],
-        'text-anchor': 'top',
-        'text-allow-overlap': false,
-      },
-      paint: {
-        'text-color': '#1a2a38',
-        'text-halo-color': 'rgba(255,255,255,0.9)',
-        'text-halo-width': 1.5,
+    // ── Club halos ────────────────────────────────────────────────
+    map.addLayer({ id:'clubs-halo', type:'circle', source:'clubs',
+      paint:{
+        'circle-radius':['interpolate',['linear'],['zoom'], 2,['*',['get','influence'],0.06], 6,['*',['get','influence'],0.13], 10,['*',['get','influence'],0.24]],
+        'circle-color':['get','color'],
+        'circle-opacity':['interpolate',['linear'],['zoom'], ZOOM_CLUB_FADE_START,0.14, ZOOM_CLUB_FADE_END,0],
+        'circle-blur':1.2,
       }
     });
-  } catch(e) { console.warn('Label layer failed:', e); }
 
-  // ── Dismiss boot screen now — layers are ready ───────────────────
-  setP(100, '');
-  setTimeout(() => document.getElementById('boot').classList.add('gone'), 400);
+    // ── Club dots ─────────────────────────────────────────────────
+    map.addLayer({ id:'clubs-dot', type:'circle', source:'clubs',
+      paint:{
+        'circle-radius':['interpolate',['linear'],['zoom'], 2,['*',['get','influence'],0.030], 5,['*',['get','influence'],0.065], 10,['*',['get','influence'],0.12]],
+        'circle-color':['get','color'],
+        'circle-stroke-color':'rgba(255,255,255,0.45)',
+        'circle-stroke-width':['interpolate',['linear'],['zoom'], 2,0.5, 10,1.5],
+        'circle-opacity':['interpolate',['linear'],['zoom'],
+          2, ['case',['>=',['get','influence'],85],0.92,0],
+          4, ['case',['>=',['get','influence'],85],0.92,['case',['>=',['get','influence'],65],0.88,0]],
+          6, ['case',['>=',['get','influence'],65],0.88,['case',['>=',['get','influence'],40],0.84,0]],
+          9, 0.84,
+          ZOOM_CLUB_FADE_START, 0.84,
+          ZOOM_CLUB_FADE_END, 0
+        ],
+      }
+    });
 
-  // ── Cursor ───────────────────────────────────────────────────────
-  map.on('mouseenter', 'clubs-dot', () => { map.getCanvas().style.cursor = 'pointer'; });
-  map.on('mouseleave', 'clubs-dot', () => { map.getCanvas().style.cursor = ''; });
+    // ── Club labels ───────────────────────────────────────────────
+    try {
+      map.addLayer({ id:'clubs-label', type:'symbol', source:'clubs',
+        filter:['>=',['get','influence'],85],
+        layout:{
+          'text-field':['get','topName'],
+          'text-font':['Open Sans Regular','Arial Unicode MS Regular'],
+          'text-size':['interpolate',['linear'],['zoom'], 3,9, 8,12],
+          'text-offset':[0,1.3],'text-anchor':'top','text-allow-overlap':false
+        },
+        paint:{
+          'text-color':'#1a2a38','text-halo-color':'rgba(255,255,255,0.9)','text-halo-width':1.5,
+          'text-opacity':['interpolate',['linear'],['zoom'], ZOOM_CLUB_FADE_START,1, ZOOM_CLUB_FADE_END,0],
+        }
+      });
+    } catch(e) { console.warn('Label layer failed:', e); }
 
-  // ── Click ────────────────────────────────────────────────────────
-  let popup = null;
-  map.on('click', 'clubs-dot', e => {
-    rotating = false;
-    const p = e.features[0].properties;
-    const cm = clubMap[p.id];
-    if (!cm) return;
+    // ── Individual player halos ───────────────────────────────────
+    map.addLayer({ id:'players-halo', type:'circle', source:'players',
+      paint:{
+        'circle-radius':['interpolate',['linear'],['zoom'], 11,6, 14,14, 17,22],
+        'circle-color':['get','color'],
+        'circle-opacity':['interpolate',['linear'],['zoom'], ZOOM_PLAYER_FADE_START,0, ZOOM_PLAYER_FADE_END,0.15],
+        'circle-blur':1.0,
+      }
+    });
 
-    if (popup) popup.remove();
+    // ── Individual player dots ────────────────────────────────────
+    map.addLayer({ id:'players-dot', type:'circle', source:'players',
+      paint:{
+        'circle-radius':['interpolate',['linear'],['zoom'], 11,3, 13,5, 15,8, 17,11],
+        'circle-color':['get','color'],
+        'circle-stroke-color':'rgba(255,255,255,0.55)',
+        'circle-stroke-width':1.2,
+        'circle-opacity':['interpolate',['linear'],['zoom'], ZOOM_PLAYER_FADE_START,0, ZOOM_PLAYER_FADE_END,0.92],
+      }
+    });
 
-    const topPlayer = cm.players[0];
-    const more = cm.players.length > 1
-      ? `<div class="pop-more">+${cm.players.length - 1} more Swedish players</div>` : '';
+    // ── Individual player labels ──────────────────────────────────
+    try {
+      map.addLayer({ id:'players-label', type:'symbol', source:'players',
+        layout:{
+          'text-field':['get','playerName'],
+          'text-font':['Open Sans Regular','Arial Unicode MS Regular'],
+          'text-size':['interpolate',['linear'],['zoom'], 12,9, 15,12],
+          'text-offset':[0,1.1],'text-anchor':'top','text-allow-overlap':false,
+        },
+        paint:{
+          'text-color':'#1a2a38','text-halo-color':'rgba(255,255,255,0.9)','text-halo-width':1.5,
+          'text-opacity':['interpolate',['linear'],['zoom'], 12,0, 13.5,1],
+        }
+      });
+    } catch(e) { console.warn('Player label layer failed:', e); }
 
-    const html = `
-      <div class="pop-country">${p.country}</div>
-      <div class="pop-club">${p.id}</div>
-      <div class="pop-player">${topPlayer.name}</div>
-      <div class="pop-meta">${topPlayer.pos} · ${topPlayer.caps} caps · Born ${topPlayer.born}</div>
-      ${more}
-      <div class="pop-cta" onclick="openPanel('${p.id.replace(/'/g,"\\'")}')">
-        View all players →
-      </div>`;
+    // ── Cursor + Interaction ──────────────────────────────────────
+    ['clubs-dot','players-dot'].forEach(layer => {
+      map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
+    });
 
-    popup = new maplibregl.Popup({ closeButton: true, offset: 12 })
-      .setLngLat(e.lngLat)
-      .setHTML(html)
-      .addTo(map);
-  });
+    let activePopup = null;
 
-  map.on('click', e => {
-    const hits = map.queryRenderedFeatures(e.point, { layers: ['clubs-dot'] });
-    if (!hits.length && popup) { popup.remove(); popup = null; }
-  });
+    map.on('click', 'clubs-dot', e => {
+      rotating = false;
+      if (activePopup) { activePopup.remove(); activePopup = null; }
+      const p = e.features[0].properties;
+      const cm = clubMap[p.id];
+      if (!cm) return;
+      const top = cm.players[0];
+      const more = cm.players.length > 1
+        ? `<div class="pop-meta" style="margin-top:3px;font-style:italic">+${cm.players.length - 1} more Swedish players</div>` : '';
+      const html = `
+        <div class="pop-tag">${p.country} · ${p.stadium}</div>
+        <div class="pop-name">${p.id}</div>
+        <div class="pop-meta">${top.player.name} · ${top.player.pos}</div>
+        ${more}
+        <span class="pop-cta" onclick="openClubPanel('${p.id.replace(/'/g,"\\'")}')">View all players →</span>`;
+      activePopup = new maplibregl.Popup({ closeButton:true, offset:12 })
+        .setLngLat(e.lngLat).setHTML(html).addTo(map);
+    });
 
-  // ── Zoom label ───────────────────────────────────────────────────
-  map.on('zoom', () => {
-    const z = map.getZoom();
-    document.getElementById('zlbl').textContent = zoomLabel(z);
-  });
+    map.on('click', 'players-dot', e => {
+      rotating = false;
+      if (activePopup) { activePopup.remove(); activePopup = null; }
+      const pr = e.features[0].properties;
+      const html = `
+        <div class="pop-tag">${pr.country} · ${pr.stadium}</div>
+        <div class="pop-name">${pr.playerName}</div>
+        <div class="pop-meta">${pr.pos} · Born ${pr.born} · ${pr.years}</div>
+        <div class="pop-meta">${pr.apps} apps · ${pr.ceGoals} goals · ${pr.trophies}</div>
+        <span class="pop-cta" onclick="openPlayerPanel('${pr.playerName.replace(/'/g,"\\'")}','${pr.clubName.replace(/'/g,"\\'")}')">Full profile →</span>`;
+      activePopup = new maplibregl.Popup({ closeButton:true, offset:12 })
+        .setLngLat(e.lngLat).setHTML(html).addTo(map);
+    });
 
-  // ── Auto-rotation ────────────────────────────────────────────────
-  map.on('mousedown', () => { rotating = false; });
-  map.on('touchstart', () => { rotating = false; });
+    map.on('click', e => {
+      const hits = map.queryRenderedFeatures(e.point, { layers:['clubs-dot','players-dot'] });
+      if (!hits.length && activePopup) { activePopup.remove(); activePopup = null; }
+    });
 
-  function spin() {
-    if (rotating && map.getZoom() < 4) {
-      const c = map.getCenter();
-      map.setCenter([c.lng + 0.04, c.lat]);
-    }
-    requestAnimationFrame(spin);
-  }
-  spin();
+    map.on('zoom', () => {
+      document.getElementById('zlbl').textContent = zoomLabel(map.getZoom());
+    });
 
-  // Live Wikidata
-  fetchWikidata();
+    // Auto-rotate
+    map.on('mousedown', () => { rotating = false; });
+    map.on('touchstart', () => { rotating = false; });
+    (function spin() {
+      if (rotating && map.getZoom() < 4) {
+        const c = map.getCenter();
+        map.setCenter([c.lng + 0.04, c.lat]);
+      }
+      requestAnimationFrame(spin);
+    })();
+
+    setP(100, '');
+    setTimeout(() => document.getElementById('boot').classList.add('gone'), 400);
+    fetchWikidata();
 
   } catch(err) {
     console.error('onMapLoad error:', err);
@@ -972,42 +1250,79 @@ function onMapLoad() {
 }
 
 // ================================================================
-//  PANEL
+//  PANEL  – club view
 // ================================================================
-window.openPanel = function(clubId) {
+window.openClubPanel = function(clubId) {
   const cm = clubMap[clubId];
   if (!cm) return;
-
   document.getElementById('pbody').innerHTML = `
     <div class="pc-tag">${cm.country}</div>
-    <div class="pc-club">${clubId}</div>
-    <div class="pc-loc">${cm.stadium} · ${cm.players.length} Swedish ${cm.players.length === 1 ? 'player' : 'players'}</div>
+    <div class="pc-name">${clubId}</div>
+    <div class="pc-sub">${cm.stadium} · ${cm.players.length} Swedish ${cm.players.length === 1 ? 'player' : 'players'}</div>
     <div class="divider"></div>
-    ${cm.players.map((p,i) => playerRow(p, i, clubId)).join('')}
-    <div style="margin-top:18px;font-size:7px;color:#162230;letter-spacing:.12em;text-transform:uppercase">Curated + Wikidata live</div>`;
-
+    ${cm.players.map(({ player: p, entry: ce }, i) => clubPlayerRow(p, ce, i, clubId)).join('')}
+    <div style="margin-top:18px;font-size:7px;color:#111e2a;letter-spacing:.12em;text-transform:uppercase">Curated + Wikidata</div>`;
   document.getElementById('panel').classList.add('open');
 };
 
-function playerRow(p, i, cid) {
+function clubPlayerRow(p, ce, i, cid) {
   const cls = p.influence >= 85 ? 'legend' : p.influence >= 65 ? 'star' : '';
   const id = `bio_${cid.replace(/\W/g,'_')}_${i}`;
   return `<div class="ply" onclick="toggleBio('${id}')">
     <div class="ply-rank">${String(i+1).padStart(2,'0')} · ${p.pos}${p.active ? ' · <span style="color:#3aaa66">Active</span>' : ''}</div>
     <div class="ply-name ${cls}">${p.name}</div>
-    <div class="ply-meta">${p.born} · ${p.caps} caps · ${p.goals} goals</div>
-    <div class="ply-bio" id="${id}">${p.bio}
+    <div class="ply-meta">${ce.years} · ${ce.apps} apps · ${ce.goals} goals</div>
+    <div class="ply-bio" id="${id}">${ce.bio}
       <div class="bio-row">
-        <div class="bs"><strong>${p.caps}</strong>Caps</div>
-        <div class="bs"><strong>${p.goals}</strong>Goals</div>
-        <div class="bs"><strong>${p.born}</strong>Born</div>
+        <div class="bs"><strong>${ce.apps}</strong>Apps</div>
+        <div class="bs"><strong>${ce.goals}</strong>Goals</div>
+        <div class="bs"><strong>${ce.years}</strong>Years</div>
+        <div class="bs"><strong style="font-size:10px">${ce.trophies || '—'}</strong>Trophies</div>
+      </div>
+      <div style="margin-top:8px">
+        <span class="pop-cta" onclick="event.stopPropagation();openPlayerPanel('${p.name.replace(/'/g,"\\'")}','${cid.replace(/'/g,"\\'")}')">Full career →</span>
       </div>
     </div>
   </div>`;
 }
 
-window.toggleBio = function(id) { document.getElementById(id)?.classList.toggle('open'); };
-window.closePanel = function() { document.getElementById('panel').classList.remove('open'); };
+// ================================================================
+//  PANEL  – individual player view (all clubs)
+// ================================================================
+window.openPlayerPanel = function(playerName, fromClub) {
+  const p = PLAYERS.find(x => x.name === playerName);
+  if (!p) return;
+
+  const otherClubs = p.clubs
+    .filter(ce => ce.name !== fromClub && clubMap[ce.name])
+    .map(ce => `<div class="pv-other-item" onclick="openClubPanel('${ce.name.replace(/'/g,"\\'")}')">
+      ${ce.name} · ${ce.years} · ${ce.apps} apps · ${ce.goals} goals
+    </div>`).join('');
+
+  const thisEntry = p.clubs.find(ce => ce.name === fromClub) || p.clubs[0];
+
+  document.getElementById('pbody').innerHTML = `
+    <span class="pv-back" onclick="openClubPanel('${fromClub.replace(/'/g,"\\'")}')">← Back to ${fromClub}</span>
+    <div class="pv-pos">${p.pos}${p.active ? ' · <span style="color:#3aaa66">Active</span>' : ''}</div>
+    <div class="pv-name">${p.name}</div>
+    <div class="pv-meta">Born ${p.born} · ${p.caps} international caps · ${p.goals} international goals</div>
+    <p style="font-size:9px;line-height:1.8;color:#627a8a;margin-bottom:8px">${p.bio}</p>
+    <div class="pv-club-head">AT ${fromClub.toUpperCase()}</div>
+    <div class="pv-stats">
+      <div class="pv-stat"><strong>${thisEntry.apps}</strong>Apps</div>
+      <div class="pv-stat"><strong>${thisEntry.goals}</strong>Goals</div>
+      <div class="pv-stat"><strong>${thisEntry.years}</strong>Period</div>
+      <div class="pv-stat"><strong style="font-size:10px">${thisEntry.trophies || '—'}</strong>Trophies</div>
+    </div>
+    <div class="pv-club-bio">${thisEntry.bio}</div>
+    ${otherClubs ? `<div class="pv-other">Also played at</div><div class="pv-other-list">${otherClubs}</div>` : ''}
+    <div style="margin-top:18px;font-size:7px;color:#111e2a;letter-spacing:.12em;text-transform:uppercase">Curated + Wikidata</div>`;
+
+  document.getElementById('panel').classList.add('open');
+};
+
+window.toggleBio = id => document.getElementById(id)?.classList.toggle('open');
+window.closePanel = () => document.getElementById('panel').classList.remove('open');
 
 // ================================================================
 //  WIKIDATA LIVE FETCH
@@ -1015,7 +1330,6 @@ window.closePanel = function() { document.getElementById('panel').classList.remo
 async function fetchWikidata() {
   const lt = document.getElementById('live');
   lt.classList.add('on');
-
   const q = `SELECT DISTINCT ?player ?playerLabel ?club ?clubLabel ?countryLabel ?lat ?lon ?caps WHERE {
   ?player wdt:P27 wd:Q34;wdt:P106 wd:Q937857;wdt:P54 ?club.
   ?club wdt:P625 ?coord;wdt:P17 ?country.
@@ -1024,12 +1338,10 @@ async function fetchWikidata() {
   OPTIONAL{?player wdt:P1350 ?caps}
   SERVICE wikibase:label{bd:serviceParam wikibase:language "en"}
 } LIMIT 1500`;
-
   try {
     const r = await fetch(
       `https://query.wikidata.org/sparql?query=${encodeURIComponent(q)}&format=json`,
-      { headers: { 'Accept': 'application/sparql-results+json' } }
-    );
+      { headers: { 'Accept': 'application/sparql-results+json' } });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const j = await r.json();
     mergeWikidata(j.results.bindings);
@@ -1046,56 +1358,35 @@ async function fetchWikidata() {
 function mergeWikidata(bindings) {
   const known = new Set([...seenNames].map(n => n.toLowerCase()));
   let added = 0;
-
   bindings.forEach(b => {
-    const pName = b.playerLabel?.value;
-    const cName = b.clubLabel?.value;
-    const lat = parseFloat(b.lat?.value);
-    const lon = parseFloat(b.lon?.value);
+    const pName = b.playerLabel?.value, cName = b.clubLabel?.value;
+    const lat = parseFloat(b.lat?.value), lon = parseFloat(b.lon?.value);
     const caps = parseInt(b.caps?.value) || 0;
-
     if (!pName || !cName || isNaN(lat) || isNaN(lon)) return;
     if (known.has(pName.toLowerCase())) return;
-
     const inf = Math.min(55, Math.max(12, Math.round(caps * 0.6)));
-
     let ck = Object.keys(CLUBS).find(k => k.toLowerCase() === cName.toLowerCase());
     if (!ck) {
       ck = cName;
       CLUBS[ck] = { lat, lng: lon, city: cName, country: b.countryLabel?.value || '?', stadium: cName };
     }
-
-    const np = {
-      name: pName, influence: inf, caps, goals: 0, born: '?',
-      pos: 'Player', active: false,
-      bio: `Swedish international · ${caps} caps · Source: Wikidata.`,
-      clubs: [ck]
-    };
-
-    PLAYERS.push(np);
-    seenNames.add(pName);
-    known.add(pName.toLowerCase());
-
+    const ce = { name: ck, years: '?', apps: caps, goals: 0, trophies: '—', bio: `Swedish international · ${caps} caps · Source: Wikidata.` };
+    const np = { name: pName, influence: inf, caps, goals: 0, born: '?', pos: 'Player',
+      active: false, bio: `Swedish international. ${caps} caps.`, clubs: [ce] };
+    PLAYERS.push(np); seenNames.add(pName); known.add(pName.toLowerCase());
     if (!clubMap[ck]) clubMap[ck] = { ...CLUBS[ck], clubName: ck, players: [] };
-    if (!clubMap[ck].players.find(x => x.name === pName)) {
-      clubMap[ck].players.push(np);
-      clubMap[ck].players.sort((a,b) => b.influence - a.influence);
-    }
+    clubMap[ck].players.push({ player: np, entry: ce });
+    clubMap[ck].players.sort((a, b) => b.player.influence - a.player.influence);
     added++;
   });
-
   if (added > 0 && map) {
     updateStats();
-    const src = map.getSource('clubs');
-    if (src) src.setData(buildGeoJSON());
-    console.log(`Wikidata added ${added} players`);
+    map.getSource('clubs')?.setData(buildClubGeoJSON());
+    map.getSource('players')?.setData(buildPlayerGeoJSON());
   }
 }
 
-// ================================================================
-//  BOOT
-// ================================================================
-setP(20, 'Loading map engine…');
+// Boot
 if (typeof maplibregl === 'undefined') {
   bootErr('MapLibre GL JS failed to load.\n\nCheck your internet connection or ad blocker.');
 } else {
@@ -1103,7 +1394,5 @@ if (typeof maplibregl === 'undefined') {
   initMap();
 }
 </script>
-</body>
-</html>
 </body>
 </html>
