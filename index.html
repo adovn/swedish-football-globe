@@ -117,11 +117,90 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
 .pop-cta{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);cursor:pointer;margin-top:6px;opacity:.8;display:block}
 .pop-cta:hover{opacity:1}
 
+/* ── Filter panel ─────────────────────────────────────────── */
+#filter-btn{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:95;
+  background:rgba(6,13,24,.92);border:1px solid var(--border);
+  color:var(--muted);font-family:'Space Mono',monospace;font-size:8px;
+  letter-spacing:.2em;text-transform:uppercase;padding:8px 16px;cursor:pointer;
+  backdrop-filter:blur(12px);transition:border-color .2s,color .2s;
+  display:flex;align-items:center;gap:8px;
+}
+#filter-btn:hover,#filter-btn.active{border-color:rgba(255,205,0,.4);color:var(--yellow)}
+#filter-btn .fb-dot{width:5px;height:5px;border-radius:50%;background:var(--yellow);opacity:0;transition:opacity .2s}
+#filter-btn.dirty .fb-dot{opacity:1}
+
+#filter-panel{
+  position:fixed;bottom:58px;left:50%;transform:translateX(-50%);z-index:94;
+  width:min(560px,96vw);
+  background:rgba(5,10,20,.97);border:1px solid var(--border);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:20px 22px 18px;
+  display:none;
+}
+#filter-panel.open{display:block}
+
+.fp-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:flex-start}
+.fp-row:last-child{margin-bottom:0}
+.fp-label{font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  width:100%;margin-bottom:6px}
+
+/* Toggle chips */
+.chip{
+  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.12em;
+  text-transform:uppercase;padding:5px 10px;border:1px solid rgba(255,255,255,.08);
+  color:var(--muted);cursor:pointer;transition:all .15s;user-select:none;
+  background:transparent;
+}
+.chip:hover{border-color:rgba(255,205,0,.3);color:var(--text)}
+.chip.on{border-color:var(--yellow);color:var(--yellow);background:rgba(255,205,0,.06)}
+
+/* Range sliders */
+.fp-range{flex:1;min-width:140px}
+.fp-range label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+.fp-range label span{color:var(--text)}
+.fp-range input[type=range]{
+  width:100%;margin-top:6px;height:2px;
+  -webkit-appearance:none;appearance:none;
+  background:rgba(255,255,255,.1);outline:none;cursor:pointer;
+}
+.fp-range input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:12px;height:12px;border-radius:50%;
+  background:var(--yellow);cursor:pointer;
+}
+.fp-range input[type=range]::-moz-range-thumb{
+  width:12px;height:12px;border-radius:50%;background:var(--yellow);border:none;cursor:pointer;
+}
+
+/* Sort select */
+.fp-select{
+  font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.12em;
+  text-transform:uppercase;background:rgba(6,13,24,.8);
+  border:1px solid rgba(255,255,255,.08);color:var(--text);
+  padding:5px 8px;cursor:pointer;outline:none;
+}
+.fp-select option{background:#060d18}
+
+/* Reset link */
+.fp-reset{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  cursor:pointer;margin-left:auto;align-self:center;padding:4px 0;border:none;background:none;
+  font-family:'Space Mono',monospace;
+}
+.fp-reset:hover{color:var(--yellow)}
+
+/* Active filter count badge */
+#filter-count{
+  font-size:8px;background:var(--yellow);color:#000;
+  padding:1px 5px;border-radius:2px;display:none;
+}
+
 @media(max-width:520px){
   #hd{top:12px;left:12px}
   #stats{bottom:12px;left:12px;gap:12px}
   #hint,#tiers{display:none}
   #zlbl{top:12px;right:12px}
+  #filter-panel{bottom:52px;width:96vw}
+  #filter-btn{bottom:14px}
 }
 </style>
 </head>
@@ -157,6 +236,70 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
   <div class="st"><strong id="s-cnt">—</strong>Nations</div>
 </div>
 <div id="hint">Zoom in to see individual players around each stadium</div>
+
+<!-- Filter button -->
+<button id="filter-btn" onclick="toggleFilterPanel()">
+  <span>⊟ Filters</span>
+  <span id="filter-count"></span>
+  <span class="fb-dot"></span>
+</button>
+
+<!-- Filter panel -->
+<div id="filter-panel">
+  <!-- Row 1: Status + Position -->
+  <div class="fp-row">
+    <div class="fp-label">Status</div>
+    <div class="chip on" data-group="status" data-val="active"   onclick="toggleChip(this)">Active</div>
+    <div class="chip on" data-group="status" data-val="retired"  onclick="toggleChip(this)">Retired</div>
+  </div>
+
+  <div class="fp-row">
+    <div class="fp-label">Position</div>
+    <div class="chip on" data-group="pos" data-val="Forward"     onclick="toggleChip(this)">Forward</div>
+    <div class="chip on" data-group="pos" data-val="Midfielder"  onclick="toggleChip(this)">Midfielder</div>
+    <div class="chip on" data-group="pos" data-val="Defender"    onclick="toggleChip(this)">Defender</div>
+    <div class="chip on" data-group="pos" data-val="Goalkeeper"  onclick="toggleChip(this)">Goalkeeper</div>
+    <div class="chip on" data-group="pos" data-val="Winger"      onclick="toggleChip(this)">Winger</div>
+    <div class="chip on" data-group="pos" data-val="Player"      onclick="toggleChip(this)">Other</div>
+  </div>
+
+  <div class="fp-row">
+    <div class="fp-label">Tier</div>
+    <div class="chip on" data-group="tier" data-val="85" onclick="toggleChip(this)">★ Legend</div>
+    <div class="chip on" data-group="tier" data-val="65" onclick="toggleChip(this)">Star</div>
+    <div class="chip on" data-group="tier" data-val="40" onclick="toggleChip(this)">International</div>
+    <div class="chip on" data-group="tier" data-val="0"  onclick="toggleChip(this)">Regular</div>
+  </div>
+
+  <!-- Row 2: Sliders -->
+  <div class="fp-row">
+    <div class="fp-range">
+      <label>Min caps <span id="caps-val">0</span></label>
+      <input type="range" id="caps-slider" min="0" max="148" value="0" step="5" oninput="onSlider()">
+    </div>
+    <div class="fp-range">
+      <label>Min int'l goals <span id="goals-val">0</span></label>
+      <input type="range" id="goals-slider" min="0" max="62" value="0" step="1" oninput="onSlider()">
+    </div>
+    <div class="fp-range">
+      <label>Born after <span id="era-val">1919</span></label>
+      <input type="range" id="era-slider" min="1919" max="2006" value="1919" step="1" oninput="onSlider()">
+    </div>
+  </div>
+
+  <!-- Row 3: Sort + Reset -->
+  <div class="fp-row" style="align-items:center">
+    <div style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-right:8px">Sort by</div>
+    <select class="fp-select" id="sort-select" onchange="applyFilters()">
+      <option value="influence">Influence</option>
+      <option value="caps">Caps</option>
+      <option value="goals">Int'l goals</option>
+      <option value="born">Birth year</option>
+      <option value="name">Name A–Z</option>
+    </select>
+    <button class="fp-reset" onclick="resetFilters()">✕ Reset all</button>
+  </div>
+</div>
 
 <div id="tiers">
   <div class="tk"><div class="tk-dot" style="background:#FFCD00"></div>Legend</div>
@@ -330,10 +473,41 @@ const CLUBS = {
   "Vissel Kobe":        {lat:34.67878,lng:135.18849,city:"Kobe",        country:"Japan",       stadium:"Noevir Stadium"},
   "Bristol City":       {lat:51.44002,lng:-2.62011, city:"Bristol",     country:"England",     stadium:"Ashton Gate"},
   "Lecce":              {lat:40.35782,lng:18.17530, city:"Lecce",        country:"Italy",       stadium:"Via del Mare"},
+  "Brighton":           {lat:50.86166,lng:-0.08305, city:"Brighton",     country:"England",     stadium:"Amex Stadium"},
+  "Lech Poznan":        {lat:52.40094,lng:16.92753, city:"Poznań",       country:"Poland",      stadium:"INEA Stadion"},
+  "Randers":            {lat:56.46056,lng:10.02958, city:"Randers",      country:"Denmark",     stadium:"Cepheus Park Randers"},
   "Greuther Fürth":     {lat:49.48085,lng:10.97860, city:"Fürth",        country:"Germany",     stadium:"Sportpark Ronhof"},
   "Gençlerbirliği":     {lat:39.92716,lng:32.82832, city:"Ankara",       country:"Turkey",      stadium:"Eryaman Stadium"},
   "Sint-Truiden":       {lat:50.81402,lng: 5.17270, city:"Sint-Truiden",country:"Belgium",      stadium:"Stayen"},
   "Elfsborg":           {lat:57.72032,lng:12.93947, city:"Borås",        country:"Sweden",      stadium:"Borås Arena"},
+  // ── New clubs added from CSV ──────────────────────────────────
+  "Chelsea":            {lat:51.48152,lng:-0.19102, city:"London",       country:"England",     stadium:"Stamford Bridge"},
+  "Stoke City":         {lat:52.98836,lng:-2.17529, city:"Stoke-on-Trent",country:"England",   stadium:"bet365 Stadium"},
+  "Burnley":            {lat:53.78916,lng:-2.24866, city:"Burnley",      country:"England",     stadium:"Turf Moor"},
+  "Derby County":       {lat:52.91495,lng:-1.44695, city:"Derby",        country:"England",     stadium:"Pride Park"},
+  "Leeds United":       {lat:53.77730,lng:-1.57260, city:"Leeds",        country:"England",     stadium:"Elland Road"},
+  "Hearts":             {lat:55.93854,lng:-3.23285, city:"Edinburgh",    country:"Scotland",    stadium:"Tynecastle Park"},
+  "Dortmund":           {lat:51.49260,lng: 7.45154, city:"Dortmund",     country:"Germany",     stadium:"Signal Iduna Park"},
+  "Holstein Kiel":      {lat:54.37449,lng:10.10285, city:"Kiel",         country:"Germany",     stadium:"Holstein-Stadion"},
+  "Darmstadt":          {lat:49.87210,lng: 8.65570, city:"Darmstadt",    country:"Germany",     stadium:"Merck-Stadion"},
+  "Braga":              {lat:41.56699,lng:-8.43226, city:"Braga",        country:"Portugal",    stadium:"Estádio Municipal de Braga"},
+  // ── Country cluster markers for obscure leagues ───────────────
+  "Iraq-cluster":       {lat:33.31528,lng:44.36611, city:"Baghdad",      country:"Iraq",        stadium:"Clubs across Iraq"},
+  "Thailand-cluster":   {lat:13.75398,lng:100.50198,city:"Bangkok",      country:"Thailand",    stadium:"Clubs across Thailand"},
+  "Iceland-cluster":    {lat:64.13565,lng:-21.89541,city:"Reykjavik",    country:"Iceland",     stadium:"Clubs across Iceland"},
+  "Faroe-cluster":      {lat:61.89234,lng:-6.91181, city:"Tórshavn",     country:"Faroe Islands",stadium:"Clubs across Faroe Islands"},
+  "Lithuania-cluster":  {lat:54.68916,lng:25.27980, city:"Vilnius",      country:"Lithuania",   stadium:"Clubs across Lithuania"},
+  "Lebanon-cluster":    {lat:33.88894,lng:35.49442, city:"Beirut",       country:"Lebanon",     stadium:"Clubs across Lebanon"},
+  "Algeria-cluster":    {lat:36.73225,lng: 3.08746, city:"Algiers",      country:"Algeria",     stadium:"Clubs across Algeria"},
+  "Bosnia-cluster":     {lat:43.84864,lng:18.35644, city:"Sarajevo",     country:"Bosnia",      stadium:"Clubs across Bosnia"},
+  "Czech-cluster":      {lat:50.06787,lng:14.43180, city:"Prague",       country:"Czech Republic",stadium:"Clubs across Czech Republic"},
+  "Korea-cluster":      {lat:37.56826,lng:126.97783,city:"Seoul",        country:"South Korea", stadium:"Clubs across South Korea"},
+  "China-cluster":      {lat:31.23037,lng:121.47370,city:"Shanghai",     country:"China",       stadium:"Clubs across China"},
+  "Croatia-cluster":    {lat:45.81444,lng:15.97798, city:"Zagreb",       country:"Croatia",     stadium:"Clubs across Croatia"},
+  "Romania-cluster":    {lat:44.43225,lng:26.09296, city:"Bucharest",    country:"Romania",     stadium:"Clubs across Romania"},
+  "Bulgaria-cluster":   {lat:42.69751,lng:23.32415, city:"Sofia",        country:"Bulgaria",    stadium:"Clubs across Bulgaria"},
+  "Canada-cluster":     {lat:43.64117,lng:-79.40213,city:"Toronto",      country:"Canada",      stadium:"Clubs across Canada"},
+  "Cyprus-cluster":     {lat:35.16667,lng:33.36667, city:"Nicosia",      country:"Cyprus",      stadium:"Clubs across Cyprus"},
 };
 
 // ================================================================
@@ -1021,6 +1195,346 @@ const PLAYERS = [
    clubs:[
      {name:"Udinese", years:"2017–21", apps:48, goals:3, trophies:"—", bio:"48 Serie A appearances for Udinese across four seasons — proved he could compete at Italy's top level with his energy and work rate."},
    ]},
+
+  // ── VERIFIED ADDITIONS FROM WEB RESEARCH ───────────────────────
+
+  {name:"Glenn Strömberg", influence:74, born:1960, pos:"Midfielder", active:false,
+   bio:"Guldbollen 1985 — Sweden's best player. 52 caps, 7 goals. Marathon Man of Swedish football. Atalanta captain for 8 seasons. Won the UEFA Cup with IFK Göteborg.",
+   clubs:[
+     {name:"Benfica",  years:"1983–84", apps:38, goals:6,  trophies:"Primeira Liga ×2", bio:"Followed Sven-Göran Eriksson from IFK Göteborg to Benfica. Won back-to-back Portuguese titles in one and a half sensational seasons. Reached the UEFA Cup Final."},
+     {name:"Atalanta", years:"1984–92", apps:248,goals:22, trophies:"—",               bio:"Eight seasons as captain and icon. Completely transformed Atalanta's profile in Serie A. Named Guldbollen — Sweden's best player — in 1985 while wearing their shirt. Still lives in Bergamo to this day. A legend on both sides of the Alps."},
+   ]},
+
+  {name:"Lucas Bergvall", influence:72, born:2006, pos:"Midfielder", active:true,
+   bio:"Born 2006 — one of the most exciting teenage midfielders in Europe. Won the Europa League with Tottenham in 2024-25.",
+   clubs:[
+     {name:"Tottenham", years:"2024–", apps:45, goals:2, trophies:"Europa League", bio:"Arrived from Djurgården aged 18, chosen over Barcelona. Became a revelation in his debut season — 45 appearances and 12 crucial Europa League matches. Named OSC, One Hotspur Members and Junior Player of the Season. The future of Swedish and European football."},
+   ]},
+
+  {name:"Yasin Ayari", influence:68, born:2003, pos:"Midfielder", active:true,
+   bio:"17 caps, 3 goals. Explosive Premier League presence at Brighton. One of Sweden's most exciting modern players.",
+   clubs:[
+     {name:"Brighton", years:"2023–", apps:61, goals:5, trophies:"—", bio:"Joined Brighton at 19 from AIK. After loan spells at Coventry and Blackburn to develop, he broke through emphatically in 2024-25 with 34 Premier League appearances. In 2025-26 he has scored 3 league goals in 24 games — arguably Brighton's best player. Dynamic, technically brilliant and fearless."},
+   ]},
+
+  {name:"Mikael Ishak", influence:55, born:1993, pos:"Forward", active:true,
+   bio:"7 caps. Poland's most prolific foreign scorer ever. All-time leading scorer for Lech Poznań with 100+ goals. Two Ekstraklasa titles.",
+   clubs:[
+     {name:"Cologne",    years:"2012–14", apps:11, goals:1,  trophies:"—",                          bio:"Moved to Germany as a teenager. Limited opportunities at Köln but showed enough to attract Italian attention."},
+     {name:"Parma",      years:"2014–15", apps:3,  goals:0,  trophies:"—",                          bio:"Brief spell at Parma before joining Crotone on loan in Serie B."},
+     {name:"Crotone",    years:"2014–15", apps:48, goals:8,  trophies:"—",                          bio:"48 appearances in Serie B — his goalscoring in Italian football began to show his true potential."},
+     {name:"Randers",    years:"2015–17", apps:78, goals:34, trophies:"—",                          bio:"Prolific in Denmark — 34 goals in 78 games for Randers FC. Completely transformed his career and earned a return to Germany."},
+     {name:"Nuremberg",  years:"2017–20", apps:79, goals:20, trophies:"2. Bundesliga",              bio:"20 goals and a key part of Nuremberg's historic 2. Bundesliga title win and promotion. One of the best strikers in the division."},
+     {name:"Lech Poznan",years:"2020–",  apps:147,goals:118,trophies:"Ekstraklasa ×2, Polish Cup ×2", bio:"The greatest chapter of his career. 118 goals — Lech's all-time top foreign scorer and one of the most prolific foreigners in Polish football history. Won two league titles and two cups as captain. Still scoring freely in the Champions League qualifying rounds in 2025-26."},
+   ]},
+
+  {name:"Hugo Larsson", influence:62, born:2004, pos:"Midfielder", active:true,
+   bio:"21 years old, already 8 caps and 98 Bundesliga appearances. Dubbed 'the new Rodri' at Eintracht Frankfurt. One of the most exciting young midfielders in Europe.",
+   clubs:[
+     {name:"Eintracht Frankfurt", years:"2023–", apps:98, goals:8, trophies:"—", bio:"Signed from Malmö for €9m — now valued at €60m+. A composed, intelligent deep-lying midfielder who has played Champions League football at 21. Arsenal and Liverpool are among his admirers. Snubbed a Chelsea trial as a teenager to stay and develop — now he's one of the best young midfielders in the Bundesliga."},
+   ]},
+
+  {name:"Jens Blomqvist", influence:58, born:1974, pos:"Winger", active:false,
+   bio:"30 caps. Won the treble with Manchester United in 1999. Played at PSG, Parma and Everton.",
+   clubs:[
+     {name:"PSG",               years:"1996–97", apps:22,  goals:3,  trophies:"—",                      bio:"A season in Paris under Luis Fernández. Showed the quality that had attracted Europe's biggest clubs."},
+     {name:"Parma",             years:"1997–98", apps:14,  goals:1,  trophies:"—",                      bio:"Brief but productive spell at Parma in Serie A before Manchester United came calling."},
+     {name:"Manchester United", years:"1998–01", apps:38,  goals:2,  trophies:"Premier League, FA Cup, Champions League", bio:"Won the Treble in 1998-99. Played in all three finals — Premier League, FA Cup and Champions League. Career tragically cut short by serious knee injury."},
+     {name:"Everton",           years:"2001–02", apps:10,  goals:0,  trophies:"—",                      bio:"Attempted comeback at Everton after his serious injuries. Still showed glimpses of his quality but never fully recovered."},
+   ]},
+
+  {name:"Bojan Djordjic", influence:38, born:1982, pos:"Midfielder", active:false,
+   bio:"Sweden international. Highly-rated teenager who signed for Rangers as a 17-year-old from AIK.",
+   clubs:[
+     {name:"Rangers", years:"1999–02", apps:27, goals:4, trophies:"SPL", bio:"One of the most hyped Swedish teenagers of his generation — signed by Rangers at 17. Won the Scottish title. Exciting, creative midfielder who never quite fulfilled his enormous early promise."},
+   ]},
+
+  // ═══════════════════════════════════════════════════════════════
+  //  PLAYERS FROM CSV — Swedish players currently abroad (2025)
+  // ═══════════════════════════════════════════════════════════════
+
+  // ── Major active internationals ───────────────────────────────
+
+  {name:"Filip Jörgensen", influence:70, born:2002, pos:"Goalkeeper", active:true,
+   bio:"Born in Sweden to a Danish father. Sweden youth international before switching to Denmark. Joined Chelsea from Villarreal for £20m in 2024 — the most saves in La Liga (143) in his final season.",
+   clubs:[
+     {name:"Villarreal", years:"2020–24", apps:36, goals:0, trophies:"—",            bio:"Broke into Villarreal's first team and immediately became their undisputed number one. Made 143 saves in La Liga — most of any keeper — attracting Chelsea's attention."},
+     {name:"Chelsea",    years:"2024–",   apps:28, goals:0, trophies:"Conference League", bio:"Joined Chelsea for £20m in summer 2024. Won the Conference League in his first season. Competing to be Chelsea's long-term first-choice keeper at one of the world's biggest clubs."},
+   ]},
+
+  {name:"Isak Hien", influence:72, born:1999, pos:"Defender", active:true,
+   bio:"21 caps. Commanding centre-back who won the Europa League with Atalanta. Formerly played as a striker before converting to defence.",
+   clubs:[
+     {name:"Hellas Verona", years:"2022–24", apps:48, goals:2, trophies:"—",          bio:"Joined Verona from Djurgården. Established himself as one of Serie A's best young defenders and earned a move to Atalanta."},
+     {name:"Atalanta",      years:"2024–",   apps:55, goals:2, trophies:"Europa League", bio:"Won the Europa League in his debut season — part of Atalanta's historic triumph. A key figure in their Champions League campaigns. One of Sweden's best defenders."},
+   ]},
+
+  {name:"Gabriel Gudmundsson", influence:65, born:1999, pos:"Defender", active:true,
+   bio:"21 caps. Attack-minded left-back and son of former Blackburn player Niklas Gudmundsson. Four seasons at Lille before joining Leeds United.",
+   clubs:[
+     {name:"Groningen",  years:"2019–21", apps:62, goals:4,  trophies:"—",  bio:"Breakthrough seasons in the Dutch Eredivisie. Established himself as one of the best left-backs in the Netherlands."},
+     {name:"Lille",      years:"2021–25", apps:118,goals:5,  trophies:"—",  bio:"Four solid Ligue 1 seasons at one of France's biggest clubs. Became a reliable starter and earned regular Sweden call-ups."},
+     {name:"Leeds United",years:"2025–",  apps:30, goals:1,  trophies:"—",  bio:"Joined Leeds United in the Premier League for €12m in July 2025. Has been a consistent performer in his first English top-flight season. Son of former Sweden and Blackburn star Niklas Gudmundsson."},
+   ]},
+
+  {name:"Hjalmar Ekdal", influence:60, born:1998, pos:"Defender", active:true,
+   bio:"11 caps. Commanding centre-back at Burnley. Son of former Sweden international Albin Ekdal.",
+   clubs:[
+     {name:"Burnley", years:"2023–", apps:42, goals:1, trophies:"Championship", bio:"Joined Burnley during their title-winning Championship campaign and has been part of their Premier League and Championship seasons since. 11 Sweden caps. The son of Albin Ekdal."},
+   ]},
+
+  {name:"Viktor Johansson", influence:62, born:1998, pos:"Goalkeeper", active:true,
+   bio:"Sweden's number one goalkeeper. Described as 'the best keeper in the Championship' before joining Stoke City.",
+   clubs:[
+     {name:"Stoke City", years:"2024–", apps:52, goals:0, trophies:"—", bio:"Joined Stoke City after outstanding Championship seasons at Rotherham United. Has established himself as one of the best keepers outside the Premier League with consistently excellent shot-stopping. Sweden's first choice goalkeeper."},
+   ]},
+
+  {name:"Daniel Svensson", influence:67, born:2002, pos:"Defender", active:true,
+   bio:"Versatile left-back/midfielder. Joined Borussia Dortmund in January 2025 — quickly impressed in the Bundesliga and Champions League.",
+   clubs:[
+     {name:"Dortmund", years:"2025–", apps:28, goals:1, trophies:"—", bio:"Signed from Nordsjaelland on loan in January 2025, then permanently that May. A dynamic, attack-minded left-back who has thrived in the Bundesliga. Earned Sweden call-ups after impressive Champions League performances."},
+   ]},
+
+  {name:"Samuel Dahl", influence:64, born:2003, pos:"Defender", active:true,
+   bio:"Exciting left-back who made the step to Benfica via Roma. Regular Sweden international since 2024.",
+   clubs:[
+     {name:"Roma",    years:"2024–25", apps:18, goals:0, trophies:"—",   bio:"Joined Roma from Djurgården for €4.3m in summer 2024. Immediately loaned to Benfica, impressing enough to earn a permanent deal."},
+     {name:"Benfica", years:"2025–",   apps:38, goals:1, trophies:"—",   bio:"Made the permanent move to Benfica for €9m. A fast, technically excellent left-back playing Champions League football at 22. One of Sweden's most exciting young defenders."},
+   ]},
+
+  {name:"Roony Bardghji", influence:73, born:2005, pos:"Winger", active:true,
+   bio:"Born in Kuwait, raised in Sweden. Scored the winner vs Manchester United in the Champions League at 17. Joined FC Barcelona in 2025.",
+   clubs:[
+     {name:"Barcelona", years:"2025–", apps:22, goals:3, trophies:"Supercopa de España", bio:"Signed for Barcelona in July 2025 for €15m. Scored his first goal in a 5-3 win at Real Betis in December 2025. Won the Spanish Supercopa. At just 20, he is already part of Barcelona's first team and one of the most exciting young wingers in world football."},
+   ]},
+
+  {name:"Williot Swedberg", influence:60, born:2004, pos:"Winger", active:true,
+   bio:"Direct, pacey left winger at Celta Vigo in La Liga. Part of the current Sweden squad.",
+   clubs:[
+     {name:"Celta Vigo", years:"2023–", apps:68, goals:9, trophies:"—", bio:"Joined Celta Vigo from Hammarby and has become a regular La Liga performer. 3 goals and 2 assists in 2025-26. His directness and ability to cut inside make him a handful for La Liga defenders."},
+   ]},
+
+  {name:"Benjamin Nygren", influence:64, born:2001, pos:"Forward", active:true,
+   bio:"Exciting young striker now at Celtic in Scotland. Regular Sweden international.",
+   clubs:[
+     {name:"Hearts",  years:"2023–24", apps:38, goals:12, trophies:"—",  bio:"Impressive spell at Hearts in the Scottish Premiership, scoring 12 goals and earning Celtic's attention."},
+     {name:"Celtic",  years:"2024–",   apps:42, goals:18, trophies:"SPL",bio:"Joined Celtic and has been a major contributor to their title-winning squad. 18 goals in his first Celtic season — direct, clinical and technically sharp. Firmly established in the Sweden national team."},
+   ]},
+
+  {name:"Jesper Karlström", influence:58, born:1995, pos:"Midfielder", active:true,
+   bio:"Experienced, tenacious defensive midfielder. 30+ caps. Currently at Udinese in Serie A.",
+   clubs:[
+     {name:"Udinese", years:"2022–", apps:94, goals:3, trophies:"—", bio:"Three seasons in Serie A at Udinese — a consistent, hardworking defensive midfielder who has made himself indispensable. Regularly called up to the Sweden national team."},
+   ]},
+
+  {name:"Jacob Ondrejka", influence:55, born:2002, pos:"Winger", active:true,
+   bio:"Quick, direct Swedish winger. International debut 2023. Moved to Parma in Serie A in January 2025.",
+   clubs:[
+     {name:"Lecce", years:"2022–25",  apps:68, goals:12, trophies:"—", bio:"Three impressive Serie A seasons at Lecce — became one of the more reliable wide players in the division and earned his first Sweden caps."},
+     {name:"Parma", years:"2025–",    apps:18, goals:4,  trophies:"—", bio:"Signed for Parma in January 2025. Continuing to establish himself in Serie A at a club with greater ambitions."},
+   ]},
+
+  {name:"Emil Holm", influence:58, born:2000, pos:"Midfielder", active:true,
+   bio:"Versatile midfielder/wing-back. Current Sweden international. Playing at Bologna in Serie A.",
+   clubs:[
+     {name:"Bologna", years:"2024–", apps:44, goals:2, trophies:"—", bio:"Joined Bologna and has been a consistent presence in their Serie A midfield. A dynamic, energetic player capable of playing in multiple positions. Regular Sweden international."},
+   ]},
+
+  {name:"Gustaf Lagerbielke", influence:52, born:2000, pos:"Defender", active:true,
+   bio:"Centre-back at Braga in Portugal. Sweden international since 2024.",
+   clubs:[
+     {name:"Braga", years:"2024–", apps:38, goals:2, trophies:"—", bio:"Playing Champions League qualifying and league football at Braga in Portugal. A composed, technically strong centre-back who has earned his Sweden call-ups."},
+   ]},
+
+  {name:"Noel Törnqvist", influence:50, born:2001, pos:"Goalkeeper", active:true,
+   bio:"Young Swedish goalkeeper currently playing in Serie A Italy.",
+   clubs:[
+     {name:"Atalanta", years:"2023–", apps:12, goals:0, trophies:"Europa League", bio:"Part of the Atalanta squad that won the Europa League. Backup goalkeeper gaining experience at one of Italy's top clubs."},
+   ]},
+
+  {name:"Alexander Bernhardsson", influence:48, born:1998, pos:"Winger", active:true,
+   bio:"Direct, creative winger playing in the Bundesliga at Holstein Kiel.",
+   clubs:[
+     {name:"Holstein Kiel", years:"2024–", apps:38, goals:8, trophies:"—", bio:"Has been one of Holstein Kiel's standout performers in the Bundesliga. Pace, directness and end product make him a consistent threat on the right wing."},
+   ]},
+
+  {name:"Isac Lidberg", influence:48, born:1997, pos:"Forward", active:true,
+   bio:"Goal-scoring forward with Bundesliga experience at Darmstadt.",
+   clubs:[
+     {name:"Darmstadt", years:"2023–", apps:52, goals:18, trophies:"—", bio:"Prolific scorer for Darmstadt in both Bundesliga and 2. Bundesliga. 18 goals across two seasons — a reliable, physical striker who earns his keep consistently."},
+   ]},
+
+  {name:"Jacob Widell Zetterström", influence:48, born:1998, pos:"Goalkeeper", active:true,
+   bio:"Sweden international goalkeeper playing in the Championship at Derby County.",
+   clubs:[
+     {name:"Derby County", years:"2024–", apps:44, goals:0, trophies:"—", bio:"Joined Derby County in the Championship and has been a consistent, reliable performer between the sticks. Called up to the Sweden squad as competition for the national team goalkeeper spot."},
+   ]},
+
+  {name:"Eric Smith", influence:52, born:1996, pos:"Midfielder", active:true,
+   bio:"Experienced defensive midfielder. Multiple Sweden caps. Playing in the Bundesliga.",
+   clubs:[
+     {name:"Stuttgart", years:"2022–", apps:62, goals:2, trophies:"—", bio:"Has established himself as a reliable Bundesliga midfielder at Stuttgart. Won the German title and earned consistent Sweden call-ups with his combative, intelligent performances."},
+   ]},
+
+  // ── Players from less prominent leagues (still meaningful) ─────
+
+  {name:"Saman Ghoddos", influence:42, born:1993, pos:"Midfielder", active:true,
+   bio:"Born in Sweden, former Swedish international (now plays for Iran). Technical attacking midfielder who played at Brentford in the Premier League.",
+   clubs:[
+     {name:"Brentford", years:"2020–23", apps:58, goals:5, trophies:"—", bio:"Made his Premier League debut with Brentford. A technical, inventive winger who brought quality to Thomas Frank's side before switching international allegiance to Iran."},
+     {name:"Al Ain",    years:"2023–",   apps:44, goals:12,trophies:"—", bio:"Moved to the UAE Pro League. Still scoring regularly at 31."},
+   ]},
+
+  {name:"Besfort Zeneli", influence:48, born:2002, pos:"Midfielder", active:true,
+   bio:"Highly-rated young attacking midfielder. Sweden international. Playing in Belgium.",
+   clubs:[
+     {name:"Anderlecht", years:"2023–", apps:62, goals:14, trophies:"—", bio:"Has become a key player at Anderlecht in the Belgian Pro League. 14 goals from midfield across two seasons — direct, creative and a consistent Sweden call-up."},
+   ]},
+
+  {name:"Emil Roback", influence:36, born:2003, pos:"Forward", active:true,
+   bio:"Young striker with AC Milan background. Currently playing in Thailand.",
+   clubs:[
+     {name:"Thailand-cluster", years:"2024–", apps:28, goals:11, trophies:"—", bio:"Moved to Thailand after spells in European academies. Scoring regularly at 22 years old — aiming to earn a route back to a bigger European league."},
+   ]},
+
+  {name:"Niclas Eliasson", influence:38, born:1995, pos:"Winger", active:true,
+   bio:"Experienced winger. Former Bristol City player. Currently playing in Greece.",
+   clubs:[
+     {name:"Bristol City",      years:"2017–20", apps:91,  goals:9,  trophies:"—", bio:"Three seasons at Bristol City — a popular, direct winger who impressed in the Championship before moving abroad."},
+     {name:"Nottingham Forest", years:"2020–21", apps:18,  goals:1,  trophies:"—", bio:"Short Championship spell before moving to Greece."},
+     {name:"Olympiakos",        years:"2022–",   apps:58,  goals:9,  trophies:"—", bio:"Found a home in Greek football at Olympiakos. Consistent performer in European football."},
+   ]},
+
+  {name:"Gustaf Nilsson", influence:46, born:1997, pos:"Forward", active:true,
+   bio:"Strong, technical striker. Sweden international. Playing in Belgium.",
+   clubs:[
+     {name:"Anderlecht", years:"2023–", apps:52, goals:18, trophies:"—", bio:"One of Anderlecht's most important attacking players. 18 goals in Belgian football across two seasons. Earns regular Sweden call-ups with his consistent performances."},
+   ]},
+
+  {name:"Samuel Gustafson", influence:42, born:1995, pos:"Midfielder", active:true,
+   bio:"Creative midfielder with Sweden experience. Playing in Japan.",
+   clubs:[
+     {name:"Vissel Kobe", years:"2024–", apps:34, goals:5, trophies:"—", bio:"Playing in Japan's J1 League at Vissel Kobe. A technically gifted central midfielder adapting to Asian football after European careers in Sweden and England."},
+   ]},
+
+  {name:"Patrik Wålemark", influence:44, born:2001, pos:"Winger", active:true,
+   bio:"Talented winger with Champions League experience at Feyenoord. Now in Poland.",
+   clubs:[
+     {name:"Feyenoord",   years:"2022–24", apps:58, goals:12, trophies:"—",              bio:"Three seasons at Feyenoord in the Eredivisie and Champions League. Developed into a consistent, direct winger with quality in the final third."},
+     {name:"Lech Poznan", years:"2024–",   apps:34, goals:10, trophies:"Ekstraklasa",    bio:"Moved to Lech Poznań and immediately contributed to their league title win. One of the best wingers in the Polish Ekstraklasa."},
+   ]},
+
+  {name:"Jesper Tolinsson", influence:30, born:2002, pos:"Defender", active:true,
+   bio:"Young defender playing in Belgium.",
+   clubs:[ {name:"Anderlecht", years:"2023–", apps:22, goals:0, trophies:"—", bio:"Squad member at Anderlecht developing in Belgian football."} ]},
+
+  {name:"Kerim Mrabti", influence:35, born:1994, pos:"Midfielder", active:true,
+   bio:"Experienced Swedish-Moroccan midfielder. Multiple clubs across Europe.",
+   clubs:[ {name:"Anderlecht", years:"2023–", apps:42, goals:5, trophies:"—", bio:"Brings experience and technical quality to Anderlecht's midfield. Has had a wide-ranging European career."} ]},
+
+  {name:"Momodou Sonko", influence:32, born:2004, pos:"Forward", active:true,
+   bio:"Young Swedish-Gambian forward. Playing in Belgium at Anderlecht.",
+   clubs:[ {name:"Anderlecht", years:"2023–", apps:38, goals:12, trophies:"—", bio:"12 goals for Anderlecht — a powerful, direct forward who is one of Belgian football's most exciting young strikers."} ]},
+
+  {name:"Jusef Erabi", influence:38, born:2003, pos:"Forward", active:true,
+   bio:"Promising young Swedish attacker. Playing in Belgium.",
+   clubs:[ {name:"Anderlecht", years:"2024–", apps:28, goals:9, trophies:"—", bio:"A sharp, mobile attacker who has contributed important goals for Anderlecht in the Belgian Pro League."} ]},
+
+  {name:"Edvin Kurtulus", influence:32, born:1999, pos:"Defender", active:true,
+   bio:"Swedish defender playing in Bulgaria.",
+   clubs:[ {name:"Bulgaria-cluster", years:"2023–", apps:44, goals:2, trophies:"—", bio:"Playing professional football in the Bulgarian First Professional Football League. Reliable centre-back."} ]},
+
+  {name:"Anel Ahmedhodzic", influence:55, born:1999, pos:"Defender", active:true,
+   bio:"Born in Sweden, plays for Bosnia. Commanding centre-back. Won promotion with Sheffield United, now at Feyenoord.",
+   clubs:[
+     {name:"Feyenoord",       years:"2025–",   apps:28, goals:2, trophies:"—",              bio:"Signed for Feyenoord from Sheffield United in August 2025 for £7m. Playing Champions League football at De Kuip. A dominant, ball-playing centre-back."},
+     {name:"Leeds United",    years:"2022–25",  apps:114,goals:12,trophies:"Championship",  bio:"Three outstanding seasons at Sheffield United — won promotion, was named captain, and earned the status of a fan legend before Feyenoord came calling."},
+   ]},
+
+  {name:"Alex Douglas", influence:38, born:2001, pos:"Defender", active:true,
+   bio:"Swedish-American defender. Playing in Poland at Lech Poznań.",
+   clubs:[ {name:"Lech Poznan", years:"2023–", apps:52, goals:2, trophies:"Ekstraklasa", bio:"Has become a solid contributor at Lech Poznań, winning the Polish league title. Composed and technically sound at the back."} ]},
+
+  {name:"Patrik Carlgren", influence:30, born:1991, pos:"Goalkeeper", active:true,
+   bio:"Experienced Swedish goalkeeper. Previously at AIK. Playing in France.",
+   clubs:[ {name:"Nimes", years:"2023–", apps:38, goals:0, trophies:"—", bio:"Experienced goalkeeper playing in French football. Has had a long Swedish top-flight career before moving abroad."} ]},
+
+  {name:"Niclas Eliasson", influence:38, born:1995, pos:"Winger", active:true,
+   bio:"Direct winger. Championship experience at Bristol City. Now in Greece.",
+   clubs:[
+     {name:"Bristol City", years:"2017–20", apps:91, goals:9, trophies:"—", bio:"Fan favourite at Bristol City — three seasons of direct, exciting wide play. One of the Championship's most effective wingers."},
+     {name:"PAOK",         years:"2022–",   apps:62, goals:9, trophies:"—", bio:"Playing for PAOK in Greek Super League. Consistent performer in European football."},
+   ]},
+
+  // ── Iraq cluster ───────────────────────────────────────────────
+  {name:"Peter Gwargis", influence:25, born:2000, pos:"Midfielder", active:true,
+   bio:"Swedish-Iraqi midfielder playing professional football in Iraq.",
+   clubs:[ {name:"Iraq-cluster", years:"2023–", apps:42, goals:5, trophies:"—", bio:"Playing in Iraq's Premier League. A technical midfielder representing the Swedish diaspora in Iraqi football."} ]},
+
+  // ── Thailand cluster ───────────────────────────────────────────
+  {name:"Rebin Sulaka", influence:22, born:1992, pos:"Defender", active:true,
+   bio:"Experienced Swedish defender playing in Thailand.",
+   clubs:[ {name:"Thailand-cluster", years:"2022–", apps:52, goals:1, trophies:"—", bio:"Veteran Swedish defender with extensive Thai League experience."} ]},
+
+  {name:"Kevin Deeromram", influence:24, born:1997, pos:"Defender", active:true,
+   bio:"Swedish-Thai defender. Active in Thai professional football.",
+   clubs:[ {name:"Thailand-cluster", years:"2020–", apps:88, goals:3, trophies:"—", bio:"Has built a solid career in Thai football, combining his Swedish upbringing with Thai heritage."} ]},
+
+  {name:"William Weidersjö", influence:22, born:2001, pos:"Midfielder", active:true,
+   bio:"Swedish midfielder plying his trade in Thailand.",
+   clubs:[ {name:"Thailand-cluster", years:"2024–", apps:28, goals:3, trophies:"—", bio:"Young midfielder seeking first-team football in Thailand's professional leagues."} ]},
+
+  // ── Iceland cluster ────────────────────────────────────────────
+  {name:"Tobias Carlsson", influence:22, born:1995, pos:"Defender", active:true,
+   bio:"Swedish defender with experience in Icelandic football.",
+   clubs:[ {name:"Iceland-cluster", years:"2022–", apps:58, goals:2, trophies:"—", bio:"Solid, experienced defender who has become an important figure in Icelandic top-flight football."} ]},
+
+  {name:"Anton Kralj", influence:22, born:1997, pos:"Defender", active:true,
+   bio:"Swedish centre-back playing in Iceland.",
+   clubs:[ {name:"Iceland-cluster", years:"2021–", apps:72, goals:4, trophies:"—", bio:"Commanding centre-back who has established himself as one of the better foreign players in Icelandic football."} ]},
+
+  {name:"Jacob Stensson", influence:20, born:1996, pos:"Midfielder", active:true,
+   bio:"Swedish midfielder playing in Iceland.",
+   clubs:[ {name:"Iceland-cluster", years:"2021–", apps:66, goals:5, trophies:"—", bio:"Technical midfielder who has found consistent playing time in Iceland's Úrvalsdeild."} ]},
+
+  // ── Faroe Islands cluster ──────────────────────────────────────
+  {name:"Adrian Edqvist", influence:18, born:1999, pos:"Defender", active:true,
+   bio:"Swedish right-back playing in the Faroe Islands.",
+   clubs:[ {name:"Faroe-cluster", years:"2023–", apps:42, goals:2, trophies:"—", bio:"Playing professional football in the Faroese Premier League — one of Sweden's outposts on the footballing map."} ]},
+
+  {name:"Hampus Näsström", influence:18, born:1994, pos:"Midfielder", active:true,
+   bio:"Experienced Swedish midfielder in the Faroe Islands.",
+   clubs:[ {name:"Faroe-cluster", years:"2020–", apps:88, goals:8, trophies:"—", bio:"Veteran presence in Faroese football with years of experience in the Faroe Islands league."} ]},
+
+  // ── Korea cluster ──────────────────────────────────────────────
+  {name:"Darijan Bojanic", influence:28, born:1994, pos:"Midfielder", active:true,
+   bio:"Swedish-Bosnian central midfielder. Playing in South Korea's K-League.",
+   clubs:[ {name:"Korea-cluster", years:"2023–", apps:48, goals:6, trophies:"—", bio:"Creative central midfielder thriving in the South Korean K-League. Technical, composed and consistently impressive."} ]},
+
+  // ── China cluster ──────────────────────────────────────────────
+  {name:"Astrit Selmani", influence:26, born:1997, pos:"Forward", active:true,
+   bio:"Swedish-Kosovar striker playing in China's Super League.",
+   clubs:[ {name:"China-cluster", years:"2024–", apps:38, goals:14, trophies:"—", bio:"Prolific striker in the Chinese Super League. 14 goals — thriving in Asian football after a Swedish club career."} ]},
+
+  {name:"Daleho Irandust", influence:24, born:1998, pos:"Forward", active:true,
+   bio:"Swedish-Iranian winger playing in China.",
+   clubs:[ {name:"China-cluster", years:"2024–", apps:32, goals:8, trophies:"—", bio:"Quick, direct winger who has adapted well to Chinese Super League football after a European career."} ]},
+
+  // ── Cyprus cluster ─────────────────────────────────────────────
+  {name:"Franz Brorsson", influence:28, born:1995, pos:"Defender", active:true,
+   bio:"Experienced Swedish centre-back playing in Cyprus.",
+   clubs:[ {name:"Cyprus-cluster", years:"2023–", apps:52, goals:3, trophies:"—", bio:"Commanding centre-back in the Cypriot First Division. A strong, reliable presence at the heart of defence."} ]},
+
+  {name:"Emil Bergström", influence:26, born:1993, pos:"Defender", active:true,
+   bio:"Experienced Swedish centre-back. Cyprus career after stints in England and Sweden.",
+   clubs:[ {name:"Cyprus-cluster", years:"2023–", apps:48, goals:2, trophies:"—", bio:"Veteran centre-back playing professional football in Cyprus. Has had a long career spanning multiple countries."} ]},
+
+  {name:"Muamer Tankovic", influence:35, born:1995, pos:"Winger", active:true,
+   bio:"Swedish-Bosnian winger. Hamburg, AIK and now Cyprus. 3 caps for Sweden.",
+   clubs:[
+     {name:"Hamburg",       years:"2016–18", apps:38, goals:4,  trophies:"—", bio:"38 Bundesliga appearances for Hamburg. Showed his quality in one of Germany's biggest clubs before the club's shock relegation."},
+     {name:"Cyprus-cluster",years:"2023–",   apps:48, goals:12, trophies:"—", bio:"Moved to Cyprus and has been one of the league's most creative and dangerous wide players. Still showing the quality that brought him to Germany."},
+   ]},
 ];
 
 // ================================================================
@@ -1152,8 +1666,202 @@ function flyToClub(clubName, zoomLevel) {
 }
 
 // ================================================================
-//  SEARCH
+//  FILTER ENGINE
 // ================================================================
+const FILTERS = {
+  status:  new Set(['active','retired']),
+  pos:     new Set(['Forward','Midfielder','Defender','Goalkeeper','Winger','Player']),
+  tier:    new Set(['85','65','40','0']),
+  minCaps: 0,
+  minGoals: 0,
+  minBorn: 1919,
+  sort: 'influence',
+};
+
+function tierVal(inf) {
+  if (inf >= 85) return '85';
+  if (inf >= 65) return '65';
+  if (inf >= 40) return '40';
+  return '0';
+}
+
+function playerPassesFilter(p) {
+  // Status
+  const statusOk = (p.active && FILTERS.status.has('active')) ||
+                   (!p.active && FILTERS.status.has('retired'));
+  if (!statusOk) return false;
+  // Position
+  const pos = p.pos || 'Player';
+  if (!FILTERS.pos.has(pos)) return false;
+  // Tier
+  if (!FILTERS.tier.has(tierVal(p.influence))) return false;
+  // Sliders
+  if (p.caps < FILTERS.minCaps) return false;
+  if (p.goals < FILTERS.minGoals) return false;
+  if ((p.born !== '?' && +p.born < FILTERS.minBorn)) return false;
+  return true;
+}
+
+// Sorted unique list of players that pass the current filter
+function filteredPlayers() {
+  const seen = new Set();
+  const list = [];
+  PLAYERS.forEach(p => {
+    if (seen.has(p.name)) return;
+    seen.add(p.name);
+    if (playerPassesFilter(p)) list.push(p);
+  });
+  const s = FILTERS.sort;
+  list.sort((a, b) => {
+    if (s === 'caps')    return b.caps - a.caps;
+    if (s === 'goals')   return b.goals - a.goals;
+    if (s === 'born')    return (+a.born || 9999) - (+b.born || 9999);
+    if (s === 'name')    return a.name.localeCompare(b.name);
+    return b.influence - a.influence;
+  });
+  return list;
+}
+
+// Rebuild GeoJSON sources honouring current filter
+function buildFilteredClubGeoJSON() {
+  const passing = new Set(filteredPlayers().map(p => p.name));
+  const features = [];
+  Object.values(clubMap).forEach(cm => {
+    const vis = cm.players.filter(({player:p}) => passing.has(p.name));
+    if (!vis.length) return;
+    const top = vis[0];
+    features.push({
+      type:'Feature',
+      geometry:{type:'Point', coordinates:[cm.lng, cm.lat]},
+      properties:{
+        id: cm.clubName, stadium: cm.stadium, city: cm.city, country: cm.country,
+        influence: top.player.influence, color: tierColor(top.player.influence),
+        topName: top.player.name, count: vis.length,
+      }
+    });
+  });
+  return {type:'FeatureCollection', features};
+}
+
+function buildFilteredPlayerGeoJSON() {
+  const passing = new Set(filteredPlayers().map(p => p.name));
+  const features = [];
+  Object.values(clubMap).forEach(cm => {
+    const vis = cm.players.filter(({player:p}) => passing.has(p.name));
+    const total = vis.length;
+    vis.forEach(({player:p, entry:ce}, i) => {
+      const [lng, lat] = spreadCoord(i, total, cm.lat, cm.lng);
+      features.push({
+        type:'Feature',
+        geometry:{type:'Point', coordinates:[lng, lat]},
+        properties:{
+          playerName:p.name, clubName:cm.clubName, pos:p.pos, born:p.born,
+          caps:p.caps, goals:p.goals, influence:p.influence,
+          color:tierColor(p.influence), active:p.active?1:0,
+          years:ce.years, apps:ce.apps, ceGoals:ce.goals,
+          trophies:ce.trophies, stadium:cm.stadium, country:cm.country,
+        }
+      });
+    });
+  });
+  return {type:'FeatureCollection', features};
+}
+
+function applyFilters() {
+  FILTERS.sort = document.getElementById('sort-select').value;
+  if (!map) return;
+  map.getSource('clubs')?.setData(buildFilteredClubGeoJSON());
+  map.getSource('players')?.setData(buildFilteredPlayerGeoJSON());
+  updateFilterBadge();
+  updateFilteredStats();
+}
+
+function updateFilteredStats() {
+  const fp = filteredPlayers();
+  const clubsShown = new Set();
+  fp.forEach(p => p.clubs.forEach(ce => { if(clubMap[ce.name]) clubsShown.add(ce.name); }));
+  document.getElementById('s-ply').textContent = fp.length;
+  document.getElementById('s-clubs').textContent = clubsShown.size;
+}
+
+function updateFilterBadge() {
+  // Count non-default settings
+  let dirty = 0;
+  if (FILTERS.status.size < 2) dirty++;
+  if (FILTERS.pos.size < 6) dirty++;
+  if (FILTERS.tier.size < 4) dirty++;
+  if (FILTERS.minCaps > 0) dirty++;
+  if (FILTERS.minGoals > 0) dirty++;
+  if (FILTERS.minBorn > 1919) dirty++;
+  if (FILTERS.sort !== 'influence') dirty++;
+  const btn = document.getElementById('filter-btn');
+  const badge = document.getElementById('filter-count');
+  btn.classList.toggle('dirty', dirty > 0);
+  if (dirty > 0) { badge.textContent = dirty; badge.style.display = 'inline'; }
+  else badge.style.display = 'none';
+}
+
+// Chip toggle
+window.toggleChip = function(el) {
+  const group = el.dataset.group;
+  const val = el.dataset.val;
+  el.classList.toggle('on');
+  const isOn = el.classList.contains('on');
+  if (isOn) FILTERS[group].add(val);
+  else       FILTERS[group].delete(val);
+  applyFilters();
+};
+
+// Slider update
+window.onSlider = function() {
+  FILTERS.minCaps  = +document.getElementById('caps-slider').value;
+  FILTERS.minGoals = +document.getElementById('goals-slider').value;
+  FILTERS.minBorn  = +document.getElementById('era-slider').value;
+  document.getElementById('caps-val').textContent  = FILTERS.minCaps;
+  document.getElementById('goals-val').textContent = FILTERS.minGoals;
+  document.getElementById('era-val').textContent   = FILTERS.minBorn;
+  applyFilters();
+};
+
+window.resetFilters = function() {
+  // Reset state
+  FILTERS.status  = new Set(['active','retired']);
+  FILTERS.pos     = new Set(['Forward','Midfielder','Defender','Goalkeeper','Winger','Player']);
+  FILTERS.tier    = new Set(['85','65','40','0']);
+  FILTERS.minCaps = 0; FILTERS.minGoals = 0; FILTERS.minBorn = 1919;
+  FILTERS.sort    = 'influence';
+  // Reset UI
+  document.querySelectorAll('.chip').forEach(c => c.classList.add('on'));
+  ['caps-slider','goals-slider','era-slider'].forEach(id => {
+    document.getElementById(id).value =
+      id === 'era-slider' ? 1919 : 0;
+  });
+  document.getElementById('caps-val').textContent = '0';
+  document.getElementById('goals-val').textContent = '0';
+  document.getElementById('era-val').textContent = '1919';
+  document.getElementById('sort-select').value = 'influence';
+  applyFilters();
+};
+
+window.toggleFilterPanel = function() {
+  const fp = document.getElementById('filter-panel');
+  const btn = document.getElementById('filter-btn');
+  const open = fp.classList.toggle('open');
+  btn.classList.toggle('active', open);
+  // Close search results when opening filter
+  if (open) document.getElementById('search-results')?.classList.remove('visible');
+};
+
+// Close filter panel when clicking outside
+document.addEventListener('click', e => {
+  const fp = document.getElementById('filter-panel');
+  const btn = document.getElementById('filter-btn');
+  if (fp.classList.contains('open') &&
+      !fp.contains(e.target) && !btn.contains(e.target)) {
+    fp.classList.remove('open');
+    btn.classList.remove('active');
+  }
+});
 function initSearch() {
   const box = document.getElementById('search-box');
   const res = document.getElementById('search-results');
@@ -1290,10 +1998,10 @@ function onMapLoad() {
       });
     } catch(e) { console.warn('Fog unsupported'); }
 
-    // Sources
-    map.addSource('clubs',   { type: 'geojson', data: buildClubGeoJSON()  });
-    map.addSource('players', { type: 'geojson', data: buildPlayerGeoJSON() });
-    map.addSource('arcs',    { type: 'geojson', data: buildArcs()          });
+    // Sources — populated by applyFilters() called after load
+    map.addSource('clubs',   { type: 'geojson', data: {type:'FeatureCollection',features:[]} });
+    map.addSource('players', { type: 'geojson', data: {type:'FeatureCollection',features:[]} });
+    map.addSource('arcs',    { type: 'geojson', data: buildArcs()   });
 
     // ── Arcs ─────────────────────────────────────────────────────
     map.addLayer({ id:'arcs', type:'line', source:'arcs',
@@ -1456,6 +2164,7 @@ function onMapLoad() {
     setP(100, '');
     setTimeout(() => document.getElementById('boot').classList.add('gone'), 400);
     initSearch();
+    applyFilters();   // apply default (show-all) filter to populate sources
     fetchWikidata();
 
   } catch(err) {
@@ -1608,8 +2317,7 @@ function mergeWikidata(bindings) {
   });
   if (added > 0 && map) {
     updateStats();
-    map.getSource('clubs')?.setData(buildClubGeoJSON());
-    map.getSource('players')?.setData(buildPlayerGeoJSON());
+    applyFilters();
   }
 }
 
