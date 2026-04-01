@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swedish Football — Global Footprint</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#006AA7;--yellow:#FFCD00;
+  --bg:#04080f;--panel-bg:rgba(6,10,20,.96);
+  --text:#ddd8cf;--muted:#5a6e82;--border:rgba(255,205,0,.1)
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace}
+#globe-wrap{position:fixed;inset:0;cursor:grab}
+#globe-wrap:active{cursor:grabbing}
+
+/* ── Header ── */
+#hd{position:fixed;top:26px;left:30px;z-index:90;pointer-events:none;user-select:none}
+#hd h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(24px,3.8vw,48px);
+  line-height:.88;letter-spacing:.06em;color:var(--text);
+}
+#hd h1 em{color:var(--yellow);font-style:normal;display:block}
+#hd p{margin-top:9px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+
+/* ── Zoom label ── */
+#zoom-lbl{
+  position:fixed;top:28px;right:28px;z-index:90;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  transition:color .4s;
+}
+
+/* ── Stats ── */
+#stats{
+  position:fixed;bottom:26px;left:30px;z-index:90;
+  display:flex;gap:24px;pointer-events:none;
+}
+.st{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.st strong{display:block;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.04em;color:var(--yellow);line-height:1.05}
+
+/* ── Hint ── */
+#hint{
+  position:fixed;bottom:26px;right:28px;z-index:90;
+  font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  opacity:0;animation:fadeHint 7s ease 2s forwards;
+}
+@keyframes fadeHint{0%{opacity:0}15%{opacity:1}75%{opacity:1}100%{opacity:.2}}
+
+/* ── Loading ── */
+#ld{
+  position:fixed;bottom:60px;left:50%;transform:translateX(-50%);
+  z-index:90;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  transition:opacity .6s;white-space:nowrap;
+}
+#ld.gone{opacity:0;pointer-events:none}
+
+/* ── Flag deco ── */
+.flag{position:fixed;bottom:82px;right:28px;width:34px;height:22px;opacity:.1;z-index:89}
+.flag::before{content:'';position:absolute;top:50%;left:0;right:0;height:3px;background:var(--yellow);transform:translateY(-50%)}
+.flag::after{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--yellow)}
+
+/* ── Panel ── */
+#panel{
+  position:fixed;top:0;right:0;
+  width:min(360px,100vw);height:100%;
+  background:var(--panel-bg);
+  backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  border-left:1px solid var(--border);
+  z-index:200;
+  transform:translateX(102%);
+  transition:transform .44s cubic-bezier(.22,1,.36,1);
+  overflow-y:auto;overflow-x:hidden;
+}
+#panel.open{transform:translateX(0)}
+#pcls{
+  position:sticky;top:0;float:right;
+  margin:16px 16px 0 0;
+  width:28px;height:28px;
+  background:none;border:1px solid rgba(255,255,255,.08);
+  color:var(--text);cursor:pointer;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s,color .2s;font-family:'Space Mono',monospace;
+  z-index:201;
+}
+#pcls:hover{border-color:var(--yellow);color:var(--yellow)}
+#pbody{padding:48px 24px 56px;clear:both}
+.pc-tag{font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--yellow);margin-bottom:4px}
+.pc-club{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:.92;letter-spacing:.05em;margin-bottom:4px}
+.pc-loc{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+.divider{width:34px;height:2px;background:var(--yellow);margin-bottom:18px}
+
+.ply{
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);
+  cursor:pointer;transition:padding-left .18s;
+}
+.ply:hover{padding-left:5px}
+.ply-num{font-size:9px;color:var(--muted);letter-spacing:.08em;margin-bottom:2px}
+.ply-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.05em;line-height:1}
+.ply-name.legend{color:var(--yellow)}
+.ply-name.star{color:#9bbfd4}
+.ply-meta{font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.06em}
+.ply-exp{
+  display:none;margin-top:9px;padding:10px 12px;
+  background:rgba(255,205,0,.03);border-left:2px solid rgba(255,205,0,.4);
+  font-size:10px;line-height:1.78;color:var(--muted);
+}
+.ply-exp.open{display:block}
+.exp-stats{display:flex;gap:16px;margin-top:8px}
+.es{font-size:9px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.es strong{display:block;font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--text);line-height:1.1}
+
+/* ── Tier legend ── */
+#tiers{
+  position:fixed;top:50%;right:28px;transform:translateY(-50%);
+  z-index:90;display:flex;flex-direction:column;gap:8px;
+  font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);pointer-events:none;
+}
+.tier-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  margin-right:7px;vertical-align:middle;
+}
+
+@media(max-width:520px){
+  #hd{top:16px;left:16px}
+  #stats{bottom:16px;left:16px;gap:16px}
+  #hint{bottom:16px;right:16px}
+  #zoom-lbl{top:16px;right:16px}
+  #tiers{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="globe-wrap"></div>
+
+<div id="hd">
+  <h1>SWEDISH<em>FOOTBALL</em></h1>
+  <p>Global Footprint · All Time</p>
+</div>
+
+<div id="zoom-lbl">World View</div>
+
+<div id="stats">
+  <div class="st"><strong id="s-ply">—</strong>Players</div>
+  <div class="st"><strong id="s-clubs">—</strong>Clubs</div>
+  <div class="st"><strong id="s-cnt">—</strong>Nations</div>
+</div>
+
+<div id="hint">Scroll to zoom · Click markers to explore</div>
+
+<div id="ld">⟳ Fetching live Wikidata…</div>
+
+<div class="flag"></div>
+
+<div id="tiers">
+  <div><span class="tier-dot" style="background:#FFCD00"></span>Legend</div>
+  <div><span class="tier-dot" style="background:#7bb8d4"></span>Star</div>
+  <div><span class="tier-dot" style="background:#4a7a99"></span>International</div>
+  <div><span class="tier-dot" style="background:#2d5060"></span>Regular</div>
+</div>
+
+<div id="panel">
+  <button id="pcls" onclick="closePanel()">✕</button>
+  <div id="pbody"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/globe.gl@2/dist/globe.gl.min.js"></script>
+<script>
+// ================================================================
+// CLUBS
+// ================================================================
+const CLUBS={
+  // England
+  "Arsenal":{lat:51.5549,lng:-0.1084,city:"London",country:"England"},
+  "Chelsea":{lat:51.4816,lng:-0.1910,city:"London",country:"England"},
+  "Manchester United":{lat:53.4631,lng:-2.2913,city:"Manchester",country:"England"},
+  "Manchester City":{lat:53.4831,lng:-2.2004,city:"Manchester",country:"England"},
+  "Tottenham":{lat:51.6042,lng:-0.0665,city:"London",country:"England"},
+  "West Ham":{lat:51.5386,lng:-0.0168,city:"London",country:"England"},
+  "Everton":{lat:53.4388,lng:-2.9662,city:"Liverpool",country:"England"},
+  "Leicester":{lat:52.6204,lng:-1.1424,city:"Leicester",country:"England"},
+  "Aston Villa":{lat:52.5090,lng:-1.8847,city:"Birmingham",country:"England"},
+  "Sheffield Wednesday":{lat:53.4114,lng:-1.5009,city:"Sheffield",country:"England"},
+  "Blackburn":{lat:53.7286,lng:-2.4890,city:"Blackburn",country:"England"},
+  "Newcastle":{lat:54.9756,lng:-1.6218,city:"Newcastle",country:"England"},
+  "Sunderland":{lat:54.9145,lng:-1.3876,city:"Sunderland",country:"England"},
+  "Birmingham City":{lat:52.4889,lng:-1.7946,city:"Birmingham",country:"England"},
+  "Hull City":{lat:53.7461,lng:-0.3674,city:"Hull",country:"England"},
+  "Norwich":{lat:52.6224,lng:1.3092,city:"Norwich",country:"England"},
+  "Swansea":{lat:51.6429,lng:-3.9347,city:"Swansea",country:"Wales"},
+  "Coventry":{lat:52.4676,lng:-1.5017,city:"Coventry",country:"England"},
+  "Nottingham Forest":{lat:52.9400,lng:-1.1320,city:"Nottingham",country:"England"},
+  "Brentford":{lat:51.4882,lng:-0.2886,city:"London",country:"England"},
+  "Leeds United":{lat:53.7773,lng:-1.5726,city:"Leeds",country:"England"},
+  "Crystal Palace":{lat:51.3983,lng:-0.0855,city:"London",country:"England"},
+  "Watford":{lat:51.6500,lng:-0.4014,city:"Watford",country:"England"},
+  "Southampton":{lat:50.9058,lng:-1.3914,city:"Southampton",country:"England"},
+  "Charlton":{lat:51.4865,lng:0.0366,city:"London",country:"England"},
+  // Scotland
+  "Celtic":{lat:55.8497,lng:-4.2057,city:"Glasgow",country:"Scotland"},
+  "Rangers":{lat:55.8511,lng:-4.3090,city:"Glasgow",country:"Scotland"},
+  // Italy
+  "AC Milan":{lat:45.4781,lng:9.1240,city:"Milan",country:"Italy"},
+  "Inter Milan":{lat:45.4656,lng:9.1680,city:"Milan",country:"Italy"},
+  "Juventus":{lat:45.1096,lng:7.6413,city:"Turin",country:"Italy"},
+  "Roma":{lat:41.9335,lng:12.4545,city:"Rome",country:"Italy"},
+  "Napoli":{lat:40.8279,lng:14.1931,city:"Naples",country:"Italy"},
+  "Fiorentina":{lat:43.7800,lng:11.2829,city:"Florence",country:"Italy"},
+  "Atalanta":{lat:45.7079,lng:9.6802,city:"Bergamo",country:"Italy"},
+  "Parma":{lat:44.7993,lng:10.4408,city:"Parma",country:"Italy"},
+  "Genoa":{lat:44.4157,lng:8.9122,city:"Genoa",country:"Italy"},
+  "Sampdoria":{lat:44.4300,lng:8.9300,city:"Genoa",country:"Italy"},
+  "Bologna":{lat:44.4953,lng:11.3122,city:"Bologna",country:"Italy"},
+  "Palermo":{lat:38.1217,lng:13.3425,city:"Palermo",country:"Italy"},
+  "Crotone":{lat:39.0830,lng:17.1238,city:"Crotone",country:"Italy"},
+  "Frosinone":{lat:41.6430,lng:13.4120,city:"Frosinone",country:"Italy"},
+  "Cagliari":{lat:39.2040,lng:9.1243,city:"Cagliari",country:"Italy"},
+  "Venezia":{lat:45.4380,lng:12.3575,city:"Venice",country:"Italy"},
+  "Bari":{lat:41.0875,lng:16.8719,city:"Bari",country:"Italy"},
+  "Hellas Verona":{lat:45.4389,lng:10.9922,city:"Verona",country:"Italy"},
+  "Torino":{lat:45.0961,lng:7.6410,city:"Turin",country:"Italy"},
+  "Udinese":{lat:46.0869,lng:13.2030,city:"Udine",country:"Italy"},
+  // Spain
+  "Barcelona":{lat:41.3809,lng:2.1228,city:"Barcelona",country:"Spain"},
+  "Real Sociedad":{lat:43.3017,lng:-1.9731,city:"San Sebastián",country:"Spain"},
+  "Valencia":{lat:39.4756,lng:-0.3580,city:"Valencia",country:"Spain"},
+  "Sevilla":{lat:37.3840,lng:-5.9703,city:"Seville",country:"Spain"},
+  "Celta Vigo":{lat:42.2119,lng:-8.7386,city:"Vigo",country:"Spain"},
+  "Villarreal":{lat:39.9441,lng:-0.1028,city:"Villarreal",country:"Spain"},
+  "Atletico Madrid":{lat:40.4360,lng:-3.5995,city:"Madrid",country:"Spain"},
+  "Real Madrid":{lat:40.4531,lng:-3.6883,city:"Madrid",country:"Spain"},
+  // France
+  "PSG":{lat:48.8414,lng:2.2530,city:"Paris",country:"France"},
+  "Toulouse":{lat:43.6047,lng:1.4239,city:"Toulouse",country:"France"},
+  "Lyon":{lat:45.7655,lng:4.9822,city:"Lyon",country:"France"},
+  "Bordeaux":{lat:44.8282,lng:-0.5815,city:"Bordeaux",country:"France"},
+  "Rennes":{lat:48.1077,lng:-1.7106,city:"Rennes",country:"France"},
+  "Guingamp":{lat:48.5642,lng:-3.1516,city:"Guingamp",country:"France"},
+  "Nimes":{lat:43.8334,lng:4.3605,city:"Nîmes",country:"France"},
+  "Caen":{lat:49.1778,lng:-0.3665,city:"Caen",country:"France"},
+  "Reims":{lat:49.2333,lng:4.0558,city:"Reims",country:"France"},
+  "Lille":{lat:50.6292,lng:3.1304,city:"Lille",country:"France"},
+  "Strasbourg":{lat:48.5550,lng:7.7521,city:"Strasbourg",country:"France"},
+  // Germany
+  "Borussia Mönchengladbach":{lat:51.1748,lng:6.3853,city:"Mönchengladbach",country:"Germany"},
+  "RB Leipzig":{lat:51.3457,lng:12.3483,city:"Leipzig",country:"Germany"},
+  "Hamburg":{lat:53.5872,lng:10.0585,city:"Hamburg",country:"Germany"},
+  "Werder Bremen":{lat:53.0664,lng:8.8376,city:"Bremen",country:"Germany"},
+  "Bayer Leverkusen":{lat:51.0363,lng:7.0026,city:"Leverkusen",country:"Germany"},
+  "Bayern Munich":{lat:48.2188,lng:11.6248,city:"Munich",country:"Germany"},
+  "Wolfsburg":{lat:52.4339,lng:10.8014,city:"Wolfsburg",country:"Germany"},
+  "Union Berlin":{lat:52.4571,lng:13.5688,city:"Berlin",country:"Germany"},
+  "Mainz":{lat:49.9841,lng:8.2246,city:"Mainz",country:"Germany"},
+  "Augsburg":{lat:48.3233,lng:10.8856,city:"Augsburg",country:"Germany"},
+  "Schalke":{lat:51.5545,lng:7.0677,city:"Gelsenkirchen",country:"Germany"},
+  // Netherlands
+  "Ajax":{lat:52.3141,lng:4.9415,city:"Amsterdam",country:"Netherlands"},
+  "Feyenoord":{lat:51.8937,lng:4.5230,city:"Rotterdam",country:"Netherlands"},
+  "AZ":{lat:52.6100,lng:4.7500,city:"Alkmaar",country:"Netherlands"},
+  "NEC Nijmegen":{lat:51.8358,lng:5.8453,city:"Nijmegen",country:"Netherlands"},
+  "Heerenveen":{lat:52.9417,lng:5.9022,city:"Heerenveen",country:"Netherlands"},
+  "PSV":{lat:51.4416,lng:5.4671,city:"Eindhoven",country:"Netherlands"},
+  "Twente":{lat:52.2357,lng:6.8450,city:"Enschede",country:"Netherlands"},
+  // Portugal
+  "Sporting CP":{lat:38.7611,lng:-9.1621,city:"Lisbon",country:"Portugal"},
+  "Benfica":{lat:38.7521,lng:-9.1844,city:"Lisbon",country:"Portugal"},
+  "Porto":{lat:41.1615,lng:-8.5831,city:"Porto",country:"Portugal"},
+  // Turkey
+  "Galatasaray":{lat:41.0714,lng:28.7838,city:"Istanbul",country:"Turkey"},
+  "Trabzonspor":{lat:41.0060,lng:39.7260,city:"Trabzon",country:"Turkey"},
+  "Fenerbahce":{lat:40.9962,lng:29.0434,city:"Istanbul",country:"Turkey"},
+  // Russia
+  "Krasnodar":{lat:45.0355,lng:38.9765,city:"Krasnodar",country:"Russia"},
+  "Spartak Moscow":{lat:55.8310,lng:37.4427,city:"Moscow",country:"Russia"},
+  "Zenit":{lat:59.9726,lng:30.2213,city:"St. Petersburg",country:"Russia"},
+  "CSKA Moscow":{lat:55.7512,lng:37.5639,city:"Moscow",country:"Russia"},
+  // USA
+  "LA Galaxy":{lat:33.8646,lng:-118.2610,city:"Los Angeles",country:"USA"},
+  "Seattle Sounders":{lat:47.5951,lng:-122.3316,city:"Seattle",country:"USA"},
+  "New England Revolution":{lat:42.0909,lng:-71.2643,city:"Boston",country:"USA"},
+  // Switzerland/Belgium
+  "Basel":{lat:47.5418,lng:7.6214,city:"Basel",country:"Switzerland"},
+  "Anderlecht":{lat:50.8353,lng:4.2978,city:"Brussels",country:"Belgium"},
+  "Club Brugge":{lat:51.2086,lng:3.1922,city:"Bruges",country:"Belgium"},
+  // Middle East
+  "Al Ain":{lat:24.2139,lng:55.7397,city:"Al Ain",country:"UAE"},
+  // Greece
+  "PAOK":{lat:40.6277,lng:22.9589,city:"Thessaloniki",country:"Greece"},
+  "Olympiakos":{lat:37.9423,lng:23.6682,city:"Piraeus",country:"Greece"},
+  "Panathinaikos":{lat:37.9887,lng:23.7370,city:"Athens",country:"Greece"},
+  // Japan
+  "Vissel Kobe":{lat:34.6788,lng:135.1885,city:"Kobe",country:"Japan"},
+};
+
+// ================================================================
+// PLAYERS  (influence 1-100, drives zoom-tier visibility)
+// ================================================================
+const PLAYERS=[
+  // TIER 1 — LEGENDS (85+)
+  {name:"Zlatan Ibrahimović",influence:100,caps:116,goals:62,born:1981,pos:"Forward",active:false,
+   bio:"Sweden's all-time top scorer with 62 international goals. Won league titles in Netherlands, Italy, Spain, France, and England. The most decorated Swedish player ever.",
+   clubs:["Ajax","Juventus","Inter Milan","Barcelona","AC Milan","PSG","Manchester United","LA Galaxy"]},
+  {name:"Freddie Ljungberg",influence:90,caps:75,goals:16,born:1977,pos:"Midfielder",active:false,
+   bio:"Arsenal icon and face of the Invincibles era (2003-04). Played over 300 matches for the club. Instantly recognizable redhead who terrorized defenders across Europe.",
+   clubs:["Arsenal","West Ham","Celtic","Seattle Sounders"]},
+  {name:"Henrik Larsson",influence:90,caps:106,goals:37,born:1971,pos:"Forward",active:false,
+   bio:"Celtic legend and Champions League winner with Barcelona in 2006. One of the finest strikers of his generation. Scored 242 goals for Celtic.",
+   clubs:["Celtic","Barcelona","Manchester United"]},
+  {name:"Gunnar Nordahl",influence:88,caps:33,goals:43,born:1921,pos:"Forward",active:false,
+   bio:"The greatest Swedish goalscorer in Serie A history. Netted 225 goals in 268 games for AC Milan. Olympic gold medalist 1948.",
+   clubs:["AC Milan","Roma"]},
+  {name:"Nils Liedholm",influence:85,caps:23,goals:10,born:1922,pos:"Midfielder",active:false,
+   bio:"Member of the legendary 'Gre-No-Li' trio at AC Milan. Won four Serie A titles. Reached the 1958 World Cup Final as captain.",
+   clubs:["AC Milan"]},
+  {name:"Kurt Hamrin",influence:85,caps:32,goals:17,born:1934,pos:"Winger",active:false,
+   bio:"Known as 'Little Bird' — 11 brilliant seasons at Fiorentina. Won the Cup Winners' Cup with AC Milan. One of Italy's most beloved foreign players ever.",
+   clubs:["Fiorentina","AC Milan","Genoa"]},
+  {name:"Gunnar Gren",influence:83,caps:57,goals:32,born:1920,pos:"Forward",active:false,
+   bio:"The 'Professor' of the Gre-No-Li trio. Named Italy's Footballer of the Year 1949. Elegant playmaker who starred at the 1958 World Cup Final.",
+   clubs:["AC Milan","Fiorentina"]},
+
+  // TIER 2 — STARS (65-84)
+  {name:"Alexander Isak",influence:82,caps:68,goals:30,born:2000,pos:"Forward",active:true,
+   bio:"One of the Premier League's most complete strikers. Lit up La Liga at Real Sociedad before becoming Newcastle's £60m talisman.",
+   clubs:["Real Sociedad","Newcastle"]},
+  {name:"Dejan Kulusevski",influence:79,caps:44,goals:8,born:2000,pos:"Winger",active:true,
+   bio:"Transformed Tottenham's attack after a January 2022 loan. Named Spurs Player of the Year 2022-23 — arguably the best winger in the Premier League that season.",
+   clubs:["Parma","Juventus","Tottenham"]},
+  {name:"Victor Lindelöf",influence:78,caps:109,goals:5,born:1994,pos:"Defender",active:true,
+   bio:"Sweden's second most-capped active player. Dependable Premier League centre-back at Manchester United since 2017. Led Sweden's backline with composure.",
+   clubs:["Benfica","Manchester United"]},
+  {name:"Emil Forsberg",influence:77,caps:119,goals:35,born:1991,pos:"Midfielder",active:true,
+   bio:"Sweden's all-time most capped player (119). Led RB Leipzig's rise through the Bundesliga for nearly a decade. Reliable and creative.",
+   clubs:["RB Leipzig"]},
+  {name:"Olof Mellberg",influence:76,caps:117,goals:8,born:1977,pos:"Defender",active:false,
+   bio:"Commanding captain at Aston Villa for six years. Went on to Juventus, Lyon, and Roma. One of Sweden's greatest ever defenders.",
+   clubs:["Aston Villa","Juventus","Lyon","Roma"]},
+  {name:"Stefan Schwarz",influence:74,caps:69,goals:6,born:1969,pos:"Midfielder",active:false,
+   bio:"Box-to-box engine key to Sweden's 3rd-place finish at USA 94. Played for Arsenal, Fiorentina, Valencia, and Sunderland — a true European nomad.",
+   clubs:["Arsenal","Fiorentina","Valencia","Sunderland"]},
+  {name:"Tomas Brolin",influence:73,caps:47,goals:27,born:1969,pos:"Forward",active:false,
+   bio:"The most gifted Swedish attacker of the '90s. Lit up Serie A at Parma and shone magnificently at USA 94. Italian Serie A Player of the Year 1992.",
+   clubs:["Parma","Leeds United","Crystal Palace"]},
+  {name:"Martin Dahlin",influence:72,caps:60,goals:29,born:1968,pos:"Forward",active:false,
+   bio:"Explosive, physical striker who formed a devastating partnership with Brolin at USA 94. Scored a hat-trick v Russia. Bundesliga and Serie A star.",
+   clubs:["Borussia Mönchengladbach","Roma"]},
+  {name:"Anders Limpar",influence:71,caps:58,goals:6,born:1965,pos:"Winger",active:false,
+   bio:"Inventive, skilful winger and key figure in Arsenal's 1991 First Division title win. Also played for Everton. Capable of moments of pure magic.",
+   clubs:["Arsenal","Everton"]},
+  {name:"Hasse Jeppson",influence:70,caps:34,goals:31,born:1925,pos:"Forward",active:false,
+   bio:"Set a world transfer record when joining Napoli in 1952 for £52,000. Lethal scorer across Italian football in the early 1950s.",
+   clubs:["Atalanta","Napoli","Charlton"]},
+  {name:"Pontus Jansson",influence:68,caps:55,goals:2,born:1991,pos:"Defender",active:true,
+   bio:"Cult hero at Leeds United, now captain of Brentford in the Premier League. Ferociously passionate leader and barnstorming defender.",
+   clubs:["Torino","Leeds United","Brentford"]},
+  {name:"Niclas Alexandersson",influence:67,caps:109,goals:11,born:1971,pos:"Midfielder",active:false,
+   bio:"Over 100 caps for Sweden — reliable wide midfielder across Sheffield Wednesday, Everton, and Newcastle. Consistent performer for 15 years.",
+   clubs:["Sheffield Wednesday","Everton","Newcastle"]},
+  {name:"Patrik Andersson",influence:66,caps:96,goals:7,born:1971,pos:"Defender",active:false,
+   bio:"Champions League winner with Bayern Munich in 2001. Solid centre-back who played at the top level in England, Germany, and Spain.",
+   clubs:["Blackburn","Borussia Mönchengladbach","Barcelona","Bayern Munich"]},
+  {name:"Kim Källström",influence:65,caps:131,goals:17,born:1982,pos:"Midfielder",active:false,
+   bio:"Sweden's 2nd most-capped player ever (131). Cultured holding midfielder who played across Europe: Lyon, Spartak Moscow, Arsenal, Galatasaray.",
+   clubs:["Rennes","Lyon","Sporting CP","Arsenal","Spartak Moscow","Galatasaray"]},
+
+  // TIER 3 — INTERNATIONALS (40-64)
+  {name:"Seb Larsson",influence:62,caps:133,goals:18,born:1985,pos:"Midfielder",active:false,
+   bio:"Sweden's 3rd most-capped player (133). Deadly from dead balls. Long English career at Arsenal, Birmingham, Sunderland, and Hull.",
+   clubs:["Arsenal","Birmingham City","Sunderland","Hull City"]},
+  {name:"Viktor Claesson",influence:58,caps:65,goals:11,born:1992,pos:"Winger",active:true,
+   bio:"Versatile attacker who was integral to Krasnodar's Russian Premier League success for many seasons.",
+   clubs:["Krasnodar"]},
+  {name:"Marcus Berg",influence:57,caps:51,goals:14,born:1986,pos:"Forward",active:false,
+   bio:"Prolific scorer in Russia and the Middle East. Notched over 100 goals for Krasnodar. Previously at Hamburg.",
+   clubs:["Hamburg","Krasnodar","Al Ain"]},
+  {name:"Ludwig Augustinsson",influence:56,caps:64,goals:2,born:1994,pos:"Defender",active:true,
+   bio:"Marauding left-back who played in the Bundesliga for Werder Bremen and La Liga for Sevilla, before Aston Villa.",
+   clubs:["Werder Bremen","Sevilla","Aston Villa"]},
+  {name:"Albin Ekdal",influence:55,caps:80,goals:3,born:1989,pos:"Midfielder",active:false,
+   bio:"Intelligent, composed holding midfielder. Spent the bulk of his club career in Serie A at Cagliari and Sampdoria.",
+   clubs:["Hamburg","Cagliari","Sampdoria"]},
+  {name:"Andreas Granqvist",influence:54,caps:86,goals:14,born:1985,pos:"Defender",active:false,
+   bio:"Sweden's captain at the 2018 World Cup, scoring a crucial penalty vs Germany. Played in Serie A and the Russian Premier League.",
+   clubs:["Genoa","Hellas Verona","Krasnodar"]},
+  {name:"Mikael Lustig",influence:53,caps:86,goals:6,born:1986,pos:"Defender",active:false,
+   bio:"Won seven league titles with Celtic. Long-serving, reliable right-back who was a mainstay of Sweden's defence.",
+   clubs:["Celtic"]},
+  {name:"Roland Nilsson",influence:52,caps:116,goals:2,born:1963,pos:"Defender",active:false,
+   bio:"Arguably the best right-back of his era. Long, distinguished career in England at Sheffield Wednesday and Coventry.",
+   clubs:["Sheffield Wednesday","Coventry"]},
+  {name:"Jonas Thern",influence:51,caps:57,goals:7,born:1966,pos:"Midfielder",active:false,
+   bio:"Tough, technically gifted midfielder. Key to Sweden at USA 94. Played for Napoli, Benfica, and Roma in a glittering career.",
+   clubs:["Napoli","Roma","Benfica"]},
+  {name:"Martin Olsson",influence:50,caps:61,goals:2,born:1988,pos:"Defender",active:false,
+   bio:"Left-back with many years in the Premier League at Blackburn, Norwich, and Swansea. Consistent performer.",
+   clubs:["Blackburn","Norwich","Swansea"]},
+  {name:"Markus Rosenberg",influence:49,caps:52,goals:10,born:1982,pos:"Forward",active:false,
+   bio:"Tall, technically assured striker. Played for Werder Bremen in the Bundesliga and Villarreal in La Liga.",
+   clubs:["Werder Bremen","Villarreal"]},
+  {name:"Robin Olsen",influence:48,caps:70,goals:0,born:1990,pos:"Goalkeeper",active:false,
+   bio:"Sweden's first-choice goalkeeper for a decade. Had stints at Roma, Everton, Aston Villa, and more across Europe.",
+   clubs:["Roma","Everton","Aston Villa"]},
+  {name:"Ola Toivonen",influence:47,caps:75,goals:16,born:1986,pos:"Forward",active:false,
+   bio:"Unpredictable and creative. Scored a stunning lob to beat Germany at the 2018 World Cup. Best years at Toulouse and Rennes.",
+   clubs:["Toulouse","Rennes"]},
+  {name:"Jimmy Durmaz",influence:45,caps:54,goals:5,born:1989,pos:"Winger",active:false,
+   bio:"Tricky wide player with stints in Ligue 1 and Turkey. Best known for his years at Toulouse and Galatasaray.",
+   clubs:["Toulouse","Galatasaray","Caen"]},
+  {name:"Anthony Elanga",influence:44,caps:23,goals:4,born:2002,pos:"Winger",active:true,
+   bio:"Exciting young winger who came through Manchester United's academy. Now a key performer at Nottingham Forest in the Premier League.",
+   clubs:["Manchester United","Nottingham Forest"]},
+  {name:"Pontus Kåmark",influence:43,caps:38,goals:1,born:1969,pos:"Midfielder",active:false,
+   bio:"Tough-tackling midfielder who played for Leicester City and was part of Sweden's historic USA 94 bronze-medal squad.",
+   clubs:["Leicester"]},
+  {name:"Kennet Andersson",influence:42,caps:83,goals:31,born:1967,pos:"Forward",active:false,
+   bio:"Powerful, aerial striker with 83 caps. Scored crucial goals at USA 94 and Euro 2000. Played in France and Spain.",
+   clubs:["Lille","Valencia","Bari"]},
+  {name:"Filip Helander",influence:41,caps:30,goals:2,born:1992,pos:"Defender",active:false,
+   bio:"Won multiple Scottish Premiership titles with Rangers. Previously in Serie A for Bologna. Dependable centre-back.",
+   clubs:["Bologna","Rangers"]},
+  {name:"John Guidetti",influence:40,caps:26,goals:6,born:1992,pos:"Forward",active:true,
+   bio:"Celtic fan favourite who scored crucial Euro 2016 qualifying goals. Later moved to Celta Vigo and Aston Villa.",
+   clubs:["Celtic","Celta Vigo","Aston Villa"]},
+  {name:"Marcus Allbäck",influence:40,caps:57,goals:13,born:1973,pos:"Forward",active:false,
+   bio:"Experienced striker with spells in England and the Netherlands. Played for Aston Villa, Coventry, and Heerenveen.",
+   clubs:["Aston Villa","Coventry","Heerenveen"]},
+  {name:"Joel Pohjanpalo",influence:40,caps:48,goals:17,born:1994,pos:"Forward",active:true,
+   bio:"Prolific goalscorer with experience in the Bundesliga and Serie A. Now thriving with Venezia in Italian football.",
+   clubs:["Bayer Leverkusen","Union Berlin","Venezia"]},
+  {name:"Jens Cajuste",influence:40,caps:22,goals:1,born:2000,pos:"Midfielder",active:true,
+   bio:"Dynamic box-to-box midfielder who impressed in Ligue 1 at Reims before making a high-profile move to Napoli.",
+   clubs:["Reims","Napoli"]},
+
+  // TIER 4 — REGULARS (<40)
+  {name:"Sam Larsson",influence:38,caps:17,goals:2,born:1993,pos:"Winger",active:true,
+   bio:"Skillful winger who became an important player in the Eredivisie with Heerenveen and Feyenoord.",
+   clubs:["Heerenveen","Feyenoord"]},
+  {name:"Jesper Karlsson",influence:38,caps:12,goals:3,born:1998,pos:"Winger",active:true,
+   bio:"Dangerous left-winger who became one of the Eredivisie's most creative and decisive players at AZ.",
+   clubs:["AZ"]},
+  {name:"Mattias Svanberg",influence:37,caps:30,goals:5,born:1999,pos:"Midfielder",active:true,
+   bio:"Energetic central midfielder with Serie A experience at Bologna and now playing in the Bundesliga for Wolfsburg.",
+   clubs:["Bologna","Wolfsburg"]},
+  {name:"Isaac Kiese Thelin",influence:36,caps:34,goals:8,born:1992,pos:"Forward",active:true,
+   bio:"Physical striker with international experience in Belgium, France, and Germany — Anderlecht, Bordeaux, and Augsburg.",
+   clubs:["Bordeaux","Anderlecht","Bayer Leverkusen","Augsburg"]},
+  {name:"Karl-Johan Johnsson",influence:35,caps:39,goals:0,born:1990,pos:"Goalkeeper",active:true,
+   bio:"Reliable goalkeeper who played for Guingamp and Nîmes in France's Ligue 1.",
+   clubs:["Guingamp","Nimes"]},
+  {name:"Erkan Zengin",influence:35,caps:45,goals:5,born:1985,pos:"Winger",active:false,
+   bio:"Talented wide player who spent years in Turkish football, particularly at Trabzonspor.",
+   clubs:["Trabzonspor","Strasbourg"]},
+  {name:"Robin Quaison",influence:35,caps:40,goals:9,born:1993,pos:"Forward",active:true,
+   bio:"Mobile attacker who scored regularly in the Bundesliga for Mainz. Previously at Palermo in Serie A.",
+   clubs:["Palermo","Mainz"]},
+  {name:"Ken Sema",influence:33,caps:16,goals:2,born:1994,pos:"Winger",active:true,
+   bio:"Direct and pacey winger who played in the Premier League for Watford.",
+   clubs:["Watford"]},
+  {name:"Rasmus Elm",influence:33,caps:35,goals:3,born:1988,pos:"Midfielder",active:false,
+   bio:"Creative midfielder with stints at CSKA Moscow in Russia and Wolfsburg in Germany.",
+   clubs:["Wolfsburg","CSKA Moscow"]},
+  {name:"Linus Wahlqvist",influence:32,caps:14,goals:0,born:1996,pos:"Defender",active:true,
+   bio:"Attack-minded right-back who played in the Eredivisie for NEC Nijmegen.",
+   clubs:["NEC Nijmegen"]},
+  {name:"Gustav Svensson",influence:30,caps:16,goals:1,born:1987,pos:"Midfielder",active:false,
+   bio:"Consistent central midfielder who became a key performer in MLS for Seattle Sounders.",
+   clubs:["Seattle Sounders"]},
+  {name:"Jakob Johansson",influence:30,caps:24,goals:1,born:1990,pos:"Midfielder",active:false,
+   bio:"Defensive midfielder who played for Basel in the Swiss Super League and Sporting CP in Portugal.",
+   clubs:["Basel","Sporting CP"]},
+  {name:"Oscar Hiljemark",influence:30,caps:18,goals:2,born:1992,pos:"Midfielder",active:false,
+   bio:"Midfielder with stints in Serie A at Palermo and Genoa.",
+   clubs:["Palermo","Genoa"]},
+  {name:"Marcus Rohden",influence:28,caps:10,goals:2,born:1991,pos:"Midfielder",active:false,
+   bio:"Played in Serie B for Crotone and Frosinone, spending several seasons in Italian football.",
+   clubs:["Crotone","Frosinone"]},
+  {name:"Mikael Nilsson",influence:28,caps:56,goals:3,born:1978,pos:"Defender",active:false,
+   bio:"Versatile defender who played for Southampton in England and Panathinaikos in Greece.",
+   clubs:["Southampton","Panathinaikos"]},
+  {name:"Pierre Bengtsson",influence:26,caps:18,goals:0,born:1988,pos:"Defender",active:false,
+   bio:"Left-back who played in Ligue 1 for Caen and had stints in Portugal.",
+   clubs:["Caen","Sporting CP"]},
+];
+
+// ================================================================
+// BUILD MARKERS FROM DATA
+// ================================================================
+const clubPlayers={};
+const seenNames=new Set();
+
+PLAYERS.forEach(p=>{
+  if(seenNames.has(p.name)) return; // dedup
+  seenNames.add(p.name);
+  p.clubs.forEach(c=>{
+    if(!CLUBS[c]) return;
+    if(!clubPlayers[c]) clubPlayers[c]=[];
+    clubPlayers[c].push(p);
+  });
+});
+
+Object.keys(clubPlayers).forEach(c=>{
+  clubPlayers[c].sort((a,b)=>b.influence-a.influence);
+});
+
+const allMarkers=Object.keys(clubPlayers).map(cName=>{
+  const cl=CLUBS[cName];
+  const pl=clubPlayers[cName];
+  return{id:cName,lat:cl.lat,lng:cl.lng,city:cl.city,country:cl.country,
+    players:pl,topPlayer:pl[0],influence:pl[0].influence};
+});
+
+// Stats
+const uniqueNames=new Set(PLAYERS.map(p=>p.name));
+const uniqueCountries=new Set(Object.values(CLUBS).map(c=>c.country));
+document.getElementById('s-ply').textContent=uniqueNames.size;
+document.getElementById('s-clubs').textContent=allMarkers.length;
+document.getElementById('s-cnt').textContent=uniqueCountries.size;
+
+// ================================================================
+// ZOOM TIERS
+// ================================================================
+const TIERS=[
+  {maxAlt:0.6, minInf:0,  label:"City View"},
+  {maxAlt:1.2, minInf:40, label:"Regional"},
+  {maxAlt:2.0, minInf:65, label:"Continental"},
+  {maxAlt:99,  minInf:85, label:"World View"},
+];
+
+function getTier(alt){
+  return TIERS.find(t=>alt<=t.maxAlt)||TIERS[TIERS.length-1];
+}
+
+function getVisibleMarkers(alt){
+  const {minInf}=getTier(alt);
+  return allMarkers.filter(m=>m.influence>=minInf);
+}
+
+function markerColor(m){
+  const i=m.influence;
+  if(i>=85) return '#FFCD00';
+  if(i>=65) return '#7bb8d4';
+  if(i>=40) return '#4a7a99';
+  return '#2d5060';
+}
+
+function markerRadius(m){
+  const i=m.influence;
+  if(i>=85) return 0.55;
+  if(i>=65) return 0.38;
+  if(i>=40) return 0.27;
+  return 0.18;
+}
+
+function markerLabel(m){
+  const p=m.topPlayer;
+  const extra=m.players.length>1
+    ?`<br><span style="color:#5a6e82;font-size:9px">+${m.players.length-1} more</span>`:'';
+  return`<div style="font-family:'Space Mono',monospace;background:rgba(4,8,15,.93);border:1px solid rgba(255,205,0,.22);padding:8px 12px;line-height:1.5;white-space:nowrap">
+    <div style="font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#FFCD00;margin-bottom:2px">${m.city} · ${m.country}</div>
+    <div style="font-size:14px;font-family:'Bebas Neue',sans-serif;letter-spacing:.05em;color:#ddd8cf">${p.name}</div>
+    <div style="font-size:9px;color:#5a6e82">${p.pos} · ${p.caps} caps · ${p.born}</div>${extra}</div>`;
+}
+
+// ================================================================
+// GLOBE
+// ================================================================
+let globe, currentAlt=2.2;
+
+function initGlobe(){
+  globe=Globe()(document.getElementById('globe-wrap'))
+    .globeImageUrl('https://raw.githubusercontent.com/vasturiano/three-globe/master/example/img/earth-night.jpg')
+    .backgroundImageUrl('https://raw.githubusercontent.com/vasturiano/three-globe/master/example/img/night-sky.png')
+    .atmosphereColor('#1a4a8a')
+    .atmosphereAltitude(0.16)
+    .pointsData(getVisibleMarkers(currentAlt))
+    .pointLat(m=>m.lat)
+    .pointLng(m=>m.lng)
+    .pointColor(m=>markerColor(m))
+    .pointRadius(m=>markerRadius(m))
+    .pointAltitude(0.012)
+    .pointLabel(m=>markerLabel(m))
+    .onPointClick(m=>openPanel(m))
+    // Rings for legendary clubs
+    .ringsData(allMarkers.filter(m=>m.influence>=85))
+    .ringLat(m=>m.lat).ringLng(m=>m.lng)
+    .ringColor(()=>'rgba(255,205,0,0.5)')
+    .ringMaxRadius(2.5).ringPropagationSpeed(1).ringRepeatPeriod(900)
+    // Arcs from Stockholm to legendary clubs
+    .arcsData(allMarkers.filter(m=>m.influence>=85))
+    .arcStartLat(()=>59.33).arcStartLng(()=>18.07)
+    .arcEndLat(m=>m.lat).arcEndLng(m=>m.lng)
+    .arcColor(()=>['rgba(0,106,167,0)','rgba(255,205,0,0.35)','rgba(0,106,167,0)'])
+    .arcDashLength(0.35).arcDashGap(0.18).arcDashAnimateTime(4000)
+    .arcStroke(0.4)
+    .pointOfView({lat:51,lng:14,altitude:2.2},2000);
+
+  // Auto-rotate
+  globe.controls().autoRotate=true;
+  globe.controls().autoRotateSpeed=0.25;
+  globe.controls().enableDamping=true;
+
+  // Stop rotation on interaction
+  globe.controls().addEventListener('start',()=>{
+    globe.controls().autoRotate=false;
+  });
+
+  // Zoom handler
+  let debounceTm;
+  globe.controls().addEventListener('change',()=>{
+    clearTimeout(debounceTm);
+    debounceTm=setTimeout(()=>{
+      const alt=globe.pointOfView().altitude;
+      if(Math.abs(alt-currentAlt)>0.04){
+        currentAlt=alt;
+        const tier=getTier(alt);
+        globe.pointsData(getVisibleMarkers(alt));
+        document.getElementById('zoom-lbl').textContent=tier.label;
+      }
+    },120);
+  });
+
+  // Fetch live data
+  fetchWikidata();
+}
+
+// ================================================================
+// PANEL
+// ================================================================
+function openPanel(m){
+  const body=document.getElementById('pbody');
+  body.innerHTML=`
+    <div class="pc-tag">${m.country}</div>
+    <div class="pc-club">${m.id}</div>
+    <div class="pc-loc">${m.city} · ${m.players.length} Swedish ${m.players.length===1?'player':'players'}</div>
+    <div class="divider"></div>
+    ${m.players.map((p,i)=>playerHtml(p,i,m.id)).join('')}
+    <div style="margin-top:22px;font-size:8px;color:#2d3d4a;letter-spacing:.12em;text-transform:uppercase">Source: curated + Wikidata</div>`;
+  document.getElementById('panel').classList.add('open');
+  globe.controls().autoRotate=false;
+}
+
+function playerHtml(p,i,clubId){
+  const cls=p.influence>=85?'legend':p.influence>=65?'star':'';
+  const id=`px-${clubId.replace(/\s/g,'_')}-${i}`;
+  return`<div class="ply" onclick="toggleExp('${id}')">
+    <div class="ply-num">${String(i+1).padStart(2,'0')} · ${p.pos}${p.active?' · <span style="color:#4aaa77">Active</span>':''}</div>
+    <div class="ply-name ${cls}">${p.name}</div>
+    <div class="ply-meta">${p.born} · ${p.caps} caps · ${p.goals} goals</div>
+    <div class="ply-exp" id="${id}">
+      ${p.bio}
+      <div class="exp-stats">
+        <div class="es"><strong>${p.caps}</strong>Caps</div>
+        <div class="es"><strong>${p.goals}</strong>Goals</div>
+        <div class="es"><strong>${p.born}</strong>Born</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleExp(id){
+  const el=document.getElementById(id);
+  if(el) el.classList.toggle('open');
+}
+
+function closePanel(){
+  document.getElementById('panel').classList.remove('open');
+}
+
+// ================================================================
+// WIKIDATA LIVE FETCH
+// ================================================================
+async function fetchWikidata(){
+  const q=`
+SELECT DISTINCT ?player ?playerLabel ?club ?clubLabel ?countryLabel ?lat ?lon ?caps WHERE {
+  ?player wdt:P27 wd:Q34 ;
+          wdt:P106 wd:Q937857 ;
+          wdt:P54 ?club .
+  ?club wdt:P625 ?coord ;
+        wdt:P17 ?country .
+  FILTER(?country NOT IN (wd:Q34,wd:Q33,wd:Q35,wd:Q20,wd:Q189))
+  BIND(geof:latitude(?coord) AS ?lat)
+  BIND(geof:longitude(?coord) AS ?lon)
+  OPTIONAL{?player wdt:P1350 ?caps}
+  SERVICE wikibase:label{bd:serviceParam wikibase:language "en"}
+} LIMIT 1000`;
+
+  try{
+    const res=await fetch(
+      `https://query.wikidata.org/sparql?query=${encodeURIComponent(q)}&format=json`,
+      {headers:{'Accept':'application/sparql-results+json'}}
+    );
+    if(!res.ok) throw new Error('bad response');
+    const json=await res.json();
+    mergeWikidata(json.results.bindings);
+    document.getElementById('ld').classList.add('gone');
+  }catch(e){
+    console.warn('Wikidata fetch failed:',e);
+    const ld=document.getElementById('ld');
+    ld.textContent='⚠ Live data unavailable';
+    setTimeout(()=>ld.classList.add('gone'),3000);
+  }
+}
+
+function mergeWikidata(bindings){
+  const known=new Set(PLAYERS.map(p=>p.name.toLowerCase()));
+  let added=0;
+
+  bindings.forEach(b=>{
+    const pName=b.playerLabel?.value;
+    const cName=b.clubLabel?.value;
+    const lat=parseFloat(b.lat?.value);
+    const lon=parseFloat(b.lon?.value);
+    const caps=parseInt(b.caps?.value)||0;
+
+    if(!pName||!cName||isNaN(lat)||isNaN(lon)) return;
+    if(known.has(pName.toLowerCase())) return;
+
+    const inf=Math.min(55,Math.max(12,Math.round(caps*0.6)));
+
+    // Match or register club
+    let clubKey=Object.keys(CLUBS).find(k=>k.toLowerCase()===cName.toLowerCase());
+    if(!clubKey){
+      clubKey=cName;
+      const country=b.countryLabel?.value||'Unknown';
+      CLUBS[clubKey]={lat,lng:lon,city:cName,country};
+    }
+
+    const np={name:pName,influence:inf,caps,goals:0,born:'?',pos:'Player',
+      active:false,bio:`Swedish international. ${caps} international caps. Data via Wikidata.`,
+      clubs:[clubKey],fromWikidata:true};
+
+    PLAYERS.push(np);
+    known.add(pName.toLowerCase());
+
+    if(!clubPlayers[clubKey]) clubPlayers[clubKey]=[];
+    clubPlayers[clubKey].push(np);
+    clubPlayers[clubKey].sort((a,b)=>b.influence-a.influence);
+
+    // Update or create marker
+    const ex=allMarkers.find(m=>m.id===clubKey);
+    if(ex){
+      ex.players=clubPlayers[clubKey];
+      ex.topPlayer=clubPlayers[clubKey][0];
+      ex.influence=Math.max(ex.influence,ex.topPlayer.influence);
+    } else {
+      const cl=CLUBS[clubKey];
+      allMarkers.push({id:clubKey,lat:cl.lat,lng:cl.lng,city:cl.city,country:cl.country,
+        players:clubPlayers[clubKey],topPlayer:clubPlayers[clubKey][0],
+        influence:clubPlayers[clubKey][0].influence});
+    }
+    added++;
+  });
+
+  if(added>0){
+    // Refresh stats
+    document.getElementById('s-ply').textContent=new Set(PLAYERS.map(p=>p.name)).size;
+    document.getElementById('s-clubs').textContent=allMarkers.length;
+    document.getElementById('s-cnt').textContent=new Set(Object.values(CLUBS).map(c=>c.country)).size;
+    // Refresh globe
+    globe.pointsData(getVisibleMarkers(currentAlt));
+    console.log(`Wikidata added ${added} players`);
+  }
+}
+
+// ================================================================
+// BOOT
+// ================================================================
+window.addEventListener('load', initGlobe);
+</script>
+</body>
+</html>
